@@ -13,17 +13,42 @@ Raw ranks from different benchmarks are not directly comparable. A rank of 10 on
 ## Quick start
 
 ```bash
-python rank_models.py                  # reads ./ranking.txt by default
-python rank_models.py my_data.txt      # or pass a custom file
+python rank_models.py                     # reads ./ranks_general.txt by default
+python rank_models.py my_data.txt         # or pass a custom file
+python rank_models.py ranking_sample.txt  # run with example data
 ```
+
+If the specified file does not exist, the script will print a helpful error message and exit.
 
 ### Requirements
 
 Python 3.10+ (standard library only — no third-party packages).
 
+### Command-line Arguments
+
+```
+python rank_models.py [filename]
+```
+
+- **`filename`** (optional): Path to the input file containing benchmark data. Defaults to `ranks_general.txt` if not provided.
+
+### Error Handling
+
+If the specified file cannot be found, the script outputs:
+
+```
+Error: File 'filename.txt' not found.
+
+Usage: python rank_models.py [filename]
+  filename  Path to input file (default: ranks_general.txt)
+
+Run with 'ranking_sample.txt' for an example:
+  python rank_models.py ranking_sample.txt
+```
+
 ---
 
-## Input format — `ranking.txt`
+## Input format — `ranks_general.txt`
 
 The file contains one or more **benchmark dictionaries** followed by exactly one **cost dictionary** as the last entry. Each dictionary is a standard Python `dict` literal and may span multiple lines.
 
@@ -119,16 +144,17 @@ A sorted ASCII table (best model first):
 
 ```
 .
-├── rank_models.py    # Main script
-├── ranking.txt       # Data file (user-supplied)
-└── README.md
+├── rank_models.py       # Main script
+├── ranks_general.txt    # Default data file (input)
+├── ranking_sample.txt   # Example data file
+└── README.md            # Documentation
 ```
 
 ---
 
 ## Extending the data
 
-To add a new benchmark, append a new dictionary **above** the cost dictionary in `ranking.txt`:
+To add a new benchmark, append a new dictionary **above** the cost dictionary in your data file:
 
 ```python
 new_bench={"opus":2, "sonnet":5, "gpt":1, "known_totals":40}
