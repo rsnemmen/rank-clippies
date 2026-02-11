@@ -14,6 +14,73 @@ import os
 import sys
 
 
+def categorize_tiers(results: list[tuple], z_score: float = 1.0) -> dict[str, int]:
+    """Categorize models into tiers based on statistical overlap with tier leaders.
+    
+    Uses the "Indistinguishable from Best" method: models whose error bars overlap
+    with the leader's error bar are placed in the same tier.
+    
+    Args:
+        results: List of tuples (model, avg, sd, n, cost) from main computation
+        z_score: Confidence level (1.0 = 68% CI, 1.96 = 95% CI)
+        
+    Returns:
+        Dictionary mapping model names to tier numbers (1, 2, 3, ...)
+    """
+    import pandas as pd
+    
+    # Calculate average SD from models with valid SD
+    valid_sds = [sd for _, _, sd, _, _ in results if sd is not None]
+    avg_sd = sum(valid_sds) / len(valid_sds) if valid_sds else 0.0
+    
+    # Prepare data - convert scores and SDs to percentage scale
+    df_data = []
+    for model, avg, sd, n, cost in results:
+        # Use average SD for models with sd=None
+        effective_sd = sd if sd is not None else avg_sd
+        df_data.append({
+            'model': model,
+            'score': avg * 100,  # Convert to percentage scale
+            'sd': effective_sd * 100,  # Convert to percentage scale
+        })
+    
+    df = pd.DataFrame(df_data)
+    
+    # Sort by score (ascending) - lowest scores (best performers) first
+    df = df.sort_values(by='score', ascending=True).copy()
+    df['tier'] = 0
+    
+    current_tier = 1
+    remaining_indices = df.index.tolist()
+    
+    while len(remaining_indices) > 0:
+        # Identify the leader (lowest scoring/best performing remaining item)
+        leader_idx = remaining_indices[0]
+        leader_score = df.loc[leader_idx, 'score']
+        leader_sd = df.loc[leader_idx, 'sd']
+        
+        # Calculate leader's upper bound (worst likely performance for the leader)
+        leader_max = leader_score + (z_score * leader_sd)
+        
+        # Find all items whose lower bound overlaps with leader's upper bound
+        current_batch = df.loc[remaining_indices]
+        candidate_mins = current_batch['score'] - (z_score * current_batch['sd'])
+        
+        # Check overlap condition: if candidate's best case overlaps with leader's worst case
+        tier_members_mask = candidate_mins <= leader_max
+        tier_member_indices = current_batch[tier_members_mask].index.tolist()
+        
+        # Assign tier
+        df.loc[tier_member_indices, 'tier'] = current_tier
+        
+        # Remove tiered items from remaining list
+        remaining_indices = [idx for idx in remaining_indices if idx not in tier_member_indices]
+        current_tier += 1
+    
+    # Create mapping from model name to tier
+    return dict(zip(df['model'], df['tier']))
+
+
 def create_plot(results: list[tuple], output_filename: str) -> None:
     """Create a scatter plot of model performance vs. cost and save to PNG.
     
@@ -24,20 +91,31 @@ def create_plot(results: list[tuple], output_filename: str) -> None:
     try:
         import pandas as pd
         import matplotlib.pyplot as plt
+        import numpy as np
     except ImportError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         print("Plotting requires pandas and matplotlib. Install with:", file=sys.stderr)
         print("  pip install pandas matplotlib", file=sys.stderr)
         sys.exit(1)
     
+    # Calculate average SD for models with sd=None
+    valid_sds = [sd for _, _, sd, _, _ in results if sd is not None]
+    avg_sd = sum(valid_sds) / len(valid_sds) if valid_sds else 0.0
+    
+    # Categorize models into tiers
+    tier_mapping = categorize_tiers(results, z_score=1.0)
+    
     # Convert results to DataFrame
     df_data = []
     for model, avg, sd, n, cost in results:
+        # Use average SD for models with sd=None
+        effective_sd = sd if sd is not None else avg_sd
         df_data.append({
             'Model Name': model,
             'Average Score': avg * 100,  # Convert from percentile to match table display
-            'Std Dev': sd * 100 if sd is not None else 0.0,  # Convert sd to same scale
-            'Credit Cost (per 1k)': cost
+            'Std Dev': effective_sd * 100,  # Convert sd to same scale
+            'Credit Cost (per 1k)': cost,
+            'Tier': tier_mapping.get(model, 0)
         })
     
     df = pd.DataFrame(df_data)
@@ -51,17 +129,26 @@ def create_plot(results: list[tuple], output_filename: str) -> None:
     # Create the plot
     plt.figure(figsize=(12, 8))
     
-    # Create Scatter Plot with error bars
-    plt.errorbar(plot_df['Credit Cost (per 1k)'], 
-                 plot_df['Average Score'], 
-                 yerr=plot_df['Std Dev'],
-                 fmt='o',  # circle markers
-                 color='royalblue', 
-                 ecolor='royalblue',  # subtle gray error bars
-                 alpha=0.7, 
-                 markersize=10,
-                 capsize=0,  # no caps on error bars
-                 markeredgecolor='black')
+    # Get colormap for tiers
+    max_tier = plot_df['Tier'].max()
+    colors = plt.cm.tab10(np.linspace(0, 1, max_tier))
+    
+    # Plot each tier separately with different colors
+    for tier_num in sorted(plot_df['Tier'].unique()):
+        tier_data = plot_df[plot_df['Tier'] == tier_num]
+        color = colors[tier_num - 1]
+        
+        plt.errorbar(tier_data['Credit Cost (per 1k)'], 
+                     tier_data['Average Score'], 
+                     yerr=tier_data['Std Dev'],
+                     fmt='o',  # circle markers
+                     color=color, 
+                     ecolor=color,
+                     alpha=0.7, 
+                     markersize=10,
+                     capsize=0,  # no caps on error bars
+                     markeredgecolor='black',
+                     label=f'Tier {tier_num}')
     
     # Annotate points with Model Names
     for _, row in plot_df.iterrows():
@@ -77,6 +164,9 @@ def create_plot(results: list[tuple], output_filename: str) -> None:
     plt.ylabel('Average Score (Lower is Better)', fontsize=19)
     plt.xlabel('Credit Cost (per 1k tokens) - Log Scale', fontsize=19)
     plt.grid(True, linestyle='--', alpha=0.6)
+    
+    # Add legend for tiers
+    plt.legend(loc='best', fontsize=12, title='Tiers', title_fontsize=13)
     
     plt.tick_params(axis='both', which='major', labelsize=15)
     plt.tick_params(axis='both', which='minor', labelsize=15)
