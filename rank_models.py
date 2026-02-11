@@ -8,6 +8,7 @@ Usage:  python rank_models.py [ranking.txt]
 
 import ast
 import math
+import os
 import sys
 
 
@@ -52,6 +53,17 @@ def parse_file(filename):
 
 def main():
     filename = sys.argv[1] if len(sys.argv) > 1 else "ranking.txt"
+
+    if not os.path.exists(filename):
+        print(f"Error: File '{filename}' not found.", file=sys.stderr)
+        print("", file=sys.stderr)
+        print("Usage: python rank_models.py [filename]", file=sys.stderr)
+        print("  filename  Path to input file (default: ranking.txt)", file=sys.stderr)
+        print("", file=sys.stderr)
+        print("Run with 'ranking_sample.txt' for an example:", file=sys.stderr)
+        print(f"  python rank_models.py ranking_sample.txt", file=sys.stderr)
+        sys.exit(1)
+
     benchmarks, cost_dict = parse_file(filename)
 
     # ── Collect percentile scores per model ──────────────────────────────
