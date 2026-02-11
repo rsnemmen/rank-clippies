@@ -57,7 +57,7 @@ def create_plot(results: list[tuple], output_filename: str) -> None:
                  yerr=plot_df['Std Dev'],
                  fmt='o',  # circle markers
                  color='royalblue', 
-                 ecolor='gray',  # subtle gray error bars
+                 ecolor='royalblue',  # subtle gray error bars
                  alpha=0.7, 
                  markersize=10,
                  capsize=0,  # no caps on error bars
@@ -73,7 +73,7 @@ def create_plot(results: list[tuple], output_filename: str) -> None:
                      xytext=(5, 5), textcoords='offset points', fontsize=13)
     
     # Formatting
-    plt.title('LLM Model Performance vs. Cost: Agentic Coding Tasks', fontsize=20)
+    plt.title('LLM Model Performance vs. Cost', fontsize=20)
     plt.ylabel('Average Score (Lower is Better)', fontsize=19)
     plt.xlabel('Credit Cost (per 1k tokens) - Log Scale', fontsize=19)
     plt.grid(True, linestyle='--', alpha=0.6)
