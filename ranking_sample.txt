@@ -1,0 +1,53 @@
+LiveBench={"sonnet":12, "opus":1, "haiku":41,
+"gpt":3, "gpt-pro":9, "gpt-instant":29, "gpt-codex":4, "gpt-oss":40,
+"gemini":6, "gemini-flash":7,
+"grok":14, "grok-fast":19,
+"kimi":10, "minimax":None, "deepseek-32":14, 
+"devstral-small":None, "devstral2":40,
+"qwen3-80":30, "qwen3-32":43, "qwen3-235":28, "qwen3-coder-30b":42,
+"glm":24,
+"llama-maverick":None, 
+"known_totals":52 }
+
+arena={"sonnet":11, "opus":4, "haiku":56,
+"gpt-instant":27, "gpt":9, "gpt-oss":101,
+"gemini":1, "gemini-flash":3,
+"grok":2, "grok-fast":25,
+"kimi":12, "minimax":81, "deepseek-32":31, 
+"devstral-small":None, "devstral2":None,
+"qwen3-80":59, "qwen3-32":78, "qwen3-235":23, "qwen3-coder-30b":134,
+"glm":19,
+"llama-maverick":None,
+"known_totals":300}
+
+humanity_last_exam={"sonnet":14, "opus":1, "haiku":None,
+"gpt-pro":2, "gpt":3, "gpt-instant":21,
+"gemini":1, "gemini-flash":14,
+"kimi":2, "minimax":0, "deepseek-32":3, 
+"devstral-small":None, "devstral2":None,
+"qwen3-80":None, "qwen3-32":None, "qwen3-235":None, "qwen3-coder-30b":None,
+"glm":21,
+"llama-maverick":22,
+"known_totals":41 }
+
+aanalysis={"sonnet":7, "opus":1, "haiku":None,
+"gpt-instant":None, "gpt":2, "gpt-oss":17, "gpt-codex":4,
+"gemini":5, "gemini-flash":7,
+"grok":10, "grok-fast":14,
+"kimi":6, "minimax":12, "deepseek-32":9, 
+"devstral-small":None, "devstral2":25,
+"qwen3-80":0, "qwen3-32":None, "qwen3-235":19, "qwen3-coder-30b":None,
+"glm":8,
+"llama-maverick":None,
+"known_totals":29}
+
+# Credit cost per 1k tokens
+{"sonnet":500, "opus":850, "haiku":170,
+"gpt":470, "gpt-pro":5600, "gpt-instant":470, "gpt-codex":470, "gpt-oss":40, "gpt-oss-20":15,
+"gemini":370, "gemini-flash":100,
+"grok":600, "grok-fast":20,
+"kimi":120, "minimax":50, "deepseek-32":23, 
+"devstral-small-big":1, 
+"qwen3-235":300, "qwen3-coder-30b":50,
+"glm":94, "mistral":400,
+"llama-maverick":55}
