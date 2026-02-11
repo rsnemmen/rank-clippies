@@ -42,6 +42,10 @@ The above command will produce the following output:
 python rank_models.py ranking_general.txt --plot  
 ```
 
+This will output the average ranking and this plot:
+![](sample_plot.png)  
+X-axis indicates the average score on a scale from 1 (best) to 100 (worst). Y-axis is the log10 of the model’s credit cost per 1k tokens. Colors indicate the model tier.
+
 
 ### Requirements
 
@@ -63,23 +67,7 @@ python rank_models.py [filename] [-p|--plot]
 | `filename` | Path to the input file containing benchmark data. Defaults to `ranks_general.txt` if not provided. |
 | `-p`, `--plot` | Generate a PNG scatter plot of model performance vs. cost with statistical tiering visualization. |
 
-### Error Handling
-
-If the specified file cannot be found, the script outputs:
-
-```
-Error: File 'filename.txt' not found.
-
-Usage: python rank_models.py [filename]
-  filename  Path to input file (default: ranks_general.txt)
-
-Run with 'ranking_sample.txt' for an example:
-  python rank_models.py ranking_sample.txt
-```
-
----
-
-## Input format — `ranks_general.txt`
+## Input format for datafile
 
 The file contains one or more **benchmark dictionaries** followed by exactly one **cost dictionary** as the last entry. Each dictionary is a standard Python `dict` literal and may span multiple lines.
 
@@ -93,20 +81,25 @@ LiveBench={"sonnet":12, "opus":1, "haiku":41,
 "known_totals":52}
 ```
 
+The included files contain leaderboards which are current as of Feb. 11 2026 manually pulled from the following websites:
+
+https://livebench.ai/#/  
+https://scale.com/leaderboard/  
+https://arena.ai/leaderboard/  
+https://www.tbench.ai/leaderboard/terminal-bench/2.0  
+https://artificialanalysis.ai  
+https://gorilla.cs.berkeley.edu/leaderboard.html#leaderboard  
+https://www.swebench.com
+
 ### Cost dictionary
 
-The **last** dictionary in the file holds credit costs per 1 000 tokens. It has no `known_totals` key and needs no variable-name prefix. Models missing from this dictionary will show `N/A` in the output.
+The **last** dictionary in the file holds credit costs per 1 000 tokens. It has no `known_totals` key and needs no variable-name prefix. Models missing from this dictionary will show `N/A` in the output. The value here is arbitrary. In the sample data included, it corresponds to Poe API credits.
 
 ```python
 # Credit cost per 1k tokens
 {"sonnet":500, "opus":850, "haiku":170, "gpt":470, "gemini":370}
 ```
 
-### Comments
-
-Lines whose first non-whitespace character is `#` are ignored.
-
----
 
 ## Methodology
 
@@ -147,7 +140,6 @@ Population standard deviation is computed over the pre-penalty percentile scores
 
 Model keys are compared as exact strings. No fuzzy matching or alias merging is performed (e.g. `qwen3-235` and `qwen3-80` remain separate models).
 
----
 
 ## Output
 
@@ -178,14 +170,6 @@ A sorted ASCII table (best model first):
 
 When using the `--plot` flag, the tool generates a PNG image with the same basename as your input file (e.g., `ranks_general.txt` → `ranks_general.png`).
 
-#### Plot Features
-
-- **Scatter plot** of model performance (Y-axis: Average Score) vs. cost (X-axis: Credit Cost per 1k tokens)
-- **Log scale** on X-axis for better visualization of cost differences
-- **Inverted Y-axis** so the best performers (lowest scores) appear at the top
-- **Error bars** showing ±1 standard deviation for each model
-- **Statistical tiering** using the "Indistinguishable from Best" method
-
 #### Statistical Tiering Methodology
 
 Models are grouped into performance tiers using a statistically rigorous approach:
@@ -201,32 +185,6 @@ Models are grouped into performance tiers using a statistically rigorous approac
 
 This means if a model's best-case performance (score minus one standard deviation) could reach the leader's worst-case performance (score plus one standard deviation), they are statistically tied.
 
-#### Plot Interpretation
-
-- **Colors**: Each tier has a distinct color from the tab10 colormap
-- **Legend**: Shows which color corresponds to Tier 1, Tier 2, etc.
-- **Tier 1** (top of plot): Best performers - models statistically tied for top rank
-- **Higher tier numbers**: Progressively worse performance groups
-- **Error bars**: Longer bars indicate more variable performance across benchmarks
-
-Models evaluated on only 1 benchmark (no calculated SD) are assigned the average SD from all other models, allowing them to participate in tiering.
-
----
-
-## Project structure
-
-```
-.
-├── rank_models.py       # Main script
-├── ranks_general.txt    # Default data file (input)
-├── ranking_sample.txt   # Example data file
-├── plotting.md          # Jupyter notebook reference for plotting
-├── indistinguishable.md # Reference for tiering methodology
-└── README.md            # Documentation
-```
-
----
-
 ## Extending the data
 
 To add a new benchmark, append a new dictionary **above** the cost dictionary in your data file:
@@ -237,7 +195,6 @@ new_bench={"opus":2, "sonnet":5, "gpt":1, "known_totals":40}
 
 To add a new model, insert its key and rank into each relevant benchmark dictionary and, optionally, add its cost to the cost dictionary.
 
----
 
 ## Scientific Background
 
@@ -252,9 +209,3 @@ This approach answers the practical question: "Which models can I confidently sa
 We use z=1.0 (68% confidence interval, approximately ±1 standard deviation) as a balance between:
 - **Strictness** (z=1.96, 95% CI): Creates many small tiers, potentially over-splitting
 - **Leniency** (z=0.5): Creates few large tiers, potentially obscuring real differences
-
----
-
-## License
-
-This project is provided as-is for personal and research use.
