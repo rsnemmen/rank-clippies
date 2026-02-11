@@ -2,6 +2,8 @@
 
 A command-line tool that computes a unified model ranking from multiple benchmark leaderboards using **percentile-normalized** scores. It ingests a simple data file of per-benchmark ranks, normalizes them to a common 0–1 scale, and outputs a single sorted table so you can compare models at a glance.
 
+**New:** Visualize model performance with statistical tiering! Generate scatter plots showing performance vs. cost, with models color-coded by statistical performance tiers based on the "Indistinguishable from Best" method.
+
 ---
 
 ## Why percentile normalization?
@@ -16,21 +18,30 @@ Raw ranks from different benchmarks are not directly comparable. A rank of 10 on
 python rank_models.py                     # reads ./ranks_general.txt by default
 python rank_models.py my_data.txt         # or pass a custom file
 python rank_models.py ranking_sample.txt  # run with example data
+python rank_models.py ranking_sample.txt --plot  # generate performance plot
 ```
 
 If the specified file does not exist, the script will print a helpful error message and exit.
 
 ### Requirements
 
-Python 3.10+ (standard library only — no third-party packages).
+**Core functionality:** Python 3.10+ (standard library only)
+
+**Plotting feature (optional):** pandas, matplotlib, numpy
+```bash
+pip install pandas matplotlib numpy  # only needed for --plot flag
+```
 
 ### Command-line Arguments
 
 ```
-python rank_models.py [filename]
+python rank_models.py [filename] [-p|--plot]
 ```
 
-- **`filename`** (optional): Path to the input file containing benchmark data. Defaults to `ranks_general.txt` if not provided.
+| Argument | Description |
+|----------|-------------|
+| `filename` | Path to the input file containing benchmark data. Defaults to `ranks_general.txt` if not provided. |
+| `-p`, `--plot` | Generate a PNG scatter plot of model performance vs. cost with statistical tiering visualization. |
 
 ### Error Handling
 
@@ -117,6 +128,8 @@ Model keys are compared as exact strings. No fuzzy matching or alias merging is 
 
 ## Output
 
+### ASCII Table
+
 A sorted ASCII table (best model first):
 
 ```
@@ -138,6 +151,43 @@ A sorted ASCII table (best model first):
 | **# Benchmarks** | Number of benchmarks the model was evaluated on.      |
 | **Cost/1k**    | Credit cost per 1 000 tokens, or `N/A` if unavailable.   |
 
+### Visualization Plot (`--plot`)
+
+When using the `--plot` flag, the tool generates a PNG image with the same basename as your input file (e.g., `ranks_general.txt` → `ranks_general.png`).
+
+#### Plot Features
+
+- **Scatter plot** of model performance (Y-axis: Average Score) vs. cost (X-axis: Credit Cost per 1k tokens)
+- **Log scale** on X-axis for better visualization of cost differences
+- **Inverted Y-axis** so the best performers (lowest scores) appear at the top
+- **Error bars** showing ±1 standard deviation for each model
+- **Statistical tiering** using the "Indistinguishable from Best" method
+
+#### Statistical Tiering Methodology
+
+Models are grouped into performance tiers using a statistically rigorous approach:
+
+1. **Tier 1**: Contains the best-performing model (leader) plus any models whose performance is statistically indistinguishable from the leader (68% confidence interval overlap)
+2. **Tier 2**: After removing Tier 1 models, the next-best performer becomes the new leader; models overlapping with this leader form Tier 2
+3. **Repeat**: Continue until all models are categorized
+
+**Mathematical criterion**: A model belongs to the current tier if:
+```
+(model_score - 1σ) ≤ (leader_score + 1σ)
+```
+
+This means if a model's best-case performance (score minus one standard deviation) could reach the leader's worst-case performance (score plus one standard deviation), they are statistically tied.
+
+#### Plot Interpretation
+
+- **Colors**: Each tier has a distinct color from the tab10 colormap
+- **Legend**: Shows which color corresponds to Tier 1, Tier 2, etc.
+- **Tier 1** (top of plot): Best performers - models statistically tied for top rank
+- **Higher tier numbers**: Progressively worse performance groups
+- **Error bars**: Longer bars indicate more variable performance across benchmarks
+
+Models evaluated on only 1 benchmark (no calculated SD) are assigned the average SD from all other models, allowing them to participate in tiering.
+
 ---
 
 ## Project structure
@@ -147,6 +197,8 @@ A sorted ASCII table (best model first):
 ├── rank_models.py       # Main script
 ├── ranks_general.txt    # Default data file (input)
 ├── ranking_sample.txt   # Example data file
+├── plotting.md          # Jupyter notebook reference for plotting
+├── indistinguishable.md # Reference for tiering methodology
 └── README.md            # Documentation
 ```
 
@@ -161,6 +213,22 @@ new_bench={"opus":2, "sonnet":5, "gpt":1, "known_totals":40}
 ```
 
 To add a new model, insert its key and rank into each relevant benchmark dictionary and, optionally, add its cost to the cost dictionary.
+
+---
+
+## Scientific Background
+
+### Why "Indistinguishable from Best" Tiering?
+
+Traditional rankings treat every rank position as meaningfully different. However, in statistical analysis, two models with overlapping confidence intervals cannot be confidently ranked against each other. The "Indistinguishable from Best" method, common in scientific literature, acknowledges this uncertainty by grouping statistically tied performers.
+
+This approach answers the practical question: "Which models can I confidently say are among the best?" rather than forcing artificial distinctions where uncertainty exists.
+
+### Confidence Interval Choice
+
+We use z=1.0 (68% confidence interval, approximately ±1 standard deviation) as a balance between:
+- **Strictness** (z=1.96, 95% CI): Creates many small tiers, potentially over-splitting
+- **Leniency** (z=0.5): Creates few large tiers, potentially obscuring real differences
 
 ---
 
