@@ -20,13 +20,13 @@ arena={"sonnet":11, "opus":4, "haiku":56,
 "llama-maverick":None,
 "known_totals":300}
 
-humanity_last_exam={"sonnet":14, "opus":1, "haiku":None,
-"gpt-pro":2, "gpt":3, "gpt-instant":21,
+humanity_last_exam={"sonnet":14, "opus":3, "haiku":None,
+"gpt-pro":2, "gpt":1, "gpt-instant":21,
 "gemini":1, "gemini-flash":14,
 "kimi":2, "minimax":0, "deepseek-32":3, 
 "devstral-small":None, "devstral2":None,
 "qwen3-80":None, "qwen3-32":None, "qwen3-235":None, "qwen3-coder-30b":None,
-"glm":21,
+"glm":2,
 "llama-maverick":22,
 "known_totals":41 }
 

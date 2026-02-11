@@ -1,0 +1,85 @@
+LiveBench={"sonnet":12, "opus":1, "haiku":21,
+"gpt":7, "gpt-pro":13, "gpt-instant":18, "gpt-codex":3, "gpt-oss":27,
+"gemini":6, "gemini-flash":16,
+"grok":32, "grok-fast":34,
+"kimi":10, "minimax":0, "deepseek-32":15, 
+"devstral-small":0, "devstral2":22,
+"qwen3-80":44, "qwen3-coder-30":48, "qwen3-280":38,
+"glm":21,
+"llama-maverick":None,
+"known_totals":52 }
+
+arena={"sonnet":16, "opus":1, "haiku":25,
+"gpt-instant":37, "gpt":4, "gpt-codex":20, "gpt-oss":101, "gpt-oss-20":154,
+"gemini":6, "gemini-flash":8,
+"grok":8, "grok-fast":29,
+"kimi":7, "minimax":12, "deepseek-32":19, 
+"devstral-small":37, "devstral2":34,
+"qwen3-80":56, "qwen3-coder-30":64, "qwen3-280":38,
+"glm":9, "mistral":29,
+"llama-maverick":None,
+"known_totals":300}
+
+swebench={"sonnet":4, "opus":1, "haiku":None,
+"gpt-pro":2, "gpt":2, "gpt-instant":25, "gpt-codex":6, "gpt-oss":27,
+"gemini":3, "gemini-flash":26,
+"kimi":10, "minimax":11, "deepseek-32":12, 
+"devstral-small":15, 
+"qwen3-80":16, "qwen3-coder-30":33,
+"glm":2,
+"llama-maverick":30,
+"known_totals":34 }
+
+swebench_pro_public={"sonnet":1, "opus":1, "haiku":2,
+"gpt-pro":0, "gpt":2, "gpt-instant":None, "gpt-codex":1,
+"gemini":1, "gemini-flash":2,
+"kimi":2, "minimax":2, "deepseek-32":12, 
+"devstral-small":None, "devstral2":14,
+"qwen3-80":None, "qwen3-coder-30":17, "qwen3-280":10,
+"glm":12,
+"llama-maverick":13,
+"known_totals":20 }
+
+berkeley={"sonnet":2, "opus":1, "haiku":6,
+"gpt-pro":None, "gpt":16, "gpt-instant":24,
+"gemini":3, "gemini-flash":15,
+"grok":9, "grok-fast":5,
+"kimi":11, "minimax":None, "deepseek-32":14, 
+"devstral-small":51, "devstral2":46,
+"qwen3-80":None, "qwen3-coder-30":29, "qwen3-280":23,
+"glm":4,
+"llama-maverick":50,
+"known_totals":109 }
+
+aanalysis={"sonnet":10, "opus":2, "haiku":None,
+"gpt-instant":None, "gpt":1, "gpt-oss":16, "gpt-codex":6, "gpt-oss-20":21,
+"gemini":5, "gemini-flash":7,
+"grok":8, "grok-fast":14,
+"kimi":9, "minimax":14, "deepseek-32":11, 
+"devstral-small":None, "devstral2":19,
+"qwen3-80":None, "qwen3-32":None, "qwen3-280":18, "qwen3-coder-30":None,
+"glm":12,
+"llama-maverick":24,
+"known_totals":29}
+
+terminal_bench={"sonnet":38, "opus":3, "haiku":57,
+"gpt-instant":88, "gpt":5, "gpt-codex":1, "gpt-oss":79, "gpt-oss-20":92,
+"gemini":6, "gemini-flash":8,
+"grok":67, "grok-fast":70,
+"kimi":42, "minimax":55, "deepseek-32":51, 
+"devstral-small":None, "devstral2":None,
+"qwen3-80":None, "qwen3-coder-30":None, "qwen3-280":66,
+"glm":4, "mistral":None,
+"llama-maverick":None,
+"known_totals":101}
+
+# Credit cost per 1k tokens
+{"sonnet":500, "opus":850, "haiku":170,
+"gpt":470, "gpt-pro":5600, "gpt-instant":470, "gpt-codex":470, "gpt-oss":40, "gpt-oss-20":15,
+"gemini":370, "gemini-flash":100,
+"grok":600, "grok-fast":20,
+"kimi":120, "minimax":50, "deepseek-32":23, 
+"devstral-small-big":1, 
+"qwen3-280":300, "qwen3-coder-30":50,
+"glm":94, "mistral":400,
+"llama-maverick":55}
