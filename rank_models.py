@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 Compute a unified model ranking from multiple benchmark leaderboards
 using percentile-normalized scores.
@@ -36,6 +36,7 @@ def create_plot(results: list[tuple], output_filename: str) -> None:
         df_data.append({
             'Model Name': model,
             'Average Score': avg * 100,  # Convert from percentile to match table display
+            'Std Dev': sd * 100 if sd is not None else 0.0,  # Convert sd to same scale
             'Credit Cost (per 1k)': cost
         })
     
@@ -50,10 +51,17 @@ def create_plot(results: list[tuple], output_filename: str) -> None:
     # Create the plot
     plt.figure(figsize=(12, 8))
     
-    # Create Scatter Plot
-    plt.scatter(plot_df['Credit Cost (per 1k)'], 
-                plot_df['Average Score'], 
-                color='royalblue', alpha=0.7, s=100, edgecolors='black')
+    # Create Scatter Plot with error bars
+    plt.errorbar(plot_df['Credit Cost (per 1k)'], 
+                 plot_df['Average Score'], 
+                 yerr=plot_df['Std Dev'],
+                 fmt='o',  # circle markers
+                 color='royalblue', 
+                 ecolor='gray',  # subtle gray error bars
+                 alpha=0.7, 
+                 markersize=10,
+                 capsize=0,  # no caps on error bars
+                 markeredgecolor='black')
     
     # Annotate points with Model Names
     for _, row in plot_df.iterrows():
