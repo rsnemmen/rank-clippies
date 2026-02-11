@@ -2,26 +2,46 @@
 
 A command-line tool that computes a unified model ranking from multiple benchmark leaderboards using **percentile-normalized** scores. It ingests a simple data file of per-benchmark ranks, normalizes them to a common 0–1 scale, and outputs a single sorted table so you can compare models at a glance.
 
-**New:** Visualize model performance with statistical tiering! Generate scatter plots showing performance vs. cost, with models color-coded by statistical performance tiers based on the "Indistinguishable from Best" method.
-
----
-
-## Why percentile normalization?
-
-Raw ranks from different benchmarks are not directly comparable. A rank of 10 on a 300-model leaderboard is far more impressive than a rank of 10 on a 30-model leaderboard. Dividing each rank by the total number of evaluated models (`known_totals`) maps every score onto a **0–1 fractional percentile** (0 = best, 1 = worst), making cross-benchmark comparison meaningful.
-
----
+Visualize model performance with statistical tiering: Generate scatter plots showing performance vs. cost, with models color-coded by statistical performance tiers based on the "Indistinguishable from Best" method.
 
 ## Quick start
 
 ```bash
-python rank_models.py                     # reads ./ranks_general.txt by default
 python rank_models.py my_data.txt         # or pass a custom file
-python rank_models.py ranking_sample.txt  # run with example data
-python rank_models.py ranking_sample.txt --plot  # generate performance plot
 ```
 
-If the specified file does not exist, the script will print a helpful error message and exit.
+```
+# run with agentic coding leaderboards 
+# (actual data as of Feb 11 2026)
+python rank_models.py ranking_coding.txt  
+```
+
+The above command will produce the following output:
+
+```text
++------------------------------------------------------------------------------------+
+| Rank  | Model                   | Avg Pctl  | Std Dev   | # Benchmarks  | Cost/1k  |
++------------------------------------------------------------------------------------+
+| 1     | opus                    | 0.030     | 0.021     | 7             | 850      |
+| 2     | gemini                  | 0.076     | 0.050     | 7             | 370      |
+| 3     | gpt                     | 0.077     | 0.047     | 7             | 470      |
+| 4     | gpt-codex               | 0.095     | 0.071     | 6             | 470      |
+| 5     | gpt-pro                 | 0.103     | 0.107     | 3             | 5600     |
+| 6     | sonnet                  | 0.170     | 0.137     | 7             | 500      |
+| 7     | kimi                    | 0.205     | 0.130     | 7             | 120      |
+| 8     | glm                     | 0.226     | 0.222     | 7             | 94       |
+| 9     | gemini-flash            | 0.237     | 0.233     | 7             | 100      |
+| 10    | haiku                   | 0.241     | 0.205     | 5             | 170      |
+...
+```
+
+
+```
+# generate performance plot for general reasoning 
+# (actual data as of Feb 11 2026)
+python rank_models.py ranking_general.txt --plot  
+```
+
 
 ### Requirements
 
@@ -97,6 +117,9 @@ For every model with a non-`None` rank in a given benchmark:
 ```
 percentile = rank / known_totals
 ```
+
+**Why percentile normalization?**  
+Raw ranks from different benchmarks are not directly comparable. A rank of 10 on a 300-model leaderboard is far more impressive than a rank of 10 on a 30-model leaderboard. Dividing each rank by the total number of evaluated models (`known_totals`) maps every score onto a **0–1 fractional percentile** (0 = best, 1 = worst), making cross-benchmark comparison meaningful.
 
 ### 2. Averaging
 
