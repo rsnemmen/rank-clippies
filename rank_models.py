@@ -4,12 +4,86 @@ Compute a unified model ranking from multiple benchmark leaderboards
 using percentile-normalized scores.
 
 Usage:  python rank_models.py [ranking.txt]
+        python rank_models.py [ranking.txt] --plot
 """
 
+import argparse
 import ast
 import math
 import os
 import sys
+
+
+def create_plot(results: list[tuple], output_filename: str) -> None:
+    """Create a scatter plot of model performance vs. cost and save to PNG.
+    
+    Args:
+        results: List of tuples (model, avg, sd, n, cost) from main computation
+        output_filename: Path to save the PNG output
+    """
+    try:
+        import pandas as pd
+        import matplotlib.pyplot as plt
+    except ImportError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        print("Plotting requires pandas and matplotlib. Install with:", file=sys.stderr)
+        print("  pip install pandas matplotlib", file=sys.stderr)
+        sys.exit(1)
+    
+    # Convert results to DataFrame
+    df_data = []
+    for model, avg, sd, n, cost in results:
+        df_data.append({
+            'Model Name': model,
+            'Average Score': avg * 100,  # Convert from percentile to match table display
+            'Credit Cost (per 1k)': cost
+        })
+    
+    df = pd.DataFrame(df_data)
+    
+    # Convert numeric columns (handling None in Cost)
+    df['Credit Cost (per 1k)'] = pd.to_numeric(df['Credit Cost (per 1k)'], errors='coerce')
+    
+    # Filter out rows with NaN costs for the plot
+    plot_df = df.dropna(subset=['Credit Cost (per 1k)'])
+    
+    # Create the plot
+    plt.figure(figsize=(12, 8))
+    
+    # Create Scatter Plot
+    plt.scatter(plot_df['Credit Cost (per 1k)'], 
+                plot_df['Average Score'], 
+                color='royalblue', alpha=0.7, s=100, edgecolors='black')
+    
+    # Annotate points with Model Names
+    for _, row in plot_df.iterrows():
+        model_name: str = str(row['Model Name'])
+        cost_val: float = float(row['Credit Cost (per 1k)'])
+        score_val: float = float(row['Average Score'])
+        plt.annotate(model_name, 
+                     (cost_val, score_val), 
+                     xytext=(5, 5), textcoords='offset points', fontsize=13)
+    
+    # Formatting
+    plt.title('LLM Model Performance vs. Cost: Agentic Coding Tasks', fontsize=20)
+    plt.ylabel('Average Score (Lower is Better)', fontsize=19)
+    plt.xlabel('Credit Cost (per 1k tokens) - Log Scale', fontsize=19)
+    plt.grid(True, linestyle='--', alpha=0.6)
+    
+    plt.tick_params(axis='both', which='major', labelsize=15)
+    plt.tick_params(axis='both', which='minor', labelsize=15)
+    
+    # Use a log scale for X axis (Cost)
+    plt.xscale('log')
+    
+    # Invert Y axis so the "Best" (Rank 1/Low Score) is at the top
+    plt.gca().invert_yaxis()
+    
+    plt.tight_layout()
+    plt.savefig(output_filename, dpi=150)
+    plt.close()
+    
+    print(f"Plot saved to: {output_filename}")
 
 
 def parse_file(filename):
@@ -52,7 +126,23 @@ def parse_file(filename):
 
 
 def main():
-    filename = sys.argv[1] if len(sys.argv) > 1 else "ranking.txt"
+    parser = argparse.ArgumentParser(
+        description="Compute a unified model ranking from multiple benchmark leaderboards."
+    )
+    parser.add_argument(
+        "filename",
+        nargs="?",
+        default="ranking.txt",
+        help="Path to input file (default: ranking.txt)"
+    )
+    parser.add_argument(
+        "-p", "--plot",
+        action="store_true",
+        help="Generate a PNG plot of model performance vs. cost"
+    )
+    args = parser.parse_args()
+    
+    filename = args.filename
 
     if not os.path.exists(filename):
         print(f"Error: File '{filename}' not found.", file=sys.stderr)
@@ -131,6 +221,13 @@ def main():
         print(row(str(idx), model, avg_s, sd_s, str(n), cost_s))
 
     print(sep)
+
+    # Generate plot if requested
+    if args.plot:
+        # Create output filename with same basename but .png extension
+        base_name = os.path.splitext(filename)[0]
+        plot_filename = f"{base_name}.png"
+        create_plot(results, plot_filename)
 
 
 if __name__ == "__main__":
