@@ -92,6 +92,7 @@ def create_plot(results: list[tuple], output_filename: str, open_models: set[str
         import pandas as pd
         import matplotlib.pyplot as plt
         import numpy as np
+        from matplotlib.lines import Line2D
     except ImportError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         print("Plotting requires pandas and matplotlib. Install with:", file=sys.stderr)
@@ -185,7 +186,17 @@ def create_plot(results: list[tuple], output_filename: str, open_models: set[str
     plt.grid(True, linestyle='--', alpha=0.6)
     
     # Add legend for tiers
-    plt.legend(loc='best', fontsize=12, title='Tiers', title_fontsize=13)
+    leg1 = plt.legend(loc='best', fontsize=12, title='Tiers', title_fontsize=13)
+    plt.gca().add_artist(leg1)
+    
+    # Add legend for marker types (circle = Proprietary, square = Open)
+    legend_elements = [
+        Line2D([0], [0], marker='o', color='w', markerfacecolor='gray',
+               markersize=10, label='Proprietary models', markeredgecolor='black'),
+        Line2D([0], [0], marker='s', color='w', markerfacecolor='gray',
+               markersize=10, label='Open models', markeredgecolor='black')
+    ]
+    plt.legend(handles=legend_elements, loc='lower right', fontsize=11)
     
     plt.tick_params(axis='both', which='major', labelsize=15)
     plt.tick_params(axis='both', which='minor', labelsize=15)
