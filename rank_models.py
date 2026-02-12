@@ -81,7 +81,7 @@ def categorize_tiers(results: list[tuple], z_score: float = 1.0) -> dict[str, in
     return dict(zip(df['model'], df['tier']))
 
 
-def create_plot(results: list[tuple], output_filename: str) -> None:
+def create_plot(results: list[tuple], output_filename: str, open_models: set[str] | None = None) -> None:
     """Create a scatter plot of model performance vs. cost and save to PNG.
     
     Args:
@@ -138,17 +138,36 @@ def create_plot(results: list[tuple], output_filename: str) -> None:
         tier_data = plot_df[plot_df['Tier'] == tier_num]
         color = colors[tier_num - 1]
         
-        plt.errorbar(tier_data['Credit Cost (per 1k)'], 
-                     tier_data['Average Score'], 
-                     yerr=tier_data['Std Dev'],
-                     fmt='o',  # circle markers
-                     color=color, 
-                     ecolor=color,
-                     alpha=0.7, 
-                     markersize=10,
-                     capsize=0,  # no caps on error bars
-                     markeredgecolor='black',
-                     label=f'Tier {tier_num}')
+        # Separate open and closed models within this tier
+        open_data = tier_data[tier_data['Model Name'].isin(open_models)] if open_models else pd.DataFrame()
+        closed_data = tier_data[~tier_data['Model Name'].isin(open_models)] if open_models else tier_data
+        
+        # Plot closed models (circles)
+        if len(closed_data) > 0:
+            plt.errorbar(closed_data['Credit Cost (per 1k)'], 
+                         closed_data['Average Score'], 
+                         yerr=closed_data['Std Dev'],
+                         fmt='o',  # circle markers
+                         color=color, 
+                         ecolor=color,
+                         alpha=0.7, 
+                         markersize=10,
+                         capsize=0,  # no caps on error bars
+                         markeredgecolor='black',
+                         label=f'Tier {tier_num}')
+        
+        # Plot open models (squares)
+        if len(open_data) > 0:
+            plt.errorbar(open_data['Credit Cost (per 1k)'], 
+                         open_data['Average Score'], 
+                         yerr=open_data['Std Dev'],
+                         fmt='s',  # square markers
+                         color=color, 
+                         ecolor=color,
+                         alpha=0.7, 
+                         markersize=10,
+                         capsize=0,  # no caps on error bars
+                         markeredgecolor='black')
     
     # Annotate points with Model Names
     for _, row in plot_df.iterrows():
@@ -185,7 +204,7 @@ def create_plot(results: list[tuple], output_filename: str) -> None:
 
 
 def parse_file(filename):
-    """Parse ranking.txt and return (list_of_benchmark_dicts, cost_dict)."""
+    """Parse ranking.txt and return (list_of_benchmark_dicts, cost_dict, open_dict)."""
     with open(filename, "r") as f:
         content = f.read()
 
@@ -219,8 +238,20 @@ def parse_file(filename):
     if len(dicts) < 2:
         sys.exit("Error: need at least one benchmark dict + one cost dict.")
 
-    # Last dict is credit-cost info; everything before it is a benchmark
-    return dicts[:-1], dicts[-1]
+    # Find the 'open' dictionary (if exists) and 'cost' dictionary (last one)
+    cost_dict = dicts[-1]
+    open_dict = {}
+
+    # Find open dict: has no "known_totals" (not a benchmark) and no "cost" key
+    for d in dicts[:-1]:
+        if "known_totals" not in d and "cost" not in d:
+            open_dict = d
+            break
+
+    # Benchmarks are all dicts with "known_totals"
+    benchmarks = [d for d in dicts[:-1] if "known_totals" in d]
+
+    return benchmarks, cost_dict, open_dict
 
 
 def main():
@@ -252,7 +283,7 @@ def main():
         print(f"  python rank_models.py ranking_sample.txt", file=sys.stderr)
         sys.exit(1)
 
-    benchmarks, cost_dict = parse_file(filename)
+    benchmarks, cost_dict, open_dict = parse_file(filename)
 
     # ── Collect percentile scores per model ──────────────────────────────
     model_scores: dict[str, list[float]] = {}
@@ -325,7 +356,8 @@ def main():
         # Create output filename with same basename but .png extension
         base_name = os.path.splitext(filename)[0]
         plot_filename = f"{base_name}.png"
-        create_plot(results, plot_filename)
+        open_models = set(open_dict.keys()) if open_dict else set()
+        create_plot(results, plot_filename, open_models)
 
 
 if __name__ == "__main__":
