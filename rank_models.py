@@ -181,7 +181,7 @@ def create_plot(results: list[tuple], output_filename: str, open_models: set[str
     
     # Formatting
     plt.title('LLM Model Performance vs. Cost', fontsize=20)
-    plt.ylabel('Average Score (Lower is Better)', fontsize=19)
+    plt.ylabel('Average Score $\\times 100$ (Lower is Better)', fontsize=19)
     plt.xlabel('Credit Cost (per 1k tokens) - Log Scale', fontsize=19)
     plt.grid(True, linestyle='--', alpha=0.6)
     

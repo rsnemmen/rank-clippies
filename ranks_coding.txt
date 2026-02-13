@@ -18,14 +18,14 @@ arena={"sonnet45":16, "opus46":1, "haiku45":25,
 "llama-maverick":None,
 "known_totals":300}
 
-swebench={"sonnet45":4, "opus46":1, "haiku45":None,
+swebench_verified={"sonnet45":4, "opus46":1, "haiku45":None,
 "gpt-pro52":2, "gpt52":2, "gpt-instant52":25, "gpt-codex53":6, "gpt-oss-120b":27,
 "gemini-pro3":3, "gemini-flash3":26,
 "kimi25":10, "minimax25":2, "deepseek32":12, 
 "qwen3-80b":16, "qwen3-coder-30":33,
 "glm5":2,
 "llama-maverick":30,
-"known_totals":34 }
+"known_totals":500 }
 
 swebench_pro_public={"sonnet45":1, "opus46":1, "haiku45":2,
 "gpt-pro52":0, "gpt52":2, "gpt-instant52":None, "gpt-codex53":1,
