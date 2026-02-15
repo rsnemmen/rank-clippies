@@ -27,7 +27,9 @@ def get_y_upper_limit(max_score: float) -> int:
     return min(upper, 100)
 
 
-def categorize_tiers(results: list[tuple], z_score: float = 1.0) -> dict[str, int]:
+def categorize_tiers(
+    results: list[tuple], z_score: float = 1.0, debug: bool = False
+) -> dict[str, int]:
     """Categorize models into tiers based on statistical overlap with tier leaders.
 
     Uses the "Indistinguishable from Best" method: models whose error bars overlap
@@ -36,6 +38,7 @@ def categorize_tiers(results: list[tuple], z_score: float = 1.0) -> dict[str, in
     Args:
         results: List of tuples (model, avg, sd, n, cost) from main computation
         z_score: Confidence level (1.0 = 68% CI, 1.96 = 95% CI)
+        debug: If True, print detailed tiering debug output
 
     Returns:
         Dictionary mapping model names to tier numbers (1, 2, 3, ...)
@@ -46,11 +49,31 @@ def categorize_tiers(results: list[tuple], z_score: float = 1.0) -> dict[str, in
     valid_sds = [sd for _, _, sd, _, _ in results if sd is not None]
     avg_sd = sum(valid_sds) / len(valid_sds) if valid_sds else 0.0
 
+    if debug:
+        print("\n" + "=" * 80)
+        print("TIERING DEBUG OUTPUT")
+        print("=" * 80)
+        print("\n📊 INITIAL DATA PREPARATION")
+        print(f"   Total models: {len(results)}")
+        print(f"   Models with valid SD: {len(valid_sds)}")
+        print(f"   Average SD (for models without SD): {avg_sd:.6f}")
+        print(f"   Z-score (confidence level): {z_score}")
+
     # Prepare data - convert scores and SDs to percentage scale
     df_data = []
+    if debug:
+        print("\n📋 MODEL DATA (converted to percentage scale):")
+        print(f"   {'Model':<30} {'Score':<12} {'SD':<12} {'SD Source':<15}")
+        print(f"   {'-' * 30} {'-' * 12} {'-' * 12} {'-' * 15}")
+
     for model, avg, sd, n, cost in results:
         # Use average SD for models with sd=None
         effective_sd = sd if sd is not None else avg_sd
+        sd_source = "measured" if sd is not None else "average"
+        if debug:
+            print(
+                f"   {model:<30} {avg * 100:>11.4f} {effective_sd * 100:>11.4f} {sd_source:<15}"
+            )
         df_data.append(
             {
                 "model": model,
@@ -65,17 +88,53 @@ def categorize_tiers(results: list[tuple], z_score: float = 1.0) -> dict[str, in
     df = df.sort_values(by="score", ascending=True).reset_index(drop=True)
     df["tier"] = 0
 
+    if debug:
+        print("\n🔄 SORTING: Models sorted by score (ascending - best first)")
+        print(
+            f"   Best performer: {df.loc[0, 'model']} (score: {df.loc[0, 'score']:.4f})"
+        )
+        print(
+            f"   Worst performer: {df.loc[len(df) - 1, 'model']} (score: {df.loc[len(df) - 1, 'score']:.4f})"
+        )
+        print("\n" + "=" * 80)
+        print("BEGINNING TIER ASSIGNMENT LOOP")
+        print("=" * 80)
+
     current_tier = 1
     remaining_indices = df.index.tolist()
 
     while len(remaining_indices) > 0:
+        if debug:
+            print(f"\n{'─' * 80}")
+            print(f"TIER {current_tier} ASSIGNMENT")
+            print(f"{'─' * 80}")
+            print(f"   Remaining models to tier: {len(remaining_indices)}")
+            print(
+                f"   Remaining model names: {[df.loc[i, 'model'] for i in remaining_indices]}"
+            )
+
         # Identify the leader (lowest scoring/best performing remaining item)
         leader_idx = remaining_indices[0]
         leader_score = df.loc[leader_idx, "score"]
         leader_sd = df.loc[leader_idx, "sd"]
-
-        # Calculate leader's upper bound (worst likely performance for the leader)
         leader_max = leader_score + (z_score * leader_sd)
+
+        if debug:
+            print("\n   👑 LEADER SELECTION:")
+            print(f"      Leader: {df.loc[leader_idx, 'model']}")
+            print(f"      Leader score: {leader_score:.4f}")
+            print(f"      Leader SD: {leader_sd:.4f}")
+            print(
+                f"      Leader's upper bound (score + {z_score}×SD): {leader_max:.4f}"
+            )
+            print(
+                "\n   🔍 OVERLAP CHECK (candidate's lower bound ≤ leader's upper bound):"
+            )
+            print(f"      Leader's max (upper bound): {leader_max:.4f}")
+            print(
+                f"\n      {'Model':<30} {'Score':<12} {'SD':<12} {'Lower Bound':<15} {'Overlap?':<10}"
+            )
+            print(f"      {'-' * 30} {'-' * 12} {'-' * 12} {'-' * 15} {'-' * 10}")
 
         # Find all items whose lower bound overlaps with leader's upper bound
         current_batch = df.loc[remaining_indices]
@@ -85,27 +144,81 @@ def categorize_tiers(results: list[tuple], z_score: float = 1.0) -> dict[str, in
         tier_members_mask = candidate_mins <= leader_max
         tier_member_indices = current_batch[tier_members_mask].index.tolist()
 
+        if debug:
+            for idx in remaining_indices:
+                model = df.loc[idx, "model"]
+                score = df.loc[idx, "score"]
+                sd = df.loc[idx, "sd"]
+                lower_bound = score - (z_score * sd)
+                overlaps = lower_bound <= leader_max
+                overlap_str = "YES ✓" if overlaps else "NO ✗"
+                print(
+                    f"      {model:<30} {score:>11.4f} {sd:>11.4f} {lower_bound:>14.4f} {overlap_str:<10}"
+                )
+
         # Assign tier
+        if debug:
+            print(f"\n   ✅ TIER {current_tier} MEMBERS:")
+            for idx in tier_member_indices:
+                model = df.loc[idx, "model"]
+                score = df.loc[idx, "score"]
+                print(f"      • {model} (score: {score:.4f})")
+
         df.loc[tier_member_indices, "tier"] = current_tier
 
         # Remove tiered items from remaining list
         remaining_indices = [
             idx for idx in remaining_indices if idx not in tier_member_indices
         ]
+
+        if debug:
+            print("\n   📊 PROGRESS:")
+            print(
+                f"      Assigned {len(tier_member_indices)} model(s) to Tier {current_tier}"
+            )
+            print(f"      Remaining models: {len(remaining_indices)}")
+            if len(remaining_indices) > 0:
+                print(
+                    f"      Next leader will be: {df.loc[remaining_indices[0], 'model']}"
+                )
+            else:
+                print("      All models have been assigned to tiers!")
+
         current_tier += 1
+
+    # Final summary
+    if debug:
+        total_tiers = current_tier - 1
+        print("\n" + "=" * 80)
+        print("TIERING COMPLETE")
+        print("=" * 80)
+        print(f"\n📈 FINAL TIER ASSIGNMENTS ({total_tiers} tiers total):")
+
+        for tier_num in range(1, total_tiers + 1):
+            tier_models = df[df["tier"] == tier_num]["model"].tolist()
+            print(f"\n   Tier {tier_num}: {len(tier_models)} model(s)")
+            for model in tier_models:
+                score = df[df["model"] == model]["score"].values[0]
+                print(f"      • {model} (score: {score:.4f})")
+
+        print("\n" + "=" * 80 + "\n")
 
     # Create mapping from model name to tier
     return dict(zip(df["model"], df["tier"]))
 
 
 def create_plot(
-    results: list[tuple], output_filename: str, open_models: set[str] | None = None
+    results: list[tuple],
+    output_filename: str,
+    open_models: set[str] | None = None,
+    debug: bool = False,
 ) -> None:
     """Create a scatter plot of model performance vs. cost and save to PNG.
 
     Args:
         results: List of tuples (model, avg, sd, n, cost) from main computation
         output_filename: Path to save the PNG output
+        debug: If True, show detailed tiering debug output
     """
     try:
         import pandas as pd
@@ -123,7 +236,7 @@ def create_plot(
     avg_sd = sum(valid_sds) / len(valid_sds) if valid_sds else 0.0
 
     # Categorize models into tiers
-    tier_mapping = categorize_tiers(results, z_score=1.0)
+    tier_mapping = categorize_tiers(results, z_score=1.0, debug=debug)
 
     # Convert results to DataFrame
     df_data = []
@@ -344,6 +457,12 @@ def main():
         action="store_true",
         help="Generate a PNG plot of model performance vs. cost",
     )
+    parser.add_argument(
+        "-d",
+        "--debug",
+        action="store_true",
+        help="Show detailed tiering debug output",
+    )
     args = parser.parse_args()
 
     filename = args.filename
@@ -450,7 +569,15 @@ def main():
         base_name = os.path.splitext(filename)[0]
         plot_filename = f"{base_name}.png"
         open_models = set(open_dict.keys()) if open_dict else set()
-        create_plot(plottable_results, plot_filename, open_models)
+        create_plot(plottable_results, plot_filename, open_models, debug=args.debug)
+    elif args.debug:
+        # Run tiering with debug output even without plot
+        # Filter results to only include models with cost data for consistency
+        plottable_results = [r for r in results if r[4] is not None]
+        if plottable_results:
+            categorize_tiers(plottable_results, z_score=1.0, debug=True)
+        else:
+            categorize_tiers(results, z_score=1.0, debug=True)
 
 
 if __name__ == "__main__":
