@@ -384,9 +384,9 @@ def main():
 
         mean = sum(scores) / n
 
-        # Sparse-data penalty (added to the average)
+        # Sparse-data penalty (added to the average, capped at 1.0)
         penalty = 0.25 if n == 1 else (0.10 if n == 2 else 0.0)
-        avg = mean + penalty
+        avg = min(mean + penalty, 1.0)
 
         # Population std-dev of the raw percentile scores
         if n >= 2:
