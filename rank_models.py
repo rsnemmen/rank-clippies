@@ -446,7 +446,7 @@ def create_ranking_plot(
         if cost is not None:
             log_cost = math.log10(cost)
             normalized = (log_cost - log_min) / (log_max - log_min) if log_max != log_min else 0.5
-            markersize = 4 + normalized * 16
+            markersize = 4 + normalized * 36
         else:
             markersize = 8
 
