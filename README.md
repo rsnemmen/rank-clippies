@@ -13,7 +13,7 @@ python rank_models.py my_data.txt         # or pass a custom file
 ```
 # run with agentic coding leaderboards 
 # (actual data as of Feb 11 2026)
-python rank_models.py ranking_coding.txt  
+python rank_models.py ranks_coding.txt  
 ```
 
 The above command will produce the following output:
@@ -39,7 +39,13 @@ The above command will produce the following output:
 ```
 # generate performance plot for general reasoning 
 # (actual data as of Feb 11 2026)
-python rank_models.py ranking_general.txt --plot  
+python rank_models.py ranks_general.txt --plot  
+
+# show detailed tiering diagnostics
+python rank_models.py ranks_general.txt --debug
+
+# combine debug and plot
+python rank_models.py ranks_general.txt -d -p
 ```
 
 This will output the average ranking and this plot:
@@ -59,13 +65,14 @@ pip install pandas matplotlib numpy  # only needed for --plot flag
 ### Command-line Arguments
 
 ```
-python rank_models.py [filename] [-p|--plot]
+python rank_models.py [filename] [-p|--plot] [-d|--debug]
 ```
 
 | Argument | Description |
 |----------|-------------|
 | `filename` | Path to the input file containing benchmark data. Defaults to `ranks_general.txt` if not provided. |
 | `-p`, `--plot` | Generate a PNG scatter plot of model performance vs. cost with statistical tiering visualization. |
+| `-d`, `--debug` | Show detailed tiering diagnostics including leader selection, overlap checks, and tier assignments. |
 
 ## Input format for datafile
 
@@ -127,6 +134,8 @@ Models evaluated on very few benchmarks get a penalty added to their average to 
 | 1                      | +0.25   |
 | 2                      | +0.10   |
 | 3 or more              | +0.00   |
+
+**Note:** Penalized scores are capped at 1.0 (100th percentile) to prevent exceeding the theoretical maximum.
 
 ### 4. Standard deviation
 
