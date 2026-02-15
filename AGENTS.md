@@ -10,23 +10,26 @@ Python tool for computing unified model rankings from benchmark leaderboards usi
 
 ```bash
 # Run the script
-python rank_models.py                    # default: ranks_general.txt
-python rank_models.py my_data.txt        # custom input file
-python rank_models.py my_data.txt --plot # generate PNG visualization
+python rank_models.py                              # default: ranks_general.txt
+python rank_models.py my_data.txt                  # custom input file
+python rank_models.py my_data.txt --plot           # generate PNG visualization
+python rank_models.py my_data.txt -d               # show tiering debug output
+python rank_models.py my_data.txt -d -p            # debug + plot
 
 # Type checking
 mypy rank_models.py --strict
 
 # Linting
-ruff check rank_models.py
+ruff check rank_models.py                          # check for issues
+ruff check rank_models.py --fix                    # auto-fix issues
 
 # Formatting
-ruff format rank_models.py
+ruff format rank_models.py                         # format code
 
 # Testing (when added)
-python -m pytest tests/ -v                           # all tests
-python -m pytest tests/test_file.py -v               # single test file
-python -m pytest tests/test_file.py::test_function -v # single test
+python -m pytest tests/ -v                         # all tests
+python -m pytest tests/test_file.py -v             # single test file
+python -m pytest tests/test_file.py::test_function -v  # single test
 ```
 
 **Note:** No tests exist yet. When adding, use pytest in `tests/` directory.
@@ -34,11 +37,12 @@ python -m pytest tests/test_file.py::test_function -v # single test
 ## CLI Usage
 
 ```bash
-python rank_models.py [filename] [-p|--plot]
+python rank_models.py [filename] [-p|--plot] [-d|--debug]
 ```
 
 - `filename` - Input file (default: `ranks_general.txt`)
 - `--plot`, `-p` - Generate PNG visualization with tiering
+- `--debug`, `-d` - Show detailed tiering diagnostics
 
 ## Code Style Guidelines
 
@@ -63,17 +67,20 @@ python rank_models.py [filename] [-p|--plot]
 - Use inline annotations: `model_scores: dict[str, list[float]]`
 - Use `|` for unions: `str | None`
 - Annotate all function parameters and return types
+- Use descriptive parameter names in docstrings
 
 ### Naming Conventions
 - Functions/variables: `snake_case`
 - Constants: `UPPER_CASE`
 - Modules: `lowercase`
 - Type variables: descriptive names
+- Boolean flags: use `is_` or `has_` prefix when appropriate
 
 ### Documentation
 - Module docstring with usage examples
-- Function docstrings in imperative mood
+- Function docstrings in imperative mood ("Calculate", "Parse", not "Calculates")
 - Inline comments explain "why", not "what"
+- Keep docstrings concise but complete
 
 ### Code Patterns
 - Prefer comprehensions for simple transforms
@@ -81,6 +88,7 @@ python rank_models.py [filename] [-p|--plot]
 - Use f-strings: `f"{value:.3f}"`
 - Use `sys.exit()` for fatal errors
 - Handle `None` explicitly with checks, not try/except
+- Use early returns to reduce nesting
 
 ### File I/O
 - Use context managers: `with open(...) as f:`
@@ -99,6 +107,18 @@ python rank_models.py [filename] [-p|--plot]
 if not os.path.exists(filename):
     print(f"Error: File '{filename}' not found.", file=sys.stderr)
     print("\nUsage: python rank_models.py [filename]", file=sys.stderr)
+    sys.exit(1)
+```
+
+### Optional Dependencies Pattern
+
+```python
+try:
+    import pandas as pd
+    import matplotlib.pyplot as plt
+except ImportError as exc:
+    print(f"Error: {exc}", file=sys.stderr)
+    print("Plotting requires pandas and matplotlib.", file=sys.stderr)
     sys.exit(1)
 ```
 
@@ -128,6 +148,7 @@ if not os.path.exists(filename):
 7. Print errors to stderr, not stdout
 8. Include file validation for new file operations
 9. Graceful handling when optional dependencies missing
+10. Add debug output for complex algorithms when appropriate
 
 ## Output Standards
 
@@ -135,3 +156,15 @@ if not os.path.exists(filename):
 - **Percentages:** 3 decimal places (0.XXX format)
 - **Plots:** 150 DPI PNG, log scale X-axis, inverted Y-axis
 - **Legend:** Show tiers when plotting enabled
+- **Debug Output:** Use emojis and clear separators for readability
+
+## Debug Mode Guidelines
+
+When implementing debug functionality:
+- Use conditional printing based on a `debug: bool` parameter
+- Structure output with clear headers and separators
+- Include all intermediate calculation steps
+- Show before/after states for transformations
+- Use visual indicators (✓, ✗, 👑, 📊) for quick scanning
+- Print to stdout (not stderr) for debug output
+- Keep debug logic separate from core algorithm when possible
