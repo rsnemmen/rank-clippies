@@ -391,6 +391,126 @@ def create_plot(
     print(f"Plot saved to: {output_filename}")
 
 
+def create_ranking_plot(
+    results: list[tuple],
+    output_filename: str,
+    open_models: set[str] | None = None,
+    debug: bool = False,
+) -> None:
+    """Create a horizontal ranking plot with models ordered by score.
+
+    Args:
+        results: List of tuples (model, avg, sd, n, cost) from main computation
+        output_filename: Path to save the PNG output
+        open_models: Set of open source model names
+        debug: If True, show detailed tiering debug output
+    """
+    try:
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from matplotlib.lines import Line2D
+    except ImportError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        print("Plotting requires matplotlib. Install with:", file=sys.stderr)
+        print("  pip install matplotlib", file=sys.stderr)
+        sys.exit(1)
+
+    valid_sds = [sd for _, _, sd, _, _ in results if sd is not None]
+    avg_sd = sum(valid_sds) / len(valid_sds) if valid_sds else 0.0
+
+    tier_mapping = categorize_tiers(results, z_score=1.0, debug=debug)
+
+    sorted_results = sorted(results, key=lambda r: r[1])
+
+    fig, ax = plt.subplots(figsize=(12, max(6, len(results) * 0.4)))
+
+    max_tier = max(tier_mapping.values()) if tier_mapping else 1
+    colors = plt.cm.tab10(np.linspace(0, 1, max_tier))
+
+    y_positions = range(len(sorted_results))
+    y_labels = [f"{i + 1}. {model}" for i, (model, _, _, _, _) in enumerate(sorted_results)]
+
+    for i, (model, avg, sd, n, cost) in enumerate(sorted_results):
+        effective_sd = sd if sd is not None else avg_sd
+        tier = tier_mapping.get(model, 1)
+        color = colors[tier - 1]
+        is_open = open_models and model in open_models
+        marker = "s" if is_open else "o"
+
+        ax.errorbar(
+            avg * 100,
+            i,
+            xerr=effective_sd * 100,
+            fmt=marker,
+            color=color,
+            ecolor=color,
+            alpha=0.7,
+            markersize=10,
+            capsize=3,
+            markeredgecolor="black",
+        )
+
+    ax.set_yticks(y_positions)
+    ax.set_yticklabels(y_labels, fontsize=11)
+
+    ax.set_xlabel("Average Score (Lower is Better)", fontsize=14)
+    ax.set_title("Model Ranking by Score", fontsize=16)
+    ax.grid(True, axis="x", linestyle="--", alpha=0.6)
+
+    ax.invert_yaxis()
+
+    max_score = max(avg for _, avg, _, _, _ in results) * 100
+    upper_limit = get_y_upper_limit(max_score)
+    ax.set_xlim(left=0, right=upper_limit)
+
+    legend_elements = []
+    for tier_num in sorted(set(tier_mapping.values())):
+        legend_elements.append(
+            Line2D(
+                [0],
+                [0],
+                marker="o",
+                color="w",
+                markerfacecolor=colors[tier_num - 1],
+                markersize=10,
+                label=f"Tier {tier_num}",
+                markeredgecolor="black",
+            )
+        )
+    leg1 = ax.legend(handles=legend_elements, loc="lower right", fontsize=10, title="Tiers")
+    ax.add_artist(leg1)
+
+    marker_legend = [
+        Line2D(
+            [0],
+            [0],
+            marker="o",
+            color="w",
+            markerfacecolor="gray",
+            markersize=10,
+            label="Proprietary models",
+            markeredgecolor="black",
+        ),
+        Line2D(
+            [0],
+            [0],
+            marker="s",
+            color="w",
+            markerfacecolor="gray",
+            markersize=10,
+            label="Open models",
+            markeredgecolor="black",
+        ),
+    ]
+    ax.legend(handles=marker_legend, loc="upper right", fontsize=10)
+
+    plt.tight_layout()
+    plt.savefig(output_filename, dpi=150)
+    plt.close()
+
+    print(f"Ranking plot saved to: {output_filename}")
+
+
 def parse_file(filename):
     """Parse ranking.txt and return (list_of_benchmark_dicts, cost_dict, open_dict)."""
     with open(filename, "r") as f:
@@ -555,7 +675,7 @@ def main():
 
         if excluded:
             print(
-                f"\nNote: {len(excluded)} model(s) excluded from plot (no cost data): {', '.join(excluded)}"
+                f"\nNote: {len(excluded)} model(s) excluded from cost plot (no cost data): {', '.join(excluded)}"
             )
 
         if not plottable_results:
@@ -565,11 +685,14 @@ def main():
             )
             sys.exit(1)
 
-        # Create output filename with same basename but .png extension
         base_name = os.path.splitext(filename)[0]
-        plot_filename = f"{base_name}.png"
         open_models = set(open_dict.keys()) if open_dict else set()
+
+        plot_filename = f"{base_name}.png"
         create_plot(plottable_results, plot_filename, open_models, debug=args.debug)
+
+        ranking_plot_filename = f"{base_name}_ranking.png"
+        create_ranking_plot(results, ranking_plot_filename, open_models, debug=args.debug)
     elif args.debug:
         # Run tiering with debug output even without plot
         # Filter results to only include models with cost data for consistency
