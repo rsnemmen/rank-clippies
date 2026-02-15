@@ -14,6 +14,19 @@ import os
 import sys
 
 
+def get_y_upper_limit(max_score: float) -> int:
+    """Calculate upper y-axis limit by rounding up to next multiple of 10, capped at 100.
+    
+    Args:
+        max_score: The maximum average score (in percentage scale)
+        
+    Returns:
+        Upper y-axis limit as an integer, capped at 100
+    """
+    upper = (int(max_score) // 10 + 1) * 10
+    return min(upper, 100)
+
+
 def categorize_tiers(results: list[tuple], z_score: float = 1.0) -> dict[str, int]:
     """Categorize models into tiers based on statistical overlap with tier leaders.
     
@@ -207,8 +220,10 @@ def create_plot(results: list[tuple], output_filename: str, open_models: set[str
     # Invert Y axis so the "Best" (Rank 1/Low Score) is at the top
     plt.gca().invert_yaxis()
     
-    # Set y-axis lower limit to 0 (visually at bottom due to inverted axis)
-    plt.gca().set_ylim(top=0)
+    # Calculate y-axis limits: 0 at bottom, upper limit based on max score
+    max_score = max(avg for _, avg, _, _, _ in results) * 100
+    upper_limit = get_y_upper_limit(max_score)
+    plt.gca().set_ylim(top=0, bottom=upper_limit)
     
     plt.tight_layout()
     plt.savefig(output_filename, dpi=150)
