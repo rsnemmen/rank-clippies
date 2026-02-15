@@ -207,6 +207,9 @@ def create_plot(results: list[tuple], output_filename: str, open_models: set[str
     # Invert Y axis so the "Best" (Rank 1/Low Score) is at the top
     plt.gca().invert_yaxis()
     
+    # Set y-axis lower limit to 0 (visually at bottom due to inverted axis)
+    plt.gca().set_ylim(top=0)
+    
     plt.tight_layout()
     plt.savefig(output_filename, dpi=150)
     plt.close()
