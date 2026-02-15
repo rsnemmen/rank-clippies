@@ -50,6 +50,6 @@ cost={"sonnet45":500, "opus46":850, "haiku45":170,
 "gemini-pro3":370, "gemini-flash3":100,
 "grok41":600, "grok-fast41":20,
 "kimi25":120, "minimax25":50, "deepseek32":23, 
-"qwen3-235b":300, "qwen3-coder-30b":50,
+"qwen3-235b":300, "qwen3-coder-30b":50, "qwen3-80b":80, "qwen3-32b":40,
 "glm5":140, "mistral":400,
-"llama-maverick":55}
+"llama-maverick":55, "nemotron-nano3":20}
