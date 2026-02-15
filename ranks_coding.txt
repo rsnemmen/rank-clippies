@@ -75,7 +75,7 @@ open={"gpt-oss-120b":40, "gpt-oss-20b":15,
 
 # Credit cost per 1k tokens
 cost={"sonnet45":500, "opus46":850, "haiku45":170,
-"gpt52":470, "gpt-pro52":5600, "gpt-instant52":470, "gpt-codex53":470, "gpt-oss-120b":40, "gpt-oss-20b":15,
+"gpt52":470, "gpt-pro52":5700, "gpt-instant52":470, "gpt-codex53":470, "gpt-oss-120b":40, "gpt-oss-20b":15,
 "gemini-pro3":370, "gemini-flash3":100,
 "grok41":600, "grok-fast41":20,
 "kimi25":120, "minimax25":50, "deepseek32":23, 
