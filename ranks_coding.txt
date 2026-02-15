@@ -33,7 +33,7 @@ swebench_pro_public={"sonnet45":1, "opus46":1, "haiku45":2,
 "kimi25":2, "minimax25":2, "deepseek32":12, 
 "qwen3-80b":None, "qwen3-coder-30":17, "qwen3-235b":10,
 "glm5":12,
-"llama-maverick":13,
+"llama-maverick":13, "nemotron3":None,
 "known_totals":20 }
 
 berkeley={"sonnet45":2, "opus46":1, "haiku45":6,
@@ -46,15 +46,15 @@ berkeley={"sonnet45":2, "opus46":1, "haiku45":6,
 "llama-maverick":50,
 "known_totals":109 }
 
-aanalysis={"sonnet45":9, "opus46":2, "haiku45":None,
-"gpt-instant52":None, "gpt52":4, "gpt-oss-120b":14, "gpt-codex53":6, "gpt-oss-20b":17,
-"gemini-pro3":9, "gemini-flash3":10,
-"grok41":13, "grok-fast41":11,
-"kimi25":5, "minimax25":12, "deepseek32":8, 
-"qwen3-80b":None, "qwen3-32b":None, "qwen3-235b":16, "qwen3-coder-30":None,
-"glm5":3,
-"llama-maverick":22,
-"known_totals":397}
+aanalysis={"sonnet45":62, "opus46":1, "haiku45":108,
+"gpt-instant52":234, "gpt52":32, "gpt-oss-120b":115, "gpt-codex53":43, "gpt-oss-20b":154,
+"gemini-pro3":62, "gemini-flash3":70,
+"grok41":100, "grok-fast41":73,
+"kimi25":35, "minimax25":47, "deepseek32":58, 
+"qwen3-80b":None, "qwen3-32b":226, "qwen3-235b":146, "qwen3-coder-30":180,
+"glm5":20,
+"llama-maverick":245, "nemotron-nano3":211,
+"known_totals":245}
 
 terminal_bench={"sonnet45":38, "opus46":3, "haiku45":57,
 "gpt-instant52":88, "gpt52":5, "gpt-codex53":1, "gpt-oss-120b":79, "gpt-oss-20b":92,

@@ -60,7 +60,7 @@ def categorize_tiers(results: list[tuple], z_score: float = 1.0) -> dict[str, in
     df = pd.DataFrame(df_data)
     
     # Sort by score (ascending) - lowest scores (best performers) first
-    df = df.sort_values(by='score', ascending=True).copy()
+    df = df.sort_values(by='score', ascending=True).reset_index(drop=True)
     df['tier'] = 0
     
     current_tier = 1
