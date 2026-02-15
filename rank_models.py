@@ -427,6 +427,12 @@ def create_ranking_plot(
     max_tier = max(tier_mapping.values()) if tier_mapping else 1
     colors = plt.cm.tab10(np.linspace(0, 1, max_tier))
 
+    costs = [cost for _, _, _, _, cost in sorted_results if cost is not None]
+    min_cost = min(costs) if costs else 1
+    max_cost = max(costs) if costs else 100
+    log_min = math.log10(min_cost)
+    log_max = math.log10(max_cost)
+
     y_positions = range(len(sorted_results))
     y_labels = [f"{i + 1}. {model}" for i, (model, _, _, _, _) in enumerate(sorted_results)]
 
@@ -437,6 +443,13 @@ def create_ranking_plot(
         is_open = open_models and model in open_models
         marker = "s" if is_open else "o"
 
+        if cost is not None:
+            log_cost = math.log10(cost)
+            normalized = (log_cost - log_min) / (log_max - log_min) if log_max != log_min else 0.5
+            markersize = 4 + normalized * 16
+        else:
+            markersize = 8
+
         ax.errorbar(
             avg * 100,
             i,
@@ -445,7 +458,7 @@ def create_ranking_plot(
             color=color,
             ecolor=color,
             alpha=0.7,
-            markersize=10,
+            markersize=markersize,
             capsize=3,
             markeredgecolor="black",
         )
