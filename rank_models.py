@@ -337,7 +337,7 @@ def create_plot(
 
     # Formatting
     plt.title("LLM Model Performance vs. Cost", fontsize=20)
-    plt.ylabel("Average Score $\\times 100$ (Lower is Better)", fontsize=19)
+    plt.ylabel("Percentile Rank (Lower = Better)", fontsize=19)
     plt.xlabel("Credit Cost (per 1k tokens) - Log Scale", fontsize=19)
     plt.grid(True, linestyle="--", alpha=0.6)
 
@@ -466,8 +466,8 @@ def create_ranking_plot(
     ax.set_yticks(y_positions)
     ax.set_yticklabels(y_labels, fontsize=11)
 
-    ax.set_xlabel("Average Score (Lower is Better)", fontsize=14)
-    ax.set_title("Model Ranking by Score", fontsize=16)
+    ax.set_xlabel("Percentile Rank (Lower = Better)", fontsize=14)
+    ax.set_title("Model Ranking", fontsize=16)
     ax.grid(True, axis="x", linestyle="--", alpha=0.6)
 
     ax.invert_yaxis()
