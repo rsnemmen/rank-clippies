@@ -38,19 +38,28 @@ The above command will produce the following output:
 
 ```
 # generate performance plot for general reasoning 
-# (actual data as of Feb 11 2026)
-python rank_models.py ranks_general.txt --plot  
+python rank_models.py data/ranks_general.txt --plot  
+```
 
+This will output two plots. The first is the average ranking as a function of API cost:
+![](figures/ranks_general.png)  
+**Figure 1: General intelligence vs model cost.** Y-axis indicates the average percentile rank on a scale from 1 (best) to 100 (worst). X-axis is the log10 of the model’s credit cost per 1k tokens (relative). Colors indicate the model tier. Error bars ($1 \sigma$) indicate the variation of a model ranking across different benchmarks.
+
+The second plot is a different visualization of the tiers: 
+![](figures/ranks_general_ranking.png)  
+**Figure 2: Model ranking (general intelligence).** Bigger circles indicate more expensive models.
+
+The same plots but evaluating coding and agentic coding performance are available in the `data` folder (files `ranks_coding.png` and `ranks_coding_ranking.png`).
+
+For more detailed information about the ranking procedure and for debugging:
+
+```
 # show detailed tiering diagnostics
 python rank_models.py ranks_general.txt --debug
 
 # combine debug and plot
 python rank_models.py ranks_general.txt -d -p
 ```
-
-This will output the average ranking and this plot:
-![](sample_plot.png)  
-X-axis indicates the average score on a scale from 1 (best) to 100 (worst). Y-axis is the log10 of the model’s credit cost per 1k tokens. Colors indicate the model tier.
 
 
 ### Requirements
@@ -100,7 +109,7 @@ https://www.swebench.com
 
 ### Cost dictionary
 
-The **last** dictionary in the file holds credit costs per 1 000 tokens. It has no `known_totals` key and needs no variable-name prefix. Models missing from this dictionary will show `N/A` in the output. The value here is arbitrary. In the sample data included, it corresponds to Poe API credits.
+The last dictionary in the file holds credit costs per 1 000 tokens. It has no `known_totals` key and needs no variable-name prefix. Models missing from this dictionary will show `N/A` in the output. The value here is arbitrary. In the sample data included, it corresponds to Poe API credits.
 
 ```python
 # Credit cost per 1k tokens
@@ -119,7 +128,7 @@ percentile = rank / known_totals
 ```
 
 **Why percentile normalization?**  
-Raw ranks from different benchmarks are not directly comparable. A rank of 10 on a 300-model leaderboard is far more impressive than a rank of 10 on a 30-model leaderboard. Dividing each rank by the total number of evaluated models (`known_totals`) maps every score onto a **0–1 fractional percentile** (0 = best, 1 = worst), making cross-benchmark comparison meaningful.
+Raw ranks from different benchmarks are not directly comparable. A rank of 10 on a 300-model leaderboard is far more impressive than a rank of 10 on a 30-model leaderboard. Dividing each rank by the total number of evaluated models (`known_totals`) maps every score onto a 0–1 fractional percentile (0 = best, 1 = worst), making cross-benchmark comparison meaningful.
 
 ### 2. Averaging
 
@@ -196,7 +205,7 @@ This means if a model's best-case performance (score minus one standard deviatio
 
 ## Extending the data
 
-To add a new benchmark, append a new dictionary **above** the cost dictionary in your data file:
+To add a new benchmark, append a new dictionary above the cost dictionary in your data file:
 
 ```python
 new_bench={"opus":2, "sonnet":5, "gpt":1, "known_totals":40}
@@ -205,16 +214,8 @@ new_bench={"opus":2, "sonnet":5, "gpt":1, "known_totals":40}
 To add a new model, insert its key and rank into each relevant benchmark dictionary and, optionally, add its cost to the cost dictionary.
 
 
-## Scientific Background
-
-### Why "Indistinguishable from Best" Tiering?
+## Why "Indistinguishable from Best" Tiering?
 
 Traditional rankings treat every rank position as meaningfully different. However, in statistical analysis, two models with overlapping confidence intervals cannot be confidently ranked against each other. The "Indistinguishable from Best" method, common in scientific literature, acknowledges this uncertainty by grouping statistically tied performers.
 
 This approach answers the practical question: "Which models can I confidently say are among the best?" rather than forcing artificial distinctions where uncertainty exists.
-
-### Confidence Interval Choice
-
-We use z=1.0 (68% confidence interval, approximately ±1 standard deviation) as a balance between:
-- **Strictness** (z=1.96, 95% CI): Creates many small tiers, potentially over-splitting
-- **Leniency** (z=0.5): Creates few large tiers, potentially obscuring real differences
