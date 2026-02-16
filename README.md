@@ -6,14 +6,9 @@ Visualize model performance with statistical tiering: Generate scatter plots sho
 
 ## Quick start
 
-```bash
-python rank_models.py my_data.txt         # or pass a custom file
-```
-
-```
-# run with agentic coding leaderboards 
-# (actual data as of Feb 11 2026)
-python rank_models.py ranks_coding.txt  
+```shell
+# evaluate across general reasoning leaderboards 
+python rank_models.py data/ranks_general.txt  
 ```
 
 The above command will produce the following output:
@@ -35,8 +30,9 @@ The above command will produce the following output:
 ...
 ```
 
+For the plots:
 
-```
+```shell
 # generate performance plot for general reasoning 
 python rank_models.py data/ranks_general.txt --plot  
 ```
