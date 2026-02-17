@@ -12,11 +12,11 @@ arena={"sonnet45":16, "opus46":1, "haiku45":25,
 "gpt-instant52":37, "gpt52":4, "gpt-codex53":20, "gpt-oss-120b":101, "gpt-oss-20b":154,
 "gemini-pro3":6, "gemini-flash3":8,
 "grok41":8, "grok-fast41":29,
-"kimi25":7, "minimax25":12, "deepseek32":19, 
+"kimi25":8, "minimax25":12, "deepseek32":19, 
 "qwen3-80b":56, "qwen3-coder-30b":64, "qwen3-235b":38,
-"glm5":9, "mistral":29,
+"glm5":6, "mistral":29,
 "llama-maverick":None,
-"known_totals":300}
+"known_totals":306}
 
 swebench_verified={
     "sonnet45": 26,

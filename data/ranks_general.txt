@@ -12,11 +12,11 @@ arena={"sonnet45":11, "opus46":4, "haiku45":56,
 "gpt-instant52":27, "gpt52":9, "gpt-oss-120b":101,
 "gemini-pro3":1, "gemini-flash3":3,
 "grok41":2, "grok-fast41":25,
-"kimi25":12, "minimax25":82, "deepseek32":31, 
-"qwen3-80b":59, "qwen3-32b":119, "qwen3-235b":23, "qwen3-coder-30b":200,
-"glm5":11,
+"kimi25":19, "minimax25":82, "deepseek32":37, 
+"qwen3-80b":65, "qwen3-32b":119, "qwen3-235b":39, "qwen3-coder-30b":200, "qwen3-max":29,
+"glm5":12,
 "llama-maverick":None,
-"known_totals":300}
+"known_totals":306}
 
 humanity_last_exam={"sonnet45":14, "opus46":3, "haiku45":None,
 "gpt-pro52":2, "gpt52":1, "gpt-instant52":21,
@@ -40,7 +40,7 @@ aanalysis={"sonnet45":85, "opus46":1, "haiku45":136,
 # Open weights?
 open={"gpt-oss-120b":40, "gpt-oss-20b":15,
 "kimi25":120, "minimax25":50, "deepseek32":23, 
-"qwen3-80b":None, "qwen3-32b":305, "qwen3-235b":204, "qwen3-coder-30b":280,
+"qwen3-80b":None, "qwen3-32b":305, "qwen3-235b":204, "qwen3-coder-30b":280, "qwen35":280,
 "glm5":140, "mistral":400,
 "llama-maverick":55, "nemotron-nano3":30}
 
@@ -50,6 +50,6 @@ cost={"sonnet45":500, "opus46":850, "haiku45":170,
 "gemini-pro3":370, "gemini-flash3":100,
 "grok41":600, "grok-fast41":20,
 "kimi25":120, "minimax25":50, "deepseek32":23, 
-"qwen3-235b":300, "qwen3-coder-30b":50, "qwen3-80b":80, "qwen3-32b":40,
+"qwen3-235b":300, "qwen3-coder-30b":50, "qwen3-80b":80, "qwen3-32b":40, "qwen35":86, "qwen3-max": 220,
 "glm5":140, "mistral":400,
 "llama-maverick":55, "nemotron-nano3":20}
