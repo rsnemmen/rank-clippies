@@ -27,6 +27,52 @@ def get_y_upper_limit(max_score: float) -> int:
     return min(upper, 100)
 
 
+# Okabe-Ito colorblind-safe palette (recommended by Nature journals)
+_NATURE_COLORS = [
+    "#0072B2",  # deep blue      (Tier 1 – best)
+    "#E69F00",  # orange
+    "#009E73",  # teal green
+    "#D55E00",  # vermillion
+    "#CC79A7",  # reddish purple
+    "#56B4E9",  # sky blue
+    "#F0E442",  # yellow
+    "#999999",  # medium gray
+    "#117733",  # dark green
+    "#882255",  # wine
+]
+
+# rcParams for a Nature-style figure
+_NATURE_RC: dict[str, object] = {
+    "font.family": "sans-serif",
+    "font.sans-serif": ["Arial", "Helvetica Neue", "Helvetica", "DejaVu Sans"],
+    "axes.facecolor": "white",
+    "figure.facecolor": "white",
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+    "axes.linewidth": 0.8,
+    "axes.labelsize": 10,
+    "axes.titlesize": 12,
+    "axes.titleweight": "bold",
+    "xtick.labelsize": 9,
+    "ytick.labelsize": 9,
+    "xtick.major.size": 4,
+    "ytick.major.size": 4,
+    "xtick.major.width": 0.8,
+    "ytick.major.width": 0.8,
+    "xtick.direction": "out",
+    "ytick.direction": "out",
+    "grid.color": "#d0d0d0",
+    "grid.linewidth": 0.6,
+    "legend.fontsize": 9,
+    "legend.frameon": True,
+    "legend.framealpha": 0.9,
+    "legend.edgecolor": "#cccccc",
+    "legend.title_fontsize": 9,
+    "savefig.dpi": 300,
+    "savefig.bbox": "tight",
+}
+
+
 def categorize_tiers(
     results: list[tuple], z_score: float = 1.0, debug: bool = False
 ) -> dict[str, int]:
@@ -221,9 +267,9 @@ def create_plot(
         debug: If True, show detailed tiering debug output
     """
     try:
+        import matplotlib
         import pandas as pd
         import matplotlib.pyplot as plt
-        import numpy as np
         from matplotlib.lines import Line2D
     except ImportError as exc:
         print(f"Error: {exc}", file=sys.stderr)
@@ -241,152 +287,117 @@ def create_plot(
     # Convert results to DataFrame
     df_data = []
     for model, avg, sd, n, cost in results:
-        # Use average SD for models with sd=None
         effective_sd = sd if sd is not None else avg_sd
         df_data.append(
             {
                 "Model Name": model,
-                "Average Score": avg
-                * 100,  # Convert from percentile to match table display
-                "Std Dev": effective_sd * 100,  # Convert sd to same scale
+                "Average Score": avg * 100,
+                "Std Dev": effective_sd * 100,
                 "Credit Cost (per 1k)": cost,
                 "Tier": tier_mapping.get(model, 0),
             }
         )
 
     df = pd.DataFrame(df_data)
-
-    # Convert numeric columns (handling None in Cost)
-    df["Credit Cost (per 1k)"] = pd.to_numeric(
-        df["Credit Cost (per 1k)"], errors="coerce"
-    )
-
-    # Filter out rows with NaN costs for the plot
+    df["Credit Cost (per 1k)"] = pd.to_numeric(df["Credit Cost (per 1k)"], errors="coerce")
     plot_df = df.dropna(subset=["Credit Cost (per 1k)"])
 
-    # Create the plot
-    plt.figure(figsize=(12, 8))
+    with matplotlib.rc_context(_NATURE_RC):
+        fig, ax = plt.subplots(figsize=(11, 7))
 
-    # Get colormap for tiers
-    max_tier = plot_df["Tier"].max()
-    colors = plt.cm.tab10(np.linspace(0, 1, max_tier))
+        max_tier = int(plot_df["Tier"].max())
+        colors = [_NATURE_COLORS[i % len(_NATURE_COLORS)] for i in range(max_tier)]
 
-    # Plot each tier separately with different colors
-    for tier_num in sorted(plot_df["Tier"].unique()):
-        tier_data = plot_df[plot_df["Tier"] == tier_num]
-        color = colors[tier_num - 1]
+        eb_kw = dict(elinewidth=0.9, capsize=2, capthick=0.9)
 
-        # Separate open and closed models within this tier
-        open_data = (
-            tier_data[tier_data["Model Name"].isin(open_models)]
-            if open_models
-            else pd.DataFrame()
-        )
-        closed_data = (
-            tier_data[~tier_data["Model Name"].isin(open_models)]
-            if open_models
-            else tier_data
-        )
+        for tier_num in sorted(plot_df["Tier"].unique()):
+            tier_data = plot_df[plot_df["Tier"] == tier_num]
+            color = colors[tier_num - 1]
 
-        # Plot closed models (circles)
-        if len(closed_data) > 0:
-            plt.errorbar(
-                closed_data["Credit Cost (per 1k)"],
-                closed_data["Average Score"],
-                yerr=closed_data["Std Dev"],
-                fmt="o",  # circle markers
-                color=color,
-                ecolor=color,
-                alpha=0.7,
-                markersize=10,
-                capsize=0,  # no caps on error bars
-                markeredgecolor="black",
-                label=f"Tier {tier_num}",
+            open_data = (
+                tier_data[tier_data["Model Name"].isin(open_models)]
+                if open_models
+                else pd.DataFrame()
+            )
+            closed_data = (
+                tier_data[~tier_data["Model Name"].isin(open_models)]
+                if open_models
+                else tier_data
             )
 
-        # Plot open models (squares)
-        if len(open_data) > 0:
-            # Only add label if closed_data is empty (avoid duplicate tier labels)
-            label = f"Tier {tier_num}" if len(closed_data) == 0 else None
-            plt.errorbar(
-                open_data["Credit Cost (per 1k)"],
-                open_data["Average Score"],
-                yerr=open_data["Std Dev"],
-                fmt="s",  # square markers
-                color=color,
-                ecolor=color,
-                alpha=0.7,
-                markersize=10,
-                capsize=0,  # no caps on error bars
-                markeredgecolor="black",
-                label=label,
+            if len(closed_data) > 0:
+                ax.errorbar(
+                    closed_data["Credit Cost (per 1k)"],
+                    closed_data["Average Score"],
+                    yerr=closed_data["Std Dev"],
+                    fmt="o",
+                    color=color,
+                    ecolor=color,
+                    alpha=0.88,
+                    markersize=9,
+                    markeredgecolor="white",
+                    markeredgewidth=0.8,
+                    label=f"Tier {tier_num}",
+                    **eb_kw,
+                )
+
+            if len(open_data) > 0:
+                label = f"Tier {tier_num}" if len(closed_data) == 0 else None
+                ax.errorbar(
+                    open_data["Credit Cost (per 1k)"],
+                    open_data["Average Score"],
+                    yerr=open_data["Std Dev"],
+                    fmt="D",  # diamond for open-weight models
+                    color=color,
+                    ecolor=color,
+                    alpha=0.88,
+                    markersize=8,
+                    markeredgecolor="white",
+                    markeredgewidth=0.8,
+                    label=label,
+                    **eb_kw,
+                )
+
+        # Annotate points
+        for _, row in plot_df.iterrows():
+            ax.annotate(
+                str(row["Model Name"]),
+                (float(row["Credit Cost (per 1k)"]), float(row["Average Score"])),
+                xytext=(5, 3),
+                textcoords="offset points",
+                fontsize=7,
+                color="#444444",
             )
 
-    # Annotate points with Model Names
-    for _, row in plot_df.iterrows():
-        model_name: str = str(row["Model Name"])
-        cost_val: float = float(row["Credit Cost (per 1k)"])
-        score_val: float = float(row["Average Score"])
-        plt.annotate(
-            model_name,
-            (cost_val, score_val),
-            xytext=(5, 5),
-            textcoords="offset points",
-            fontsize=13,
-        )
+        ax.set_title("LLM Model Performance vs. Cost", pad=12)
+        ax.set_ylabel("Percentile rank (lower = better)")
+        ax.set_xlabel("Credit cost per 1 k tokens (log scale)")
+        ax.grid(True, linestyle="--", linewidth=0.6, alpha=0.5)
 
-    # Formatting
-    plt.title("LLM Model Performance vs. Cost", fontsize=20)
-    plt.ylabel("Percentile Rank (Lower = Better)", fontsize=19)
-    plt.xlabel("Credit Cost (per 1k tokens) - Log Scale", fontsize=19)
-    plt.grid(True, linestyle="--", alpha=0.6)
+        leg1 = ax.legend(loc="best", title="Performance tier")
+        ax.add_artist(leg1)
 
-    # Add legend for tiers
-    leg1 = plt.legend(loc="best", fontsize=12, title="Tiers", title_fontsize=13)
-    plt.gca().add_artist(leg1)
+        legend_elements = [
+            Line2D(
+                [0], [0], marker="o", color="w", markerfacecolor="#666666",
+                markersize=9, label="Proprietary", markeredgecolor="white", markeredgewidth=0.8,
+            ),
+            Line2D(
+                [0], [0], marker="D", color="w", markerfacecolor="#666666",
+                markersize=8, label="Open-weight", markeredgecolor="white", markeredgewidth=0.8,
+            ),
+        ]
+        ax.legend(handles=legend_elements, loc="lower right")
 
-    # Add legend for marker types (circle = Proprietary, square = Open)
-    legend_elements = [
-        Line2D(
-            [0],
-            [0],
-            marker="o",
-            color="w",
-            markerfacecolor="gray",
-            markersize=10,
-            label="Proprietary models",
-            markeredgecolor="black",
-        ),
-        Line2D(
-            [0],
-            [0],
-            marker="s",
-            color="w",
-            markerfacecolor="gray",
-            markersize=10,
-            label="Open models",
-            markeredgecolor="black",
-        ),
-    ]
-    plt.legend(handles=legend_elements, loc="lower right", fontsize=11)
+        ax.set_xscale("log")
+        ax.invert_yaxis()
 
-    plt.tick_params(axis="both", which="major", labelsize=15)
-    plt.tick_params(axis="both", which="minor", labelsize=15)
+        max_score = max(avg for _, avg, _, _, _ in results) * 100
+        upper_limit = get_y_upper_limit(max_score)
+        ax.set_ylim(top=0, bottom=upper_limit)
 
-    # Use a log scale for X axis (Cost)
-    plt.xscale("log")
-
-    # Invert Y axis so the "Best" (Rank 1/Low Score) is at the top
-    plt.gca().invert_yaxis()
-
-    # Calculate y-axis limits: 0 at bottom, upper limit based on max score
-    max_score = max(avg for _, avg, _, _, _ in results) * 100
-    upper_limit = get_y_upper_limit(max_score)
-    plt.gca().set_ylim(top=0, bottom=upper_limit)
-
-    plt.tight_layout()
-    plt.savefig(output_filename, dpi=150)
-    plt.close()
+        fig.savefig(output_filename)
+        plt.close(fig)
 
     print(f"Plot saved to: {output_filename}")
 
@@ -406,8 +417,8 @@ def create_ranking_plot(
         debug: If True, show detailed tiering debug output
     """
     try:
+        import matplotlib
         import matplotlib.pyplot as plt
-        import numpy as np
         from matplotlib.lines import Line2D
     except ImportError as exc:
         print(f"Error: {exc}", file=sys.stderr)
@@ -419,107 +430,102 @@ def create_ranking_plot(
     avg_sd = sum(valid_sds) / len(valid_sds) if valid_sds else 0.0
 
     tier_mapping = categorize_tiers(results, z_score=1.0, debug=debug)
-
     sorted_results = sorted(results, key=lambda r: r[1])
+    n_models = len(sorted_results)
 
-    fig, ax = plt.subplots(figsize=(12, max(6, len(results) * 0.4)))
+    with matplotlib.rc_context(_NATURE_RC):
+        fig, ax = plt.subplots(figsize=(11, max(5, n_models * 0.42)))
 
-    max_tier = max(tier_mapping.values()) if tier_mapping else 1
-    colors = plt.cm.tab10(np.linspace(0, 1, max_tier))
+        max_tier = max(tier_mapping.values()) if tier_mapping else 1
+        colors = [_NATURE_COLORS[i % len(_NATURE_COLORS)] for i in range(max_tier)]
 
-    costs = [cost for _, _, _, _, cost in sorted_results if cost is not None]
-    min_cost = min(costs) if costs else 1
-    max_cost = max(costs) if costs else 100
-    log_min = math.log10(min_cost)
-    log_max = math.log10(max_cost)
+        costs = [cost for _, _, _, _, cost in sorted_results if cost is not None]
+        min_cost = min(costs) if costs else 1
+        max_cost = max(costs) if costs else 100
+        log_min = math.log10(min_cost)
+        log_max = math.log10(max_cost)
 
-    y_positions = range(len(sorted_results))
-    y_labels = [f"{i + 1}. {model}" for i, (model, _, _, _, _) in enumerate(sorted_results)]
+        # Alternating row backgrounds for readability
+        for i in range(n_models):
+            if i % 2 == 0:
+                ax.axhspan(i - 0.5, i + 0.5, facecolor="#f5f5f5", alpha=1.0, zorder=0)
 
-    for i, (model, avg, sd, n, cost) in enumerate(sorted_results):
-        effective_sd = sd if sd is not None else avg_sd
-        tier = tier_mapping.get(model, 1)
-        color = colors[tier - 1]
-        is_open = open_models and model in open_models
-        marker = "s" if is_open else "o"
+        for i, (model, avg, sd, n_bench, cost) in enumerate(sorted_results):
+            effective_sd = sd if sd is not None else avg_sd
+            tier = tier_mapping.get(model, 1)
+            color = colors[tier - 1]
+            is_open = open_models and model in open_models
+            marker = "D" if is_open else "o"
 
-        if cost is not None:
-            log_cost = math.log10(cost)
-            normalized = (log_cost - log_min) / (log_max - log_min) if log_max != log_min else 0.5
-            markersize = 4 + normalized * 36
-        else:
-            markersize = 8
+            if cost is not None and log_max != log_min:
+                normalized = (math.log10(cost) - log_min) / (log_max - log_min)
+                markersize = 5 + normalized * 12
+            else:
+                markersize = 7
 
-        ax.errorbar(
-            avg * 100,
-            i,
-            xerr=effective_sd * 100,
-            fmt=marker,
-            color=color,
-            ecolor=color,
-            alpha=0.7,
-            markersize=markersize,
-            capsize=3,
-            markeredgecolor="black",
-        )
-
-    ax.set_yticks(y_positions)
-    ax.set_yticklabels(y_labels, fontsize=11)
-
-    ax.set_xlabel("Percentile Rank (Lower = Better)", fontsize=14)
-    ax.set_title("Model Ranking", fontsize=16)
-    ax.grid(True, axis="x", linestyle="--", alpha=0.6)
-
-    ax.invert_yaxis()
-
-    max_score = max(avg for _, avg, _, _, _ in results) * 100
-    upper_limit = get_y_upper_limit(max_score)
-    ax.set_xlim(left=0, right=upper_limit)
-
-    legend_elements = []
-    for tier_num in sorted(set(tier_mapping.values())):
-        legend_elements.append(
-            Line2D(
-                [0],
-                [0],
-                marker="o",
-                color="w",
-                markerfacecolor=colors[tier_num - 1],
-                markersize=10,
-                label=f"Tier {tier_num}",
-                markeredgecolor="black",
+            ax.errorbar(
+                avg * 100,
+                i,
+                xerr=effective_sd * 100,
+                fmt=marker,
+                color=color,
+                ecolor=color,
+                elinewidth=0.9,
+                alpha=0.88,
+                markersize=markersize,
+                capsize=2,
+                capthick=0.9,
+                markeredgecolor="white",
+                markeredgewidth=0.6,
+                zorder=3,
             )
-        )
-    leg1 = ax.legend(handles=legend_elements, loc="lower right", fontsize=10, title="Tiers")
-    ax.add_artist(leg1)
 
-    marker_legend = [
-        Line2D(
-            [0],
-            [0],
-            marker="o",
-            color="w",
-            markerfacecolor="gray",
-            markersize=10,
-            label="Proprietary models",
-            markeredgecolor="black",
-        ),
-        Line2D(
-            [0],
-            [0],
-            marker="s",
-            color="w",
-            markerfacecolor="gray",
-            markersize=10,
-            label="Open models",
-            markeredgecolor="black",
-        ),
-    ]
-    ax.legend(handles=marker_legend, loc="upper right", fontsize=10)
+        y_labels = [f"{i + 1}. {model}" for i, (model, *_) in enumerate(sorted_results)]
+        ax.set_yticks(range(n_models))
+        ax.set_yticklabels(y_labels)
 
-    plt.tight_layout()
-    plt.savefig(output_filename, dpi=150)
-    plt.close()
+        ax.set_xlabel("Percentile rank (lower = better)")
+        ax.set_title("Model Ranking", pad=12)
+        ax.grid(True, axis="x", linestyle="--", linewidth=0.6, alpha=0.5)
+
+        # Hide left spine; keep only the bottom axis for a clean Cleveland-dot look
+        ax.spines["left"].set_visible(False)
+        ax.tick_params(axis="y", length=0)
+
+        ax.invert_yaxis()
+
+        max_score = max(avg for _, avg, _, _, _ in results) * 100
+        upper_limit = get_y_upper_limit(max_score)
+        ax.set_xlim(left=0, right=upper_limit)
+
+        # Tier legend
+        tier_legend = [
+            Line2D(
+                [0], [0], marker="o", color="w",
+                markerfacecolor=colors[tier_num - 1],
+                markersize=9, label=f"Tier {tier_num}",
+                markeredgecolor="white", markeredgewidth=0.6,
+            )
+            for tier_num in sorted(set(tier_mapping.values()))
+        ]
+        leg1 = ax.legend(handles=tier_legend, loc="lower right", title="Performance tier")
+        ax.add_artist(leg1)
+
+        # Marker-type legend
+        marker_legend = [
+            Line2D(
+                [0], [0], marker="o", color="w", markerfacecolor="#666666",
+                markersize=9, label="Proprietary", markeredgecolor="white", markeredgewidth=0.6,
+            ),
+            Line2D(
+                [0], [0], marker="D", color="w", markerfacecolor="#666666",
+                markersize=8, label="Open-weight", markeredgecolor="white", markeredgewidth=0.6,
+            ),
+        ]
+        ax.legend(handles=marker_legend, loc="upper right")
+
+        fig.savefig(output_filename)
+        plt.close(fig)
 
     print(f"Ranking plot saved to: {output_filename}")
 
