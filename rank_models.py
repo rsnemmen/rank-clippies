@@ -258,6 +258,7 @@ def create_plot(
     output_filename: str,
     open_models: set[str] | None = None,
     debug: bool = False,
+    category: str | None = None,
 ) -> None:
     """Create a scatter plot of model performance vs. cost and save to PNG.
 
@@ -265,6 +266,7 @@ def create_plot(
         results: List of tuples (model, avg, sd, n, cost) from main computation
         output_filename: Path to save the PNG output
         debug: If True, show detailed tiering debug output
+        category: Optional category label shown as subtitle
     """
     try:
         import matplotlib
@@ -369,7 +371,8 @@ def create_plot(
                 color="#444444",
             )
 
-        ax.set_title("LLM Model Performance vs. Cost", pad=12)
+        base_title = "LLM Model Performance vs. Cost"
+        ax.set_title(f"{base_title}\n{category}" if category else base_title, pad=12)
         ax.set_ylabel("Percentile rank (lower = better)")
         ax.set_xlabel("Credit cost per 1 k tokens (log scale)")
         ax.grid(True, linestyle="--", linewidth=0.6, alpha=0.5)
@@ -407,6 +410,7 @@ def create_ranking_plot(
     output_filename: str,
     open_models: set[str] | None = None,
     debug: bool = False,
+    category: str | None = None,
 ) -> None:
     """Create a horizontal ranking plot with models ordered by score.
 
@@ -415,6 +419,7 @@ def create_ranking_plot(
         output_filename: Path to save the PNG output
         open_models: Set of open source model names
         debug: If True, show detailed tiering debug output
+        category: Optional category label shown in the title
     """
     try:
         import matplotlib
@@ -485,7 +490,8 @@ def create_ranking_plot(
         ax.set_yticklabels(y_labels)
 
         ax.set_xlabel("Percentile rank (lower = better)")
-        ax.set_title("Model Ranking", pad=12)
+        base_title = "Model Ranking"
+        ax.set_title(f"{base_title} — {category}" if category else base_title, pad=12)
         ax.grid(True, axis="x", linestyle="--", linewidth=0.6, alpha=0.5)
 
         # Hide left spine; keep only the bottom axis for a clean Cleveland-dot look
@@ -530,10 +536,18 @@ def create_ranking_plot(
     print(f"Ranking plot saved to: {output_filename}")
 
 
-def parse_file(filename):
-    """Parse ranking.txt and return (list_of_benchmark_dicts, cost_dict, open_dict)."""
+def parse_file(filename: str) -> tuple[list, dict, dict, str | None]:
+    """Parse ranking.txt and return (list_of_benchmark_dicts, cost_dict, open_dict, title)."""
     with open(filename, "r") as f:
         content = f.read()
+
+    # Scan for "# title:" before stripping comments
+    title: str | None = None
+    for ln in content.split("\n"):
+        stripped = ln.strip()
+        if stripped.startswith("# title:"):
+            title = stripped[len("# title:"):].strip()
+            break
 
     # Strip full-line comments (lines whose first non-space char is '#')
     lines = content.split("\n")
@@ -577,7 +591,7 @@ def parse_file(filename):
     # Benchmarks are all dicts with "known_totals"
     benchmarks = [d for d in dicts[:-1] if "known_totals" in d]
 
-    return benchmarks, cost_dict, open_dict
+    return benchmarks, cost_dict, open_dict, title
 
 
 def main():
@@ -616,7 +630,7 @@ def main():
         print("  python rank_models.py ranking_sample.txt", file=sys.stderr)
         sys.exit(1)
 
-    benchmarks, cost_dict, open_dict = parse_file(filename)
+    benchmarks, cost_dict, open_dict, category = parse_file(filename)
 
     # ── Collect percentile scores per model ──────────────────────────────
     model_scores: dict[str, list[float]] = {}
@@ -708,10 +722,10 @@ def main():
         open_models = set(open_dict.keys()) if open_dict else set()
 
         plot_filename = f"{base_name}.png"
-        create_plot(plottable_results, plot_filename, open_models, debug=args.debug)
+        create_plot(plottable_results, plot_filename, open_models, debug=args.debug, category=category)
 
         ranking_plot_filename = f"{base_name}_ranking.png"
-        create_ranking_plot(results, ranking_plot_filename, open_models, debug=args.debug)
+        create_ranking_plot(results, ranking_plot_filename, open_models, debug=args.debug, category=category)
     elif args.debug:
         # Run tiering with debug output even without plot
         # Filter results to only include models with cost data for consistency

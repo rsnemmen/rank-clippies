@@ -1,3 +1,4 @@
+# title: Coding and agentic coding
 LiveBench={"sonnet46":5, "opus46":1, "haiku45":25,
 "gpt52":9, "gpt-pro52":15, "gpt-instant52":22, "gpt-codex53":4, "gpt-oss-120b":44,
 "gemini-pro3":7, "gemini-flash3":19,
