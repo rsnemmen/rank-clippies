@@ -10,7 +10,8 @@ Python tool for computing unified model rankings from benchmark leaderboards usi
 
 ```bash
 # Run the script
-python rank_models.py                              # default: ranks_general.txt
+python rank_models.py                              # default: ranking.txt
+python rank_models.py data/ranks_general.txt       # from data directory
 python rank_models.py my_data.txt                  # custom input file
 python rank_models.py my_data.txt --plot           # generate PNG visualization
 python rank_models.py my_data.txt -d               # show tiering debug output
@@ -38,9 +39,10 @@ python -m pytest tests/test_file.py::test_function -v  # single test
 
 ```bash
 python rank_models.py [filename] [-p|--plot] [-d|--debug]
+python rank_models.py -h                          # Show help
 ```
 
-- `filename` - Input file (default: `ranks_general.txt`)
+- `filename` - Input file (default: `ranking.txt`)
 - `--plot`, `-p` - Generate PNG visualization with tiering
 - `--debug`, `-d` - Show detailed tiering diagnostics
 
@@ -127,13 +129,14 @@ except ImportError as exc:
 ```
 .
 ├── rank_models.py          # Main script (executable)
-├── ranks_general.txt       # Default data file
-├── ranking_sample.txt      # Example data file
-├── ranks_coding.txt        # Coding-specific benchmarks
-├── plotting.md             # Plotting reference (Jupyter notebook)
-├── indistinguishable.md    # Tiering methodology reference
+├── data/
+│   ├── ranks_general.txt   # Default data file
+│   ├── ranks_coding.txt    # Coding-specific benchmarks
+│   └── rank_convert.nb     # Wolfram Mathematica notebook for data conversion
+├── figures/                # Generated PNG plots
 ├── README.md               # User documentation
 ├── AGENTS.md               # This file
+├── LICENSE                 # MIT license
 └── tests/                  # Tests (to be added)
 ```
 
@@ -162,6 +165,7 @@ except ImportError as exc:
 
 When implementing debug functionality:
 - Use conditional printing based on a `debug: bool` parameter
+- The `z_score` parameter controls confidence level (1.0 = 68% CI, 1.96 = 95% CI)
 - Structure output with clear headers and separators
 - Include all intermediate calculation steps
 - Show before/after states for transformations
