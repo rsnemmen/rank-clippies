@@ -3,8 +3,48 @@
 ## Project Overview
 Python tool for computing unified model rankings from benchmark leaderboards using percentile-normalized scores. Features ASCII table output and optional visualization with statistical tiering based on the "Indistinguishable from Best" method.
 
+**Repository:** https://github.com/rsnemmen/rank-clippies
+
 **Core:** Single-file script with stdlib-only dependencies  
 **Optional:** Plotting features require pandas, matplotlib, numpy
+
+## Methodology
+
+### Percentile Normalization
+Different leaderboards evaluate different numbers of models. Being ranked 5th out of 600 models is more impressive than 5th out of 30. To make cross-benchmark comparisons fair, normalize each rank to a fractional percentile:
+
+```
+percentile = rank / total_models_evaluated
+```
+
+This puts every score on a 0-1 scale (0 = best, 1 = worst).
+
+### Aggregation and Penalties
+A model's composite score is the unweighted arithmetic mean of its percentiles across all benchmarks it appears on. To avoid boosting models that score well on only a single benchmark, a sparse-data penalty is added:
+- +0.25 for one benchmark
+- +0.10 for two benchmarks
+- 0 for three or more
+
+### Statistical Tiering
+Models are grouped into tiers using the "indistinguishable from best" method:
+1. The best model becomes the tier leader
+2. Every remaining model whose ±1σ confidence interval overlaps with the leader joins the same tier
+3. Remove the tier, promote the next-best model to leader, and repeat
+
+Model i is grouped with leader j if:
+```
+score_i + σ_i >= score_j - σ_j
+```
+
+Models evaluated on fewer than two benchmarks have no standard deviation, so the average σ across all other models is used as a stand-in.
+
+### Cost Metric
+Use credit cost per 1,000 tokens from a single API provider (e.g., Poe) as a uniform pricing reference for consistent relative comparisons.
+
+### Benchmark Sources
+**General reasoning:** LiveBench, Arena, Artificial Analysis Intelligence Index, Scale's Humanity's Last Exam
+
+**Coding and agentic coding:** LiveBench (coding), Arena (coding), Artificial Analysis, SWE Bench Pro Public, Berkeley Function-Calling Leaderboard (BFCL), SWE-bench Verified, Terminal-Bench 2.0
 
 ## Build/Lint/Test Commands
 
