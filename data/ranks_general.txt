@@ -9,15 +9,15 @@ LiveBench={"sonnet46":3, "opus46":1, "haiku45":19,
 "llama-maverick":None, 
 "known_totals":54 }
 
-arena={"sonnet46":15, "opus46":1, "haiku45":62,
+arena={"sonnet46":13, "opus46":1, "haiku45":62,
 "gpt-instant52":35, "gpt52":12, "gpt-oss-120b":101,
-"gemini-pro3":4, "gemini-flash3":7,  "gemini-pro31": 3,
-"grok41":10, "grok-fast41":25,
-"kimi25":16, "minimax25":82, "deepseek32":37, 
-"qwen3-80b":65, "qwen3-32b":119, "qwen3-235b":39, "qwen3-coder-30b":200, "qwen3-max":31,
-"glm5":13, "glm-flash47": 100,
+"gemini-pro3":4, "gemini-flash3":6,  "gemini-pro31": 3,
+"grok41":7, "grok-fast41":25,
+"kimi25":20, "minimax25":82, "deepseek32":37, 
+"qwen3-80b":65, "qwen3-32b":119, "qwen3-235b":39, "qwen3-coder-30b":200, "qwen3-max":32, "qwen35": 17,
+"glm5":14, "glm-flash47": 100,
 "llama-maverick":144,
-"known_totals":309}
+"known_totals":312}
 
 HLE={
     "sonnet46": 13,

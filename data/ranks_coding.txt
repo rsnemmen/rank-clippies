@@ -9,16 +9,16 @@ LiveBench={"sonnet46":5, "opus46":1, "haiku45":25,
 "llama-maverick":None,
 "known_totals":54 }
 
-arena={"sonnet46":18, "opus46":1, "haiku45":31,
-"gpt-instant52":37, "gpt52":4, "gpt-codex53":26, "gpt-oss-120b":43, "gpt-oss-20b":43,
-"gemini-pro3":9, "gemini-flash3":10, "gemini-pro31": 6,
+arena={"sonnet46":3, "opus46":1, "haiku45":31,
+"gpt-instant52":37, "gpt52":5, "gpt-codex53":26, "gpt-oss-120b":43, "gpt-oss-20b":43,
+"gemini-pro3":9, "gemini-flash3":12, "gemini-pro31": 7,
 "grok41":39, "grok-fast41":36,
-"kimi25":12, "minimax25":8, "deepseek32":22, 
+"kimi25":13, "minimax25":10, "deepseek32":23, 
 "qwen3-80b":43, "qwen3-coder-30b":43, "qwen3-235b":None,
-"glm5":7, "glm-flash47": 43,
+"glm5":8, "glm-flash47": 43,
 "mistral":29,
 "llama-maverick":43,
-"known_totals":43}
+"known_totals":45}
 
 swebench_verified={
     "sonnet46": 9,
