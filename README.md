@@ -33,8 +33,11 @@ The above command will produce the following output:
 For the plots:
 
 ```shell
-# generate performance plot for general reasoning 
-python rank_models.py data/ranks_general.txt --plot  
+# generate performance plot for general reasoning
+python rank_models.py data/ranks_general.txt --plot
+
+# generate scatter plot with quadrant overlays
+python rank_models.py data/ranks_general.txt --plot --quadrants
 ```
 
 This will output two plots. The first is the average ranking as a function of API cost:
@@ -70,7 +73,7 @@ pip install pandas matplotlib numpy  # only needed for --plot flag
 ### Command-line Arguments
 
 ```
-python rank_models.py [filename] [-p|--plot] [-d|--debug]
+python rank_models.py [filename] [-p|--plot] [-d|--debug] [-q|--quadrants]
 ```
 
 | Argument | Description |
@@ -78,6 +81,7 @@ python rank_models.py [filename] [-p|--plot] [-d|--debug]
 | `filename` | Path to the input file containing benchmark data. Defaults to `ranks_general.txt` if not provided. |
 | `-p`, `--plot` | Generate a PNG scatter plot of model performance vs. cost with statistical tiering visualization. |
 | `-d`, `--debug` | Show detailed tiering diagnostics including leader selection, overlap checks, and tier assignments. |
+| `-q`, `--quadrants` | Overlay quadrant dividers and labels on the scatter plot. Divides the chart into four regions — **Best value** (low cost, high perf), **Premium** (high cost, high perf), **Budget** (low cost, low perf), **Avoid** (high cost, low perf) — using the geometric mean of cost and median score as midpoints. Requires `--plot`. |
 
 ## Input format for datafile
 
@@ -183,6 +187,8 @@ A sorted ASCII table (best model first):
 ### Visualization Plot (`--plot`)
 
 When using the `--plot` flag, the tool generates a PNG image with the same basename as your input file (e.g., `ranks_general.txt` → `ranks_general.png`).
+
+**Quadrant overlay (`--quadrants`, `-q`):** Pass this flag together with `--plot` to divide the scatter plot into four labelled, shaded regions. The vertical divider is placed at the geometric mean of all plotted model costs (log-scale midpoint); the horizontal divider sits at the median aggregate score. This makes it easy to spot which models offer the best performance per dollar.
 
 #### Statistical Tiering Methodology
 

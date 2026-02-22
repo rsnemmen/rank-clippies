@@ -15,6 +15,7 @@ Single-file Python CLI (`rank_models.py`) that aggregates LLM benchmark leaderbo
 python rank_models.py data/ranks_general.txt
 python rank_models.py data/ranks_coding.txt --plot
 python rank_models.py data/ranks_general.txt -d -p   # debug + plot
+python rank_models.py data/ranks_general.txt -p -q   # plot with quadrant overlays
 
 # Type checking
 mypy rank_models.py --strict
@@ -33,7 +34,7 @@ Everything lives in `rank_models.py` (stdlib-only for core; pandas/matplotlib/nu
 - `parse_file()` — reads a `.txt` data file containing Python dict literals; returns `(benchmarks, cost_dict, open_dict)`
 - `main()` — computes percentile scores, applies sparse-data penalty, prints ASCII table, optionally calls plotting functions
 - `categorize_tiers()` — groups models into tiers via "Indistinguishable from Best" (1σ CI overlap); requires pandas
-- `create_plot()` — scatter plot (performance vs. cost, log-scale X); saves `<basename>.png`
+- `create_plot()` — scatter plot (performance vs. cost, log-scale X); saves `<basename>.png`; optional `-q`/`--quadrants` flag shades and labels four regions (Best value / Premium / Budget / Avoid) using geometric-mean cost and median score as midpoints
 - `create_ranking_plot()` — horizontal ranking chart; saves `<basename>_ranking.png`
 
 ## Data File Format

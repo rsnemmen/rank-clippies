@@ -56,6 +56,7 @@ python rank_models.py my_data.txt                  # custom input file
 python rank_models.py my_data.txt --plot           # generate PNG visualization
 python rank_models.py my_data.txt -d               # show tiering debug output
 python rank_models.py my_data.txt -d -p            # debug + plot
+python rank_models.py my_data.txt -p -q            # plot with quadrant overlays
 
 # Type checking
 mypy rank_models.py --strict
@@ -78,13 +79,14 @@ python -m pytest tests/test_file.py::test_function -v  # single test
 ## CLI Usage
 
 ```bash
-python rank_models.py [filename] [-p|--plot] [-d|--debug]
+python rank_models.py [filename] [-p|--plot] [-d|--debug] [-q|--quadrants]
 python rank_models.py -h                          # Show help
 ```
 
 - `filename` - Input file (default: `ranking.txt`)
 - `--plot`, `-p` - Generate PNG visualization with tiering
 - `--debug`, `-d` - Show detailed tiering diagnostics
+- `--quadrants`, `-q` - Overlay quadrant dividers and labels on the scatter plot (requires `--plot`)
 
 ## Code Style Guidelines
 
@@ -199,6 +201,7 @@ except ImportError as exc:
 - **Percentages:** 3 decimal places (0.XXX format)
 - **Plots:** 150 DPI PNG, log scale X-axis, inverted Y-axis
 - **Legend:** Show tiers when plotting enabled
+- **Quadrants (`-q`):** Divides the scatter plot into four regions using the geometric mean of cost (X) and median score (Y) as midpoints; regions are shaded and labelled "Best value" (low cost, high perf), "Premium" (high cost, high perf), "Budget" (low cost, low perf), "Avoid" (high cost, low perf)
 - **Debug Output:** Use emojis and clear separators for readability
 
 ## Debug Mode Guidelines

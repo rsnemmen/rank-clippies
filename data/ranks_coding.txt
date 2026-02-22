@@ -1,13 +1,13 @@
 # title: Coding and agentic coding
-LiveBench={"sonnet46":5, "opus46":1, "haiku45":25,
-"gpt52":9, "gpt-pro52":15, "gpt-instant52":22, "gpt-codex53":4, "gpt-oss-120b":44,
-"gemini-pro3":7, "gemini-flash3":19,
-"grok41":36, "grok-fast41":38,
-"kimi25":12, "minimax25":18, "deepseek32":17, 
+LiveBench={"sonnet46":4, "opus46":1, "haiku45":26,
+"gpt52":10, "gpt-pro52":15, "gpt-instant52":23, "gpt-codex53":5, "gpt-oss-120b":44,
+"gemini-pro3":8, "gemini-flash3":20,
+"grok41":37, "grok-fast41":39,
+"kimi25":13, "minimax25":19, "deepseek32":18, 
 "qwen3-80b":43, "qwen3-coder-30b":None, "qwen3-235b":41, "qwen3-32b": 47,
-"glm5":10,
+"glm5":11,
 "llama-maverick":None,
-"known_totals":54 }
+"known_totals":55 }
 
 arena={"sonnet46":3, "opus46":1, "haiku45":31,
 "gpt-instant52":37, "gpt52":5, "gpt-codex53":26, "gpt-oss-120b":43, "gpt-oss-20b":43,
