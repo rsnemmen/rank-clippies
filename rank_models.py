@@ -259,6 +259,7 @@ def create_plot(
     open_models: set[str] | None = None,
     debug: bool = False,
     category: str | None = None,
+    quadrants: bool = False,
 ) -> None:
     """Create a scatter plot of model performance vs. cost and save to PNG.
 
@@ -267,6 +268,7 @@ def create_plot(
         output_filename: Path to save the PNG output
         debug: If True, show detailed tiering debug output
         category: Optional category label shown as subtitle
+        quadrants: If True, draw quadrant dividers and labels on the plot
     """
     try:
         import matplotlib
@@ -398,6 +400,28 @@ def create_plot(
         max_score = max(avg for _, avg, _, _, _ in results) * 100
         upper_limit = get_y_upper_limit(max_score)
         ax.set_ylim(top=0, bottom=upper_limit)
+
+        if quadrants:
+            import numpy as np
+
+            x_mid = 10 ** float(np.mean(np.log10(plot_df["Credit Cost (per 1k)"])))
+            y_mid = float(plot_df["Average Score"].median())
+            x_lo, x_hi = ax.get_xlim()
+
+            ax.axhline(y_mid, color="#aaaaaa", linewidth=0.8, linestyle="--", zorder=0)
+            ax.axvline(x_mid, color="#aaaaaa", linewidth=0.8, linestyle="--", zorder=0)
+
+            # Light background shading per quadrant
+            ax.fill_between([x_lo, x_mid], [0, 0], [y_mid, y_mid], color="#a8d8a8", alpha=0.25, zorder=0)
+            ax.fill_between([x_mid, x_hi], [0, 0], [y_mid, y_mid], color="#a8c8e8", alpha=0.25, zorder=0)
+            ax.fill_between([x_lo, x_mid], [y_mid, y_mid], [upper_limit, upper_limit], color="#f8e8a0", alpha=0.25, zorder=0)
+            ax.fill_between([x_mid, x_hi], [y_mid, y_mid], [upper_limit, upper_limit], color="#f8b8b8", alpha=0.25, zorder=0)
+
+            label_kw = dict(fontsize=13, color="#888888", alpha=0.7, style="italic")
+            ax.text(x_lo * 1.05, y_mid * 0.05, "Best value", ha="left", va="top", **label_kw)
+            ax.text(x_hi * 0.95, y_mid * 0.05, "Premium", ha="right", va="top", **label_kw)
+            ax.text(x_lo * 1.05, upper_limit * 0.97, "Budget", ha="left", va="bottom", **label_kw)
+            ax.text(x_hi * 0.95, upper_limit * 0.97, "Avoid", ha="right", va="bottom", **label_kw)
 
         fig.savefig(output_filename)
         plt.close(fig)
@@ -616,6 +640,12 @@ def main():
         action="store_true",
         help="Show detailed tiering debug output",
     )
+    parser.add_argument(
+        "-q",
+        "--quadrants",
+        action="store_true",
+        help="Add quadrant dividers and labels to the scatter plot",
+    )
     args = parser.parse_args()
 
     filename = args.filename
@@ -722,7 +752,7 @@ def main():
         open_models = set(open_dict.keys()) if open_dict else set()
 
         plot_filename = f"{base_name}.png"
-        create_plot(plottable_results, plot_filename, open_models, debug=args.debug, category=category)
+        create_plot(plottable_results, plot_filename, open_models, debug=args.debug, category=category, quadrants=args.quadrants)
 
         ranking_plot_filename = f"{base_name}_ranking.png"
         create_ranking_plot(results, ranking_plot_filename, open_models, debug=args.debug, category=category)
