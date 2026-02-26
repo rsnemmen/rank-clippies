@@ -1,24 +1,24 @@
 # title: Coding and agentic coding
-LiveBench={"sonnet46":4, "opus46":1, "haiku45":26,
-"gpt52":10, "gpt-pro52":15, "gpt-instant52":23, "gpt-codex53":5, "gpt-oss-120b":44,
-"gemini-pro3":8, "gemini-flash3":20,
-"grok41":37, "grok-fast41":39,
-"kimi25":13, "minimax25":19, "deepseek32":18, 
-"qwen3-80b":43, "qwen3-coder-30b":None, "qwen3-235b":41, "qwen3-32b": 47,
-"glm5":11,
+LiveBench={"sonnet46":6, "opus46":2, "haiku45":28,
+"gpt52":12, "gpt-pro52":18, "gpt-instant52":25, "gpt-codex53":1, "gpt-oss-120b":48,
+"gemini-pro3":10, "gemini-flash3":22, "gemini-pro31": 4,
+"grok41":39, "grok-fast41":41,
+"kimi25":15, "minimax25":21, "deepseek32":20, 
+"qwen3-80b":47, "qwen3-coder-30b":None, "qwen3-235b":45, "qwen3-32b": 51,
+"glm5":13,
 "llama-maverick":None,
-"known_totals":55 }
+"known_totals":57 }
 
 arena={"sonnet46":3, "opus46":1, "haiku45":31,
-"gpt-instant52":37, "gpt52":5, "gpt-codex53":26, "gpt-oss-120b":43, "gpt-oss-20b":43,
-"gemini-pro3":9, "gemini-flash3":12, "gemini-pro31": 7,
+"gpt-instant52":37, "gpt52":5, "gpt-codex53":30, "gpt-oss-120b":43, "gpt-oss-20b":43,
+"gemini-pro3":9, "gemini-flash3":10, "gemini-pro31": 7,
 "grok41":39, "grok-fast41":36,
-"kimi25":13, "minimax25":10, "deepseek32":23, 
-"qwen3-80b":43, "qwen3-coder-30b":43, "qwen3-235b":None,
+"kimi25":13, "minimax25":10, "deepseek32":24, 
+"qwen3-80b":43, "qwen3-coder-30b":43, "qwen3-235b":None, "qwen35": 17,
 "glm5":8, "glm-flash47": 43,
 "mistral":29,
 "llama-maverick":43,
-"known_totals":45}
+"known_totals":46}
 
 swebench_verified={
     "sonnet46": 9,
@@ -43,6 +43,7 @@ swebench_verified={
     "qwen3-coder-30b": None,
     "qwen35": 29,
     "qwen3-max": 36,
+    "qwen35-27b": 54, 
     "glm5": 20,
     "glm-flash47": 135,
     "llama-maverick": 359,
@@ -120,27 +121,28 @@ terminal_bench=result = {
     "qwen3-coder-30b": None,
     "qwen35": 23,
     "qwen3-max": 73,
+    "qwen35-27b": 52,    
     "glm5": 17,
     "llama-maverick": None,
     "nemotron-nano3": None,
-"known_totals":104
+"known_totals":105
 }
 
 # Open weights?
 open={"gpt-oss-120b":40, "gpt-oss-20b":15,
 "kimi25":120, "minimax25":50, "deepseek32":23, 
-"qwen3-80b":None, "qwen3-32b":305, "qwen3-235b":204, "qwen3-coder-30b":280, "qwen35":280,
+"qwen3-80b":None, "qwen3-32b":305, "qwen3-235b":204, "qwen3-coder-30b":280, "qwen35":280, "qwen35-27b": 52,
 "glm5":140, "glm-flash47": 141,
 "mistral":400, 
 "llama-maverick":55, "nemotron-nano3":30}
 
 # Credit cost per 1k tokens
 cost={"sonnet46":510, "opus46":850, "haiku45":170,
-"gpt52":470, "gpt-pro52":5700, "gpt-instant52":470, "gpt-codex53":470, "gpt-oss-120b":40, "gpt-oss-20b":15,
+"gpt52":470, "gpt-pro52":5700, "gpt-instant52":470, "gpt-codex53":473, "gpt-oss-120b":40, "gpt-oss-20b":15,
 "gemini-pro3":370, "gemini-flash3":100, "gemini-pro31": 467,
 "grok41":600, "grok-fast41":20,
 "kimi25":120, "minimax25":50, "deepseek32":23, 
-"qwen3-235b":300, "qwen3-coder-30b":50, "qwen3-80b":80, "qwen3-32b":40, "qwen35":86, "qwen3-max": 220,
+"qwen3-235b":300, "qwen3-coder-30b":50, "qwen3-80b":80, "qwen3-32b":40, "qwen35":86, "qwen35-27b": 50, "qwen3-max": 220,
 "glm5":140, "glm-flash47": 17,
 "mistral":400,
 "llama-maverick":55, "nemotron-nano3":20}

@@ -1,13 +1,13 @@
 # title: General intelligence
-LiveBench={"sonnet46":3, "opus46":1, "haiku45":20,
-"gpt52":4, "gpt-pro52":10, "gpt-instant52":38, "gpt-codex53":5, "gpt-oss-120b":44,
-"gemini-pro3":7, "gemini-flash3":8,
-"grok41":17, "grok-fast41":24,
-"kimi25":11, "minimax25":23, "deepseek32":16, 
-"qwen3-80b":36, "qwen3-32b":48, "qwen3-235b":33, "qwen3-coder-30b":None,
-"glm5":12,
+LiveBench={"sonnet46":2, "opus46":1, "haiku45":28,
+"gpt52":4, "gpt-pro52":8, "gpt-instant52":42, "gpt-codex53":3, "gpt-oss-120b":49,
+"gemini-pro3":15, "gemini-flash3":18, "gemini-pro31": 5,
+"grok41":11, "grok-fast41":9,
+"kimi25":17, "minimax25":31, "deepseek32":16, 
+"qwen3-80b":33, "qwen3-32b":37, "qwen3-235b":30, "qwen3-coder-30b":None,
+"glm5":21,
 "llama-maverick":None, 
-"known_totals":56 }
+"known_totals":57 }
 
 simpleBench={
     "sonnet46": None,
