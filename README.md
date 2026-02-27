@@ -8,7 +8,7 @@ Visualize model performance with statistical tiering: Generate scatter plots sho
 
 ```shell
 # evaluate across general reasoning leaderboards 
-python rank_models.py data/ranks_general.txt  
+python rank_models.py data/general.txt  
 ```
 
 The above command will produce the following output:
@@ -34,30 +34,30 @@ For the plots:
 
 ```shell
 # generate performance plot for general reasoning
-python rank_models.py data/ranks_general.txt --plot
+python rank_models.py data/general.txt --plot
 
 # generate scatter plot with quadrant overlays
-python rank_models.py data/ranks_general.txt --plot --quadrants
+python rank_models.py data/general.txt --plot --quadrants
 ```
 
 This will output two plots. The first is the average ranking as a function of API cost:
-![](figures/ranks_general.png)  
+![](figures/general.png)  
 **Figure 1: General intelligence vs model cost.** Y-axis indicates the average percentile rank on a scale from 1 (best) to 100 (worst). X-axis is the log10 of the model’s credit cost per 1k tokens (relative). Colors indicate the model tier. Error bars ($1 \sigma$) indicate the variation of a model ranking across different benchmarks.
 
 The second plot is a different visualization of the tiers: 
-![](figures/ranks_general_ranking.png)  
+![](figures/general_ranking.png)  
 **Figure 2: Model ranking (general intelligence).** Bigger circles indicate more expensive models.
 
-The same plots but evaluating coding and agentic coding performance are available in the `data` folder (files `ranks_coding.png` and `ranks_coding_ranking.png`).
+The same plots but evaluating coding and agentic coding performance are available in the `data` folder (files `coding.png` and `coding_ranking.png`).
 
 For more detailed information about the ranking procedure and for debugging:
 
 ```
 # show detailed tiering diagnostics
-python rank_models.py ranks_general.txt --debug
+python rank_models.py data/general.txt --debug
 
 # combine debug and plot
-python rank_models.py ranks_general.txt -d -p
+python rank_models.py data/general.txt -d -p
 ```
 
 
@@ -186,7 +186,7 @@ A sorted ASCII table (best model first):
 
 ### Visualization Plot (`--plot`)
 
-When using the `--plot` flag, the tool generates a PNG image with the same basename as your input file (e.g., `ranks_general.txt` → `ranks_general.png`).
+When using the `--plot` flag, the tool generates a PNG image with the same basename as your input file (e.g., `general.txt` → `general.png`).
 
 **Quadrant overlay (`--quadrants`, `-q`):** Pass this flag together with `--plot` to divide the scatter plot into four labelled, shaded regions. The vertical divider is placed at the geometric mean of all plotted model costs (log-scale midpoint); the horizontal divider sits at the median aggregate score. This makes it easy to spot which models offer the best performance per dollar.
 
