@@ -384,7 +384,7 @@ def create_plot(
         ax.set_xlabel("Cost relative to best model (log scale)")
         ax.grid(True, linestyle="--", linewidth=0.6, alpha=0.5)
 
-        leg1 = ax.legend(loc="best", title="Performance tier")
+        leg1 = ax.legend(loc="center right", bbox_to_anchor=(1, 0.5), title="Performance tier")
         ax.add_artist(leg1)
 
         legend_elements = [
@@ -397,7 +397,7 @@ def create_plot(
                 markersize=8, label="Open-weight", markeredgecolor="white", markeredgewidth=0.8,
             ),
         ]
-        ax.legend(handles=legend_elements, loc="lower right")
+        ax.legend(handles=legend_elements, loc="center right", bbox_to_anchor=(1, 0.3))
 
         ax.set_xscale("log")
         ax.xaxis.set_major_formatter(
