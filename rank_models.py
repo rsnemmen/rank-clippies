@@ -400,6 +400,11 @@ def create_plot(
         ax.legend(handles=legend_elements, loc="lower right")
 
         ax.set_xscale("log")
+        ax.xaxis.set_major_formatter(
+            matplotlib.ticker.FuncFormatter(
+                lambda x, _: f"{x:g}" if x >= 1 else f"{x:.2g}"
+            )
+        )
         ax.invert_yaxis()
 
         max_score = max(avg for _, avg, _, _, _ in results) * 100
