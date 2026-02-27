@@ -14,19 +14,19 @@ python rank_models.py data/general.txt
 The above command will produce the following output:
 
 ```text
-+------------------------------------------------------------------------------------+
-| Rank  | Model                   | Avg Pctl  | Std Dev   | # Benchmarks  | Cost/1k  |
-+------------------------------------------------------------------------------------+
-| 1     | opus                    | 0.030     | 0.021     | 7             | 850      |
-| 2     | gemini                  | 0.076     | 0.050     | 7             | 370      |
-| 3     | gpt                     | 0.077     | 0.047     | 7             | 470      |
-| 4     | gpt-codex               | 0.095     | 0.071     | 6             | 470      |
-| 5     | gpt-pro                 | 0.103     | 0.107     | 3             | 5600     |
-| 6     | sonnet                  | 0.170     | 0.137     | 7             | 500      |
-| 7     | kimi                    | 0.205     | 0.130     | 7             | 120      |
-| 8     | glm                     | 0.226     | 0.222     | 7             | 94       |
-| 9     | gemini-flash            | 0.237     | 0.233     | 7             | 100      |
-| 10    | haiku                   | 0.241     | 0.205     | 5             | 170      |
++-------------------------------------------------------------------------------------+
+| Rank  | Model                   | Avg Pctl  | Std Dev   | # Benchmarks  | Rel. Cost |
++-------------------------------------------------------------------------------------+
+| 1     | opus                    | 0.030     | 0.021     | 7             | 1.000     |
+| 2     | gemini                  | 0.076     | 0.050     | 7             | 0.435     |
+| 3     | gpt                     | 0.077     | 0.047     | 7             | 0.553     |
+| 4     | gpt-codex               | 0.095     | 0.071     | 6             | 0.553     |
+| 5     | gpt-pro                 | 0.103     | 0.107     | 3             | 6.588     |
+| 6     | sonnet                  | 0.170     | 0.137     | 7             | 0.588     |
+| 7     | kimi                    | 0.205     | 0.130     | 7             | 0.141     |
+| 8     | glm                     | 0.226     | 0.222     | 7             | 0.111     |
+| 9     | gemini-flash            | 0.237     | 0.233     | 7             | 0.118     |
+| 10    | haiku                   | 0.241     | 0.205     | 5             | 0.200     |
 ...
 ```
 
@@ -42,7 +42,7 @@ python rank_models.py data/general.txt --plot --quadrants
 
 This will output two plots. The first is the average ranking as a function of API cost:
 ![](figures/general.png)  
-**Figure 1: General intelligence vs model cost.** Y-axis indicates the average percentile rank on a scale from 1 (best) to 100 (worst). X-axis is the log10 of the model’s credit cost per 1k tokens (relative). Colors indicate the model tier. Error bars ($1 \sigma$) indicate the variation of a model ranking across different benchmarks.
+**Figure 1: General intelligence vs model cost.** Y-axis indicates the average percentile rank on a scale from 1 (best) to 100 (worst). X-axis is the cost relative to the best-ranked model (log scale; best model = 1). Colors indicate the model tier. Error bars ($1 \sigma$) indicate the variation of a model ranking across different benchmarks.
 
 The second plot is a different visualization of the tiers: 
 ![](figures/general_ranking.png)  
@@ -166,23 +166,23 @@ Model keys are compared as exact strings. No fuzzy matching or alias merging is 
 A sorted ASCII table (best model first):
 
 ```
-+-----------------------------------------------------------------------------+
-| Rank  | Model                  | Avg Pctl | Std Dev  | # Benchmarks | Cost/1k |
-+-----------------------------------------------------------------------------+
-| 1     | opus                   | 0.019    | 0.009    | 4            | 850     |
-| 2     | gemini                 | 0.048    | 0.046    | 4            | 370     |
-| ...   | ...                    | ...      | ...      | ...          | ...     |
-+-----------------------------------------------------------------------------+
++------------------------------------------------------------------------------+
+| Rank  | Model                  | Avg Pctl | Std Dev  | # Benchmarks | Rel. Cost |
++------------------------------------------------------------------------------+
+| 1     | opus                   | 0.019    | 0.009    | 4            | 1.000     |
+| 2     | gemini                 | 0.048    | 0.046    | 4            | 0.435     |
+| ...   | ...                    | ...      | ...      | ...          | ...       |
++------------------------------------------------------------------------------+
 ```
 
-| Column         | Description                                              |
-|----------------|----------------------------------------------------------|
-| **Rank**       | Position in the final aggregated ranking (1 = best).     |
-| **Model**      | Model identifier string (exactly as written in the file).|
-| **Avg Pctl**   | Mean percentile after sparse-data penalty, 0–1 scale.    |
-| **Std Dev**    | Population std dev of percentile scores, or `N/A`.       |
-| **# Benchmarks** | Number of benchmarks the model was evaluated on.      |
-| **Cost/1k**    | Credit cost per 1 000 tokens, or `N/A` if unavailable.   |
+| Column           | Description                                                                 |
+|------------------|-----------------------------------------------------------------------------|
+| **Rank**         | Position in the final aggregated ranking (1 = best).                        |
+| **Model**        | Model identifier string (exactly as written in the file).                   |
+| **Avg Pctl**     | Mean percentile after sparse-data penalty, 0–1 scale.                       |
+| **Std Dev**      | Population std dev of percentile scores, or `N/A`.                          |
+| **# Benchmarks** | Number of benchmarks the model was evaluated on.                            |
+| **Rel. Cost**    | Cost relative to the best-ranked model (best = 1.000), or `N/A` if unavailable. |
 
 ### Visualization Plot (`--plot`)
 
