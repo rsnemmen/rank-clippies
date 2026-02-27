@@ -306,6 +306,11 @@ def create_plot(
     df["Credit Cost (per 1k)"] = pd.to_numeric(df["Credit Cost (per 1k)"], errors="coerce")
     plot_df = df.dropna(subset=["Credit Cost (per 1k)"])
 
+    # Normalize cost so best-ranked model (lowest avg score) = 1.0
+    best_cost = float(plot_df.loc[plot_df["Average Score"].idxmin(), "Credit Cost (per 1k)"])
+    plot_df = plot_df.copy()  # avoid pandas SettingWithCopyWarning
+    plot_df["Credit Cost (per 1k)"] = plot_df["Credit Cost (per 1k)"] / best_cost
+
     with matplotlib.rc_context(_NATURE_RC):
         fig, ax = plt.subplots(figsize=(11, 7))
 
@@ -376,7 +381,7 @@ def create_plot(
         base_title = "LLM Model Performance vs. Cost"
         ax.set_title(f"{base_title}\n{category}" if category else base_title, pad=12)
         ax.set_ylabel("Percentile rank (lower = better)")
-        ax.set_xlabel("Credit cost per 1 k tokens (log scale)")
+        ax.set_xlabel("Cost relative to best model (log scale)")
         ax.grid(True, linestyle="--", linewidth=0.6, alpha=0.5)
 
         leg1 = ax.legend(loc="best", title="Performance tier")
@@ -702,8 +707,12 @@ def main():
 
     results.sort(key=lambda r: r[1])  # ascending = best first
 
+    # ── Normalize costs relative to best-ranked model with cost data ─────
+    costs_with_values = [r[4] for r in results if r[4] is not None]
+    best_cost_table = costs_with_values[0] if costs_with_values else None
+
     # ── Pretty-print ASCII table ─────────────────────────────────────────
-    col = {"rank": 6, "model": 24, "avg": 10, "sd": 10, "nb": 14, "cost": 9}
+    col = {"rank": 6, "model": 24, "avg": 10, "sd": 10, "nb": 14, "cost": 10}
 
     def row(*cells):
         return (
@@ -719,13 +728,16 @@ def main():
     sep = "+" + "-" * (width - 2) + "+"
 
     print(sep)
-    print(row("Rank", "Model", "Avg Pctl", "Std Dev", "# Benchmarks", "Cost/1k"))
+    print(row("Rank", "Model", "Avg Pctl", "Std Dev", "# Benchmarks", "Rel. Cost"))
     print(sep)
 
     for idx, (model, avg, sd, n, cost) in enumerate(results, 1):
         avg_s = f"{avg:.3f}"
         sd_s = f"{sd:.3f}" if sd is not None else "N/A"
-        cost_s = str(cost) if cost is not None else "N/A"
+        if cost is not None and best_cost_table is not None:
+            cost_s = f"{cost / best_cost_table:.3f}"
+        else:
+            cost_s = "N/A"
         print(row(str(idx), model, avg_s, sd_s, str(n), cost_s))
 
     print(sep)
