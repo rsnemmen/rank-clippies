@@ -538,7 +538,7 @@ def create_ranking_plot(
         upper_limit = get_y_upper_limit(max_score)
         ax.set_xlim(left=0, right=upper_limit)
 
-        # Tier legend
+        # Tier legend (top right)
         tier_legend = [
             Line2D(
                 [0], [0], marker="o", color="w",
@@ -548,10 +548,14 @@ def create_ranking_plot(
             )
             for tier_num in sorted(set(tier_mapping.values()))
         ]
-        leg1 = ax.legend(handles=tier_legend, loc="lower right", title="Performance tier")
+        leg1 = ax.legend(handles=tier_legend, loc="upper right", title="Performance tier")
         ax.add_artist(leg1)
 
-        # Marker-type legend
+        # Marker-type legend: placed just below tier legend
+        fig.canvas.draw()
+        leg1_bb = leg1.get_window_extent()
+        leg1_bottom_y = ax.transAxes.inverted().transform((0, leg1_bb.y0))[1]
+
         marker_legend = [
             Line2D(
                 [0], [0], marker="o", color="w", markerfacecolor="#666666",
@@ -562,7 +566,12 @@ def create_ranking_plot(
                 markersize=8, label="Open-weight", markeredgecolor="white", markeredgewidth=0.6,
             ),
         ]
-        ax.legend(handles=marker_legend, loc="upper right")
+        ax.legend(
+            handles=marker_legend,
+            loc="upper right",
+            bbox_to_anchor=(1, leg1_bottom_y - 0.01),
+            bbox_transform=ax.transAxes,
+        )
 
         fig.savefig(output_filename)
         plt.close(fig)
