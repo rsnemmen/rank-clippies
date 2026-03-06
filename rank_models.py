@@ -688,13 +688,36 @@ def main():
         total = bench.get("known_totals")
         if not total:  # None or 0 → skip benchmark
             continue
-        for model, rank in bench.items():
-            if model == "known_totals":
+        min_score = bench.get("min_score")
+        if min_score is not None:
+            # Score-based benchmark: higher score = better
+            # Percentile: 0.0 = best, 1.0 = worst (min_score)
+            observed = [
+                v for k, v in bench.items()
+                if k not in ("known_totals", "min_score") and v is not None
+            ]
+            if not observed:
                 continue
-            if rank is None:  # model not evaluated here
+            max_score = max(observed)
+            score_range = max_score - min_score
+            if score_range == 0:
                 continue
-            pct = rank / total
-            model_scores.setdefault(model, []).append(pct)
+            for model, score in bench.items():
+                if model in ("known_totals", "min_score"):
+                    continue
+                if score is None:
+                    continue
+                pct = (max_score - score) / score_range
+                model_scores.setdefault(model, []).append(pct)
+        else:
+            # Rank-based benchmark: lower rank number = better
+            for model, rank in bench.items():
+                if model == "known_totals":
+                    continue
+                if rank is None:  # model not evaluated here
+                    continue
+                pct = rank / total
+                model_scores.setdefault(model, []).append(pct)
 
     # ── Compute average, std-dev, apply penalty ──────────────────────────
     results = []
