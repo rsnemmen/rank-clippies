@@ -1,19 +1,19 @@
 # title: General intelligence
-LiveBench={"sonnet46":2, "opus46":1, "haiku45":28,
-"gpt52":4, "gpt-pro52":8, "gpt-instant52":42, "gpt-codex53":3, "gpt-oss-120b":49,
-"gemini-pro3":15, "gemini-flash3":18, "gemini-pro31": 5,
-"grok41":11, "grok-fast41":9,
+LiveBench={"sonnet46":4, "opus46":2, "haiku45":28,
+"gpt52":4, "gpt-pro52":8, "gpt-instant53":26, "gpt-codex53":3, "gpt-oss-120b":49,
+"gemini-pro3":8, "gemini-flash3":10, "gemini-pro31": 1, "gemini-flash-lite31":21,
+"grok41":None, "grok-fast41":28,
 "kimi25":17, "minimax25":31, "deepseek32":16, 
 "qwen3-80b":33, "qwen3-32b":37, "qwen3-235b":30, "qwen3-coder-30b":None,
 "glm5":21,
 "llama-maverick":None, 
-"known_totals":57 }
+"known_totals":59 }
 
 simpleBench={
     "sonnet46": None,
     "opus46": 3,
     "haiku45": None,
-    "gpt-instant52": None,
+    "gpt-instant53": None,
     "gpt52": 12,
     "gpt-oss-120b": 55,
     "gpt-codex53": None,
@@ -39,20 +39,20 @@ simpleBench={
 "known_totals":63 }
 
 arena={"sonnet46":14, "opus46":1, "haiku45":62,
-"gpt-instant52":35, "gpt52":12, "gpt-oss-120b":101,
-"gemini-pro3":4, "gemini-flash3":6,  "gemini-pro31": 3,
-"grok41":7, "grok-fast41":25,
+"gpt-instant53":None, "gpt52":12, "gpt-oss-120b":101,
+"gemini-pro3":5, "gemini-flash3":7,  "gemini-pro31": 3, "gemini-flash-lite31":32,
+"grok41":8, "grok-fast41":37, "grok42":4,
 "kimi25":20, "minimax25":82, "deepseek32":37, 
 "qwen3-80b":65, "qwen3-32b":119, "qwen3-235b":39, "qwen3-coder-30b":200, "qwen3-max":32, "qwen35": 17,
 "glm5":14, "glm-flash47": 100,
 "llama-maverick":144,
-"known_totals":312}
+"known_totals":321}
 
 HLE={
     "sonnet46": 13,
     "opus46": 6,
     "haiku45": None,
-    "gpt-instant52": 40,
+    "gpt-instant53": None,
     "gpt52": 10,
     "gpt-oss-120b": 31,
     "gpt-codex53": None,
@@ -81,7 +81,7 @@ aanalysis= {
     "sonnet46": 48,
     "opus46": 32,
     "haiku45": 158,
-    "gpt-instant52": 245,
+    "gpt-instant53": None,
     "gpt52": 48,
     "gpt-oss-120b": 190,
     "gpt-codex53": 64,
@@ -89,7 +89,8 @@ aanalysis= {
     "gemini-pro3": 72,
     "gemini-flash3": 88,
     "gemini-pro31": 1,
-    "grok41": 127,
+    "gemini-flash-lite31":177,
+    "grok41": None,
     "grok-fast41": 143,
     "kimi25": 80,
     "minimax25": 119,
@@ -105,7 +106,7 @@ aanalysis= {
     "glm-flash47": 213,
     "llama-maverick": 308,
     "nemotron-nano3": 261,
-"known_totals":410}
+"known_totals":398}
 
 # Open weights?
 open={"gpt-oss-120b":40, "gpt-oss-20b":15,
@@ -116,9 +117,9 @@ open={"gpt-oss-120b":40, "gpt-oss-20b":15,
 
 # Credit cost per 1k tokens
 cost={"sonnet46":510, "opus46":850, "haiku45":170,
-"gpt52":470, "gpt-pro52":5700, "gpt-instant52":470, "gpt-codex53":470, "gpt-oss-120b":40, "gpt-oss-20b":15,
-"gemini-pro3":370, "gemini-flash3":100, "gemini-pro31":467,
-"grok41":600, "grok-fast41":24,
+"gpt52":470, "gpt-pro52":5700, "gpt-instant53":473, "gpt-codex53":470, "gpt-oss-120b":40, "gpt-oss-20b":15, "gpt54":525,
+"gemini-pro3":370, "gemini-flash3":100, "gemini-pro31":467, "gemini-flash-lite31":59,
+"grok41":600, "grok-fast41":24, "grok42":600,
 "kimi25":120, "minimax25":50, "deepseek32":23, 
 "qwen3-235b":300, "qwen3-coder-30b":50, "qwen3-80b":80, "qwen3-32b":40, "qwen35":86, "qwen35-35b": 50, "qwen3-max": 220,
 "glm5":140, "glm-flash47": 17,

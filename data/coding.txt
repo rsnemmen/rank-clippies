@@ -1,30 +1,30 @@
 # title: Coding and agentic coding
-LiveBench={"sonnet46":6, "opus46":2, "haiku45":28,
-"gpt52":12, "gpt-pro52":18, "gpt-instant52":25, "gpt-codex53":1, "gpt-oss-120b":48,
-"gemini-pro3":10, "gemini-flash3":22, "gemini-pro31": 4,
-"grok41":39, "grok-fast41":41,
-"kimi25":15, "minimax25":21, "deepseek32":20, 
+LiveBench={"sonnet46":6, "opus46":5, "haiku45":28,
+"gpt52":12, "gpt-pro52":17, "gpt-instant53":32, "gpt-codex53":1, "gpt-oss-120b":48,
+"gemini-pro3":10, "gemini-flash3":22, "gemini-pro31": 4, "gemini-flash-lite31":41,
+"grok41":None, "grok-fast41":41,
+"kimi25":14, "minimax25":20, "deepseek32":19, 
 "qwen3-80b":47, "qwen3-coder-30b":None, "qwen3-235b":45, "qwen3-32b": 51,
-"glm5":13,
+"glm5":12,
 "llama-maverick":None,
-"known_totals":57 }
+"known_totals":59 }
 
 arena={"sonnet46":3, "opus46":1, "haiku45":31,
-"gpt-instant52":37, "gpt52":5, "gpt-codex53":30, "gpt-oss-120b":43, "gpt-oss-20b":43,
-"gemini-pro3":9, "gemini-flash3":10, "gemini-pro31": 7,
+"gpt-instant53":None, "gpt52":5, "gpt-codex53":30, "gpt-oss-120b":43, "gpt-oss-20b":43,
+"gemini-pro3":9, "gemini-flash3":10, "gemini-pro31": 7, "gemini-flash-lite31":41,
 "grok41":39, "grok-fast41":36,
 "kimi25":13, "minimax25":10, "deepseek32":24, 
 "qwen3-80b":43, "qwen3-coder-30b":43, "qwen3-235b":None, "qwen35": 17,
 "glm5":8, "glm-flash47": 43,
 "mistral":29,
 "llama-maverick":43,
-"known_totals":46}
+"known_totals":51}
 
 swebench_verified= {
     "sonnet46": 9,
     "opus46": 1,
     "haiku45": 283,
-    "gpt-instant52": 268,
+    "gpt-instant53": None,
     "gpt52": 7,
     "gpt-oss-120b": 328,
     "gpt-codex53": 37,
@@ -52,7 +52,7 @@ swebench_verified= {
 "known_totals":503 }
 
 swebench_pro_public={"sonnet46":1, "opus46":1, "haiku45":2,
-"gpt-pro52":0, "gpt52":2, "gpt-instant52":None, "gpt-codex53":2, "gpt-oss-120b":12,
+"gpt-pro52":0, "gpt52":2, "gpt-instant53":None, "gpt-codex53":2, "gpt-oss-120b":12,
 "gemini-pro3":1, "gemini-flash3":2,
 "kimi25":None, "minimax25":2, "deepseek32":12, 
 "qwen3-80b":None, "qwen3-coder-30b":17, "qwen3-235b":10,
@@ -61,7 +61,7 @@ swebench_pro_public={"sonnet46":1, "opus46":1, "haiku45":2,
 "known_totals":20 }
 
 berkeley={"sonnet46":2, "opus46":1, "haiku45":6,
-"gpt-pro52":None, "gpt52":16, "gpt-instant52":24,
+"gpt-pro52":None, "gpt52":16, "gpt-instant53":None,
 "gemini-pro3":3, "gemini-flash3":15,
 "grok41":9, "grok-fast41":5,
 "kimi25":11, "minimax25":None, "deepseek32":14, 
@@ -74,7 +74,7 @@ aanalysis={
     "sonnet46": 33,
     "opus46": 1,
     "haiku45": 183,
-    "gpt-instant52": 332,
+    "gpt-instant53": None,
     "gpt52": 53,
     "gpt-oss-120b": 196,
     "gpt-codex53": 72,
@@ -82,7 +82,8 @@ aanalysis={
     "gemini-pro3": 105,
     "gemini-flash3": 118,
     "gemini-pro31": 59,
-    "grok41": 170,
+    "gemini-flash-lite31":266,
+    "grok41": None,
     "grok-fast41": 124,
     "kimi25": 59,
     "minimax25": 170,
@@ -98,13 +99,13 @@ aanalysis={
     "glm-flash47": 144,
     "llama-maverick": 397,
     "nemotron-nano3": 319,
-"known_totals":410}
+"known_totals":398}
 
 terminal_bench=result = {
     "sonnet46": 27,
     "opus46": 18,
     "haiku45": 60,
-    "gpt-instant52": 94,
+    "gpt-instant53": None,
     "gpt52": 22,
     "gpt-oss-120b": 84,
     "gpt-codex53": 1,
@@ -141,8 +142,8 @@ open={"gpt-oss-120b":40, "gpt-oss-20b":15,
 
 # Credit cost per 1k tokens
 cost={"sonnet46":510, "opus46":850, "haiku45":170,
-"gpt52":470, "gpt-pro52":5700, "gpt-instant52":470, "gpt-codex53":473, "gpt-oss-120b":40, "gpt-oss-20b":15,
-"gemini-pro3":370, "gemini-flash3":100, "gemini-pro31": 467,
+"gpt52":470, "gpt-pro52":5700, "gpt-instant53":473, "gpt-codex53":473, "gpt-oss-120b":40, "gpt-oss-20b":15, "gpt54":525,
+"gemini-pro3":370, "gemini-flash3":100, "gemini-pro31": 467, "gemini-flash-lite31":59,
 "grok41":600, "grok-fast41":20,
 "kimi25":120, "minimax25":50, "deepseek32":23, 
 "qwen3-235b":300, "qwen3-coder-30b":50, "qwen3-80b":80, "qwen3-32b":40, "qwen35":86, "qwen35-27b": 50, "qwen3-max": 220, "qwen35-35b": 50,
