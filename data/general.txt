@@ -184,6 +184,61 @@ GPQA_diamond={
     "nemotron-nano3": None,
     "min_score": 13.2 }
 
+# USA Math Olympiad 
+usamo={
+    "mythos": 97.6,
+    "sonnet46": None,
+    "opus46": 42.3,
+    "haiku45": None,
+    "gpt54": 95.2,
+    "gpt-pro54": None,
+    "gpt-oss-120b": None,
+    "gpt-codex53": None,
+    "gpt-oss-20b": None,
+    "gpt-mini54": None, 
+    "gemini-flash3": None,
+    "gemini-pro31": 74.4,
+    "gemma4-31": None,
+    "grok-fast41": None,
+    "grok42":None,
+    "kimi25": None,
+    "minimax27": None,
+    "deepseek32": None,
+    "qwen35": 36.31,
+    "qwen3-max": None,
+    "glm51": 35.12,
+    "muse":None,
+    "nemotron-nano3": None,
+    "min_score": 35.12 }
+
+# with tools
+charxiv={
+    "mythos": 93.2,
+    "sonnet46": 77.4,
+    "opus46": 78.9,
+    "haiku45": 61.7,
+    "gpt54": None,
+    "gpt-pro54": None,
+    "gpt-oss-120b": None,
+    "gpt-codex53": None,
+    "gpt-oss-20b": None,
+    "gpt-mini54": None, 
+    "gemini-flash3": 80.3,
+    "gemini-flash-lite31": 73.2,
+    "gemini-pro31": None,
+    "gemma4-31": None,
+    "grok-fast41": 31.6,
+    "grok42":None,
+    "kimi25": 77.5,
+    "minimax27": None,
+    "deepseek32": None,
+    "qwen35": None,
+    "qwen3-max": None,
+    "glm51": None,
+    "muse":86.4,
+    "nemotron-nano3": None,
+    "min_score": 31.6 }
+
 # Open weights?
 open={"gpt-oss-120b":40, "gpt-oss-20b":15,
 "gemma4-31":19,
