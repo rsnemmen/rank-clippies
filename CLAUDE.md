@@ -40,8 +40,10 @@ Everything lives in `rank_models.py` (stdlib-only for core; pandas/matplotlib/nu
 ## Data File Format
 
 Files in `data/` contain Python dict literals parsed with `ast.literal_eval`:
-- **Benchmark dicts** — `name={model: rank, ..., "known_totals": N}` (one per leaderboard)
-- **Open-source dict** (optional) — `{model: True, ...}` (no `known_totals`, no `cost` key); controls marker shape in plots
+- **Benchmark dicts** — two forms:
+  - Rank-based: `{model: rank, ..., "known_totals": N}` — `known_totals` is required; percentile = rank / N
+  - Score-based: `{model: score, ..., "min_score": floor}` — `known_totals` is optional; percentile derived from score range
+- **Open-source dict** (optional) — `{model: True, ...}` (no `known_totals`, no `min_score`, no `cost` key); controls marker shape in plots
 - **Cost dict** (last) — `{model: credits_per_1k_tokens, ...}` (no `known_totals`)
 
 Full-line `#` comments are stripped before parsing.

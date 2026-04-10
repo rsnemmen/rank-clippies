@@ -625,14 +625,14 @@ def parse_file(filename: str) -> tuple[list, dict, dict, str | None]:
     cost_dict = dicts[-1]
     open_dict = {}
 
-    # Find open dict: has no "known_totals" (not a benchmark) and no "cost" key
+    # Find open dict: not a benchmark (no known_totals, no min_score) and no cost key
     for d in dicts[:-1]:
-        if "known_totals" not in d and "cost" not in d:
+        if "known_totals" not in d and "min_score" not in d and "cost" not in d:
             open_dict = d
             break
 
-    # Benchmarks are all dicts with "known_totals"
-    benchmarks = [d for d in dicts[:-1] if "known_totals" in d]
+    # Benchmarks: rank-based dicts have "known_totals"; score-based dicts have "min_score"
+    benchmarks = [d for d in dicts[:-1] if "known_totals" in d or "min_score" in d]
 
     return benchmarks, cost_dict, open_dict, title
 
@@ -685,13 +685,10 @@ def main():
     model_scores: dict[str, list[float]] = {}
 
     for bench in benchmarks:
-        total = bench.get("known_totals")
-        if not total:  # None or 0 → skip benchmark
-            continue
         min_score = bench.get("min_score")
         if min_score is not None:
             # Score-based benchmark: higher score = better
-            # Percentile: 0.0 = best, 1.0 = worst (min_score)
+            # Percentile: 0.0 = best, 1.0 = worst (min_score); known_totals not required
             observed = [
                 v for k, v in bench.items()
                 if k not in ("known_totals", "min_score") and v is not None
@@ -710,7 +707,10 @@ def main():
                 pct = (max_score - score) / score_range
                 model_scores.setdefault(model, []).append(pct)
         else:
-            # Rank-based benchmark: lower rank number = better
+            # Rank-based benchmark: lower rank number = better; known_totals required
+            total = bench.get("known_totals")
+            if not total:  # None or 0 → skip benchmark
+                continue
             for model, rank in bench.items():
                 if model == "known_totals":
                     continue

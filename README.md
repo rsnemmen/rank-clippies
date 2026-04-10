@@ -89,12 +89,22 @@ The file contains one or more **benchmark dictionaries** followed by exactly one
 
 ### Benchmark dictionaries
 
-Each benchmark is written as `name={...}` (the name is purely cosmetic and not used in output). Every dictionary must include a `known_totals` key indicating how many models were evaluated on that leaderboard. All other keys are model identifiers mapped to either an integer rank or `None` (not evaluated).
+Each benchmark is written as `name={...}` (the name is purely cosmetic and not used in output). There are two forms:
+
+**Rank-based** — models are mapped to integer ranks (lower = better). `known_totals` is required and indicates how many models were evaluated on that leaderboard. Non-evaluated models are `None`.
 
 ```python
 LiveBench={"sonnet":12, "opus":1, "haiku":41,
 "gpt":3, "gemini":6,
 "known_totals":52}
+```
+
+**Score-based** — models are mapped to numeric scores (higher = better). `min_score` is required and sets the floor for percentile normalization. `known_totals` is optional and ignored.
+
+```python
+HLE={"sonnet":50.1, "opus":72.5, "haiku":18.3,
+"gpt":61.2, "gemini":55.8,
+"min_score":2.72}
 ```
 
 The included files contain leaderboards which are current as of Feb. 11 2026 manually pulled from the following websites:
