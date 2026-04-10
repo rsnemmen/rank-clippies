@@ -19,8 +19,7 @@ LiveBench={"sonnet46":69.64,
 "deepseek32":61.18, 
 "qwen3-coder-30b":None, 
 "glm51":65.18,
-"min_score":25.27,
-"known_totals":61 }
+"min_score":25.27 }
 
 arena={"sonnet46":8, 
 "opus46":1, 
@@ -70,8 +69,7 @@ swebench_verified= {
     "glm-flash47": None,
     "nemotron-nano3": None,
     "nemotron-super3": 60.47,
-    "min_score":56.2,
-"known_totals":29 }
+    "min_score":56.2 }
 
 swebench_pro_public={
 "mythos": 77.8,
@@ -94,8 +92,7 @@ swebench_pro_public={
 "qwen3-235b":None,
 "glm51":58.4,
 "nemotron3":None,
-"min_score":1.51, 
-"known_totals":23 }
+"min_score":1.51 }
 
 sweatlas_codebase_qna={"sonnet46":31.2, 
 "opus46":33.3, 
@@ -111,8 +108,7 @@ sweatlas_codebase_qna={"sonnet46":31.2,
 "minimax27":None,
 "deepseek32":None, 
 "glm51":None,
-"min_score":8.2, 
-"known_totals":11 }
+"min_score":8.2 }
 
 
 berkeley={"sonnet46":None, 
@@ -127,8 +123,7 @@ berkeley={"sonnet46":None,
 "deepseek32":56.73, 
 "qwen3-coder-30b":None, 
 "glm51":None,
-"min_score":7.17,
-"known_totals":109 }
+"min_score":7.17 }
 
 aa_agentic={
     "sonnet46": 63,
@@ -156,8 +151,7 @@ aa_agentic={
     "glm-flash47": 46,
     "nemotron-nano3": 19,
     "nemotron-super3": 40,
-    "min_score": 5,
-"known_totals":427}
+    "min_score": 5 }
 
 aa_coding={
     "sonnet46": 51,
@@ -186,8 +180,7 @@ aa_coding={
     "glm51": 43.4,
     "nemotron-nano3": 19,
     "nemotron-super3": 31,
-    "min_score": 1,
-"known_totals":429}
+    "min_score": 1 }
 
 terminal_bench={
     "mythos": 82,
@@ -213,9 +206,7 @@ terminal_bench={
     "glm51": 63.5,
     "nemotron-nano3": None,
     "nemotron-super3": 31,
-    "min_score": 3.1,
-"known_totals":109
-}
+    "min_score": 3.1 }
 
 # Open weights?
 open={"gpt-oss-120b":40, "gpt-oss-20b":15,

@@ -18,8 +18,7 @@ LiveBench={
 "deepseek32":62.2, 
 "qwen3-32b":43.56, 
 "glm51":70.18,
-"min_score":32.74,
-"known_totals":61 }
+"min_score":32.74 }
 
 simpleBench={
     "sonnet46": None,
@@ -42,8 +41,7 @@ simpleBench={
     "qwen3-max": None,
     "glm51": 53.2,
     "nemotron-nano3": None,
-    "min_score":10.7,
-"known_totals":63 }
+    "min_score":10.7 }
 
 arena={"sonnet46":18, 
 "opus46":1, 
@@ -99,8 +97,7 @@ HLE={
     "glm51": 28,
     "muse":42.8,
     "nemotron-nano3": None,
-    "min_score": 2.72,
-"known_totals":47 }
+    "min_score": 2.72 }
 
 aa_intelligence= {
     "sonnet46": 52,
@@ -130,8 +127,7 @@ aa_intelligence= {
     "glm-flash47": 30,
     "muse":52,
     "nemotron-nano3": 24,
-    "min_score": 5,
-"known_totals":401}
+    "min_score": 5 }
 
 dubesor={
     "sonnet46": 86.1,
@@ -159,8 +155,7 @@ dubesor={
     "glm51": 74.6,
     "llama-maverick": 55.9,
     "nemotron-nano3": None,
-    "min_score": -4.7,
-"known_totals":307 }
+    "min_score": -4.7 }
 
 GPQA_diamond={
     "mythos": 94.5,
@@ -187,8 +182,7 @@ GPQA_diamond={
     "llama-maverick": None,
     "muse":89.5,
     "nemotron-nano3": None,
-    "min_score": 13.2,
-"known_totals":156 }
+    "min_score": 13.2 }
 
 # Open weights?
 open={"gpt-oss-120b":40, "gpt-oss-20b":15,
