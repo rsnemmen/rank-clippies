@@ -42,8 +42,7 @@ arena={"sonnet46":8,
 "qwen3-coder-30b":None, 
 "qwen35": 34,
 "qwen3-max": 38,
-"glm51":6, 
-"glm-flash47": None,
+"glm51":6,
 "known_totals":337}
 
 swebench_verified= {
@@ -66,8 +65,6 @@ swebench_verified= {
     "qwen35": 76.4,
     "qwen3-max": 69.6,
     "glm51": None,
-    "glm-flash47": None,
-    "nemotron-nano3": None,
     "nemotron-super3": 60.47,
     "min_score":56.2 }
 
@@ -148,8 +145,6 @@ aa_agentic={
     "qwen35": 56,
     "qwen3-max": 43,
     "glm51": 67,
-    "glm-flash47": 46,
-    "nemotron-nano3": 19,
     "nemotron-super3": 40,
     "min_score": 5 }
 
@@ -178,7 +173,6 @@ aa_coding={
     "qwen35-35b": None,
     "qwen3-max": 26.4,
     "glm51": 43.4,
-    "nemotron-nano3": 19,
     "nemotron-super3": 31,
     "min_score": 1 }
 
@@ -204,7 +198,6 @@ terminal_bench={
     "qwen3-coder-30b": None,
     "qwen35": 52.5,
     "glm51": 63.5,
-    "nemotron-nano3": None,
     "nemotron-super3": 31,
     "min_score": 3.1 }
 
@@ -214,9 +207,9 @@ open={"gpt-oss-120b":40, "gpt-oss-20b":15,
 "kimi25":120, "minimax25":50, "minimax27":56.2,
 "deepseek32":23, 
 "qwen3-80b":None, "qwen3-32b":305, "qwen3-235b":204, "qwen3-coder-30b":280, "qwen35":280, "qwen35-27b": 52, "qwen35-35b": 52,
-"glm5":140, "glm-flash47": 141,
-"mistral":400, 
-"llama-maverick":55, "nemotron-nano3":30, "nemotron-super3": 40}
+"glm5":140,
+"mistral":400,
+"nemotron-super3": 40}
 
 # Credit cost per 1k tokens
 cost={"mythos": 3000, "sonnet46":510, "opus46":850, "haiku45":170,
@@ -227,6 +220,6 @@ cost={"mythos": 3000, "sonnet46":510, "opus46":850, "haiku45":170,
 "minimax25":50, "minimax27":50,
 "deepseek32":23, 
 "qwen3-235b":300, "qwen3-coder-30b":50, "qwen3-80b":80, "qwen3-32b":40, "qwen35":86, "qwen35-27b": 50, "qwen3-max": 220, "qwen35-35b": 50,
-"glm51":194, "glm-flash47": 17,
+"glm51":194,
 "mistral":400,
-"llama-maverick":55, "nemotron-nano3":20, "nemotron-super3": 40}
+"nemotron-super3": 40}

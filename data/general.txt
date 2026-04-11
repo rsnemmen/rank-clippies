@@ -40,7 +40,6 @@ simpleBench={
     "qwen35": None,
     "qwen3-max": None,
     "glm51": 53.2,
-    "nemotron-nano3": None,
     "min_score":10.7 }
 
 arena={"sonnet46":18, 
@@ -65,8 +64,7 @@ arena={"sonnet46":18,
 "qwen3-max":41, 
 "qwen35": 28,
 "qwen35-max": 14,
-"glm51":13, 
-"glm-flash47": 100,
+"glm51":13,
 "known_totals":339}
 
 HLE={
@@ -96,7 +94,6 @@ HLE={
     "qwen3-max": 30.2,
     "glm51": 28,
     "muse":42.8,
-    "nemotron-nano3": None,
     "min_score": 2.72 }
 
 aa_intelligence= {
@@ -124,9 +121,7 @@ aa_intelligence= {
     "qwen35-35b": 37,
     "qwen3-max": 40,
     "glm51": 51.4,
-    "glm-flash47": 30,
     "muse":52,
-    "nemotron-nano3": 24,
     "min_score": 5 }
 
 dubesor={
@@ -153,8 +148,6 @@ dubesor={
     "qwen35": 72.7,
     "qwen3-max": 72.3,
     "glm51": 74.6,
-    "llama-maverick": 55.9,
-    "nemotron-nano3": None,
     "min_score": -4.7 }
 
 GPQA_diamond={
@@ -179,9 +172,7 @@ GPQA_diamond={
     "qwen35": None,
     "qwen3-max": 72.6,
     "glm51": 86.8,
-    "llama-maverick": None,
     "muse":89.5,
-    "nemotron-nano3": None,
     "min_score": 13.2 }
 
 # USA Math Olympiad 
@@ -208,7 +199,6 @@ usamo={
     "qwen3-max": None,
     "glm51": 35.12,
     "muse":None,
-    "nemotron-nano3": None,
     "min_score": 35.12 }
 
 # with tools
@@ -236,7 +226,6 @@ charxiv={
     "qwen3-max": None,
     "glm51": None,
     "muse":86.4,
-    "nemotron-nano3": None,
     "min_score": 31.6 }
 
 # Open weights?
@@ -246,8 +235,7 @@ open={"gpt-oss-120b":40, "gpt-oss-20b":15,
 "minimax25":50, "minimax27":56.2,
 "deepseek32":23, 
 "qwen3-32b":305, "qwen3-coder-30b":280, "qwen35":280, "qwen35-35b": 158, "qwen35-max": 14,
-"glm5":140, "glm-flash47": 141, "mistral":400,
-"llama-maverick":55, "nemotron-nano3":30}
+"glm5":140, "mistral":400}
 
 # Credit cost per 1k tokens
 cost={"mythos": 3000, "sonnet46":510, "opus46":850, "haiku45":170,
@@ -258,7 +246,6 @@ cost={"mythos": 3000, "sonnet46":510, "opus46":850, "haiku45":170,
 "minimax25":50, "minimax27":50, 
 "deepseek32":23, 
 "qwen3-235b":300, "qwen3-coder-30b":50, "qwen3-80b":80, "qwen3-32b":40, "qwen35":86, "qwen35-35b": 50, "qwen3-max": 220, "qwen35-max": 350,
-"glm51":194, "glm-flash47": 17,
+"glm51":194,
 "mistral":400,
-"llama-maverick":55, "muse":850,
-"nemotron-nano3":20}
+"muse":850}
