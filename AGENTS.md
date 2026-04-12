@@ -20,7 +20,7 @@ percentile = rank / total_models_evaluated
 This puts every score on a 0-1 scale (0 = best, 1 = worst).
 
 ### Aggregation and Penalties
-A model's composite score is the unweighted arithmetic mean of its percentiles across all benchmarks it appears on. To avoid boosting models that score well on only a single benchmark, a sparse-data penalty is added:
+A model's composite score is the unweighted median of its percentiles across all benchmarks it appears on. The median is preferred over the mean for robustness against outlier benchmarks. To avoid boosting models that score well on only a single benchmark, a sparse-data penalty is added:
 - +0.25 for one benchmark
 - +0.10 for two benchmarks
 - 0 for three or more
@@ -36,7 +36,7 @@ Model i is grouped with leader j if:
 score_i + σ_i >= score_j - σ_j
 ```
 
-Models evaluated on fewer than two benchmarks have no standard deviation, so the average σ across all other models is used as a stand-in.
+Standard deviation is the population stddev around the mean (measuring spread for error bars, independent of the median aggregate). Models evaluated on fewer than two benchmarks have no standard deviation, so the average σ across all other models is used as a stand-in.
 
 ### Cost Metric
 Use credit cost per 1,000 tokens from a single API provider (e.g., Poe) as a uniform pricing reference for consistent relative comparisons. In both the ASCII table and the scatter plot, costs are normalized so the best-ranked model = 1.000; all other values are multiples of that baseline.
