@@ -260,6 +260,7 @@ def create_plot(
     debug: bool = False,
     category: str | None = None,
     quadrants: bool = False,
+    model_scores: dict[str, list[float]] | None = None,
 ) -> None:
     """Create a scatter plot of model performance vs. cost and save to PNG.
 
@@ -269,6 +270,7 @@ def create_plot(
         debug: If True, show detailed tiering debug output
         category: Optional category label shown as subtitle
         quadrants: If True, draw quadrant dividers and labels on the plot
+        model_scores: Per-model list of raw benchmark percentiles for overlay dots
     """
     try:
         import matplotlib
@@ -445,6 +447,7 @@ def create_ranking_plot(
     open_models: set[str] | None = None,
     debug: bool = False,
     category: str | None = None,
+    model_scores: dict[str, list[float]] | None = None,
 ) -> None:
     """Create a horizontal ranking plot with models ordered by score.
 
@@ -454,6 +457,7 @@ def create_ranking_plot(
         open_models: Set of open source model names
         debug: If True, show detailed tiering debug output
         category: Optional category label shown in the title
+        model_scores: Per-model list of raw benchmark percentiles for overlay dots
     """
     try:
         import matplotlib
@@ -464,6 +468,9 @@ def create_ranking_plot(
         print("Plotting requires matplotlib. Install with:", file=sys.stderr)
         print("  pip install matplotlib", file=sys.stderr)
         sys.exit(1)
+
+    import random
+    random.seed(42)
 
     valid_sds = [sd for _, _, sd, _, _ in results if sd is not None]
     avg_sd = sum(valid_sds) / len(valid_sds) if valid_sds else 0.0
@@ -518,6 +525,21 @@ def create_ranking_plot(
                 markeredgewidth=0.6,
                 zorder=3,
             )
+
+            # Overlay individual benchmark percentiles as jittered faint dots
+            if model_scores and model in model_scores:
+                for pct in model_scores[model]:
+                    jitter = random.gauss(0, 0.12)
+                    ax.plot(
+                        pct * 100,
+                        i + jitter,
+                        marker="o",
+                        color=color,
+                        alpha=0.35,
+                        markersize=3,
+                        markeredgewidth=0,
+                        zorder=2,
+                    )
 
         y_labels = [f"{i + 1}. {model}" for i, (model, *_) in enumerate(sorted_results)]
         ax.set_yticks(range(n_models))
@@ -727,12 +749,15 @@ def main():
             continue
 
         mean = sum(scores) / n
+        sorted_scores = sorted(scores)
+        mid = n // 2
+        median = sorted_scores[mid] if n % 2 == 1 else (sorted_scores[mid - 1] + sorted_scores[mid]) / 2
 
-        # Sparse-data penalty (added to the average, capped at 1.0)
+        # Sparse-data penalty (added to the median, capped at 1.0)
         penalty = 0.25 if n == 1 else (0.10 if n == 2 else 0.0)
-        avg = min(mean + penalty, 1.0)
+        avg = min(median + penalty, 1.0)
 
-        # Population std-dev of the raw percentile scores
+        # Population std-dev of the raw percentile scores (around mean, for error bar width)
         if n >= 2:
             var = sum((s - mean) ** 2 for s in scores) / n
             sd = math.sqrt(var)
@@ -801,10 +826,10 @@ def main():
         open_models = set(open_dict.keys()) if open_dict else set()
 
         plot_filename = f"{base_name}.png"
-        create_plot(plottable_results, plot_filename, open_models, debug=args.debug, category=category, quadrants=args.quadrants)
+        create_plot(plottable_results, plot_filename, open_models, debug=args.debug, category=category, quadrants=args.quadrants, model_scores=model_scores)
 
         ranking_plot_filename = f"{base_name}_ranking.png"
-        create_ranking_plot(results, ranking_plot_filename, open_models, debug=args.debug, category=category)
+        create_ranking_plot(results, ranking_plot_filename, open_models, debug=args.debug, category=category, model_scores=model_scores)
     elif args.debug:
         # Run tiering with debug output even without plot
         # Filter results to only include models with cost data for consistency
