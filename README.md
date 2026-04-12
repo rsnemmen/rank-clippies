@@ -2,7 +2,7 @@
 
 A command-line tool that computes a unified model ranking from multiple benchmark leaderboards using **percentile-normalized** scores. It ingests a simple data file of per-benchmark ranks, normalizes them to a common 0–1 scale, and outputs a single sorted table so you can compare models at a glance.
 
-Visualize model performance with statistical tiering: Generate scatter plots showing performance vs. cost, with models color-coded by statistical performance tiers based on the "Indistinguishable from Best" method.
+Visualize model performance with robust tiering: Generate scatter plots showing performance vs. cost, with models color-coded by performance tiers based on the "Indistinguishable from Best" overlap rule.
 
 ## Quick start
 
@@ -79,7 +79,7 @@ python rank_models.py [filename] [-p|--plot] [-d|--debug] [-q|--quadrants]
 | Argument | Description |
 |----------|-------------|
 | `filename` | Path to the input file containing benchmark data. Defaults to `ranks_general.txt` if not provided. |
-| `-p`, `--plot` | Generate a PNG scatter plot of model performance vs. cost with statistical tiering visualization. |
+| `-p`, `--plot` | Generate a PNG scatter plot of model performance vs. cost with tiering visualization. |
 | `-d`, `--debug` | Show detailed tiering diagnostics including leader selection, overlap checks, and tier assignments. |
 | `-q`, `--quadrants` | Overlay quadrant dividers and labels on the scatter plot. Divides the chart into four regions — **Best value** (low cost, high perf), **Premium** (high cost, high perf), **Budget** (low cost, low perf), **Avoid** (high cost, low perf) — using the geometric mean of cost and median score as midpoints. Requires `--plot`. |
 
@@ -158,7 +158,7 @@ Models evaluated on very few benchmarks get a penalty added to their average to 
 
 ### 4. Semi-IQR (dispersion)
 
-The semi-IQR (half the interquartile range) is computed over the pre-penalty percentile scores as the robust dispersion measure for error bars and statistical tiering — the natural companion to the median aggregate. Models with fewer than 3 data points report `N/A` (IQR is degenerate for n < 3); these use the average semi-IQR across all other models as a stand-in for tiering purposes.
+The semi-IQR (half the interquartile range) is computed over the pre-penalty percentile scores as the robust dispersion measure for error bars and descriptive tiering — the natural companion to the median aggregate. Models with fewer than 3 data points report `N/A` (IQR is degenerate for n < 3); these use the average semi-IQR across all other models as a stand-in for tiering purposes.
 
 ### 5. Missing data
 
@@ -200,9 +200,9 @@ When using the `--plot` flag, the tool generates a PNG image with the same basen
 
 **Quadrant overlay (`--quadrants`, `-q`):** Pass this flag together with `--plot` to divide the scatter plot into four labelled, shaded regions. The vertical divider is placed at the geometric mean of all plotted model costs (log-scale midpoint); the horizontal divider sits at the median aggregate score. This makes it easy to spot which models offer the best performance per dollar.
 
-#### Statistical Tiering Methodology
+#### Tiering Methodology
 
-Models are grouped into performance tiers using a statistically rigorous approach:
+Models are grouped into performance tiers using a robust descriptive overlap rule:
 
 1. **Tier 1**: Contains the best-performing model (leader) plus any models whose ±semi-IQR interval overlaps with the leader's interval
 2. **Tier 2**: After removing Tier 1 models, the next-best performer becomes the new leader; models overlapping with this leader form Tier 2
@@ -213,7 +213,7 @@ Models are grouped into performance tiers using a statistically rigorous approac
 (model_score - semi-IQR) ≤ (leader_score + semi-IQR)
 ```
 
-This means if a model's best-case performance (score minus semi-IQR) could reach the leader's worst-case performance (score plus semi-IQR), they are considered statistically tied. Semi-IQR is used as the dispersion measure because it is the natural robust companion to the median aggregate and makes no distributional assumptions.
+This means if a model's best-case performance (score minus semi-IQR) could reach the leader's worst-case performance (score plus semi-IQR), the two are placed in the same tier. Semi-IQR is used as the dispersion measure because it is the natural robust companion to the median aggregate and makes no distributional assumptions. This is a descriptive grouping rule, not a formal hypothesis test.
 
 ## Extending the data
 
@@ -228,6 +228,6 @@ To add a new model, insert its key and rank into each relevant benchmark diction
 
 ## Why "Indistinguishable from Best" Tiering?
 
-Traditional rankings treat every rank position as meaningfully different. However, in statistical analysis, two models with overlapping confidence intervals cannot be confidently ranked against each other. The "Indistinguishable from Best" method, common in scientific literature, acknowledges this uncertainty by grouping statistically tied performers.
+Traditional rankings treat every rank position as meaningfully different. This tool instead uses the "Indistinguishable from Best" overlap rule to group models whose robust spread intervals are too close to support a sharp separation.
 
-This approach answers the practical question: "Which models can I confidently say are among the best?" rather than forcing artificial distinctions where uncertainty exists.
+This approach answers the practical question: "Which models belong in the current top cluster?" rather than forcing a strict total order out of sparse, noisy benchmark data.
