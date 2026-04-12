@@ -42,11 +42,11 @@ python rank_models.py data/general.txt --plot --quadrants
 
 This will output two plots. The first is the average ranking as a function of API cost:
 ![](figures/general.png)  
-**Figure 1: General intelligence vs model cost.** Y-axis indicates the average percentile rank on a scale from 1 (best) to 100 (worst). X-axis is the cost relative to the best-ranked model (log scale; best model = 1). Colors indicate the model tier. Error bars ($1 \sigma$) indicate the variation of a model ranking across different benchmarks.
+**Figure 1: General intelligence vs model cost.** Y-axis indicates the median percentile rank on a scale from 1 (best) to 100 (worst). X-axis is the cost relative to the best-ranked model (log scale; best model = 1). Colors indicate the model tier. Error bars ($1 \sigma$) indicate the variation of a model ranking across different benchmarks.
 
 The second plot is a different visualization of the tiers: 
 ![](figures/general_ranking.png)  
-**Figure 2: Model ranking (general intelligence).** Bigger circles indicate more expensive models.
+**Figure 2: Model ranking (general intelligence).** Bigger circles indicate more expensive models. Small semi-transparent dots show the individual per-benchmark percentile values, revealing the spread, skewness, and outliers behind each aggregate score.
 
 The same plots but evaluating coding and agentic coding performance are available in the `data` folder (files `coding.png` and `coding_ranking.png`).
 
@@ -140,9 +140,9 @@ percentile = rank / known_totals
 **Why percentile normalization?**  
 Raw ranks from different benchmarks are not directly comparable. A rank of 10 on a 300-model leaderboard is far more impressive than a rank of 10 on a 30-model leaderboard. Dividing each rank by the total number of evaluated models (`known_totals`) maps every score onto a 0–1 fractional percentile (0 = best, 1 = worst), making cross-benchmark comparison meaningful.
 
-### 2. Averaging
+### 2. Median aggregation
 
-A model's base score is the arithmetic mean of its percentile values across all benchmarks it appears in. Every benchmark carries equal weight.
+A model's base score is the median of its percentile values across all benchmarks it appears in. Every benchmark carries equal weight. The median is used instead of the mean for robustness against outlier benchmarks where a model performs unusually well or poorly.
 
 ### 3. Sparse-data penalty
 
@@ -158,7 +158,7 @@ Models evaluated on very few benchmarks get a penalty added to their average to 
 
 ### 4. Standard deviation
 
-Population standard deviation is computed over the pre-penalty percentile scores. Models with fewer than 2 data points report `N/A`.
+Population standard deviation is computed over the pre-penalty percentile scores around the mean (measuring spread for error bars, independent of the median aggregate). Models with fewer than 2 data points report `N/A`.
 
 ### 5. Missing data
 
@@ -189,7 +189,7 @@ A sorted ASCII table (best model first):
 |------------------|-----------------------------------------------------------------------------|
 | **Rank**         | Position in the final aggregated ranking (1 = best).                        |
 | **Model**        | Model identifier string (exactly as written in the file).                   |
-| **Avg Pctl**     | Mean percentile after sparse-data penalty, 0–1 scale.                       |
+| **Avg Pctl**     | Median percentile after sparse-data penalty, 0–1 scale.                     |
 | **Std Dev**      | Population std dev of percentile scores, or `N/A`.                          |
 | **# Benchmarks** | Number of benchmarks the model was evaluated on.                            |
 | **Rel. Cost**    | Cost relative to the best-ranked model (best = 1.000), or `N/A` if unavailable. |
