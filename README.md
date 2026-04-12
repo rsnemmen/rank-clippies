@@ -15,18 +15,18 @@ The above command will produce the following output:
 
 ```text
 +-------------------------------------------------------------------------------------+
-| Rank  | Model                   | Avg Pctl  | Std Dev   | # Benchmarks  | Rel. Cost |
+| Rank  | Model                   | Avg Pctl  | IQR/2     | # Benchmarks  | Rel. Cost |
 +-------------------------------------------------------------------------------------+
-| 1     | opus                    | 0.030     | 0.021     | 7             | 1.000     |
-| 2     | gemini                  | 0.076     | 0.050     | 7             | 0.435     |
-| 3     | gpt                     | 0.077     | 0.047     | 7             | 0.553     |
-| 4     | gpt-codex               | 0.095     | 0.071     | 6             | 0.553     |
-| 5     | gpt-pro                 | 0.103     | 0.107     | 3             | 6.588     |
-| 6     | sonnet                  | 0.170     | 0.137     | 7             | 0.588     |
-| 7     | kimi                    | 0.205     | 0.130     | 7             | 0.141     |
-| 8     | glm                     | 0.226     | 0.222     | 7             | 0.111     |
-| 9     | gemini-flash            | 0.237     | 0.233     | 7             | 0.118     |
-| 10    | haiku                   | 0.241     | 0.205     | 5             | 0.200     |
+| 1     | opus                    | 0.030     | 0.018     | 7             | 1.000     |
+| 2     | gemini                  | 0.076     | 0.044     | 7             | 0.435     |
+| 3     | gpt                     | 0.077     | 0.041     | 7             | 0.553     |
+| 4     | gpt-codex               | 0.095     | 0.063     | 6             | 0.553     |
+| 5     | gpt-pro                 | 0.103     | 0.091     | 3             | 6.588     |
+| 6     | sonnet                  | 0.170     | 0.121     | 7             | 0.588     |
+| 7     | kimi                    | 0.205     | 0.115     | 7             | 0.141     |
+| 8     | glm                     | 0.226     | 0.198     | 7             | 0.111     |
+| 9     | gemini-flash            | 0.237     | 0.209     | 7             | 0.118     |
+| 10    | haiku                   | 0.241     | 0.183     | 5             | 0.200     |
 ...
 ```
 
@@ -42,7 +42,7 @@ python rank_models.py data/general.txt --plot --quadrants
 
 This will output two plots. The first is the average ranking as a function of API cost:
 ![](figures/general.png)  
-**Figure 1: General intelligence vs model cost.** Y-axis indicates the median percentile rank on a scale from 1 (best) to 100 (worst). X-axis is the cost relative to the best-ranked model (log scale; best model = 1). Colors indicate the model tier. Error bars ($1 \sigma$) indicate the variation of a model ranking across different benchmarks.
+**Figure 1: General intelligence vs model cost.** Y-axis indicates the median percentile rank on a scale from 1 (best) to 100 (worst). X-axis is the cost relative to the best-ranked model (log scale; best model = 1). Colors indicate the model tier. Error bars (±semi-IQR) indicate the variation of a model ranking across different benchmarks.
 
 The second plot is a different visualization of the tiers: 
 ![](figures/general_ranking.png)  
@@ -156,9 +156,9 @@ Models evaluated on very few benchmarks get a penalty added to their average to 
 
 **Note:** Penalized scores are capped at 1.0 (100th percentile) to prevent exceeding the theoretical maximum.
 
-### 4. Standard deviation
+### 4. Semi-IQR (dispersion)
 
-Population standard deviation is computed over the pre-penalty percentile scores around the mean (measuring spread for error bars, independent of the median aggregate). Models with fewer than 2 data points report `N/A`.
+The semi-IQR (half the interquartile range) is computed over the pre-penalty percentile scores as the robust dispersion measure for error bars and statistical tiering — the natural companion to the median aggregate. Models with fewer than 3 data points report `N/A` (IQR is degenerate for n < 3); these use the average semi-IQR across all other models as a stand-in for tiering purposes.
 
 ### 5. Missing data
 
@@ -177,10 +177,10 @@ A sorted ASCII table (best model first):
 
 ```
 +------------------------------------------------------------------------------+
-| Rank  | Model                  | Avg Pctl | Std Dev  | # Benchmarks | Rel. Cost |
+| Rank  | Model                  | Avg Pctl | IQR/2    | # Benchmarks | Rel. Cost |
 +------------------------------------------------------------------------------+
-| 1     | opus                   | 0.019    | 0.009    | 4            | 1.000     |
-| 2     | gemini                 | 0.048    | 0.046    | 4            | 0.435     |
+| 1     | opus                   | 0.019    | 0.008    | 4            | 1.000     |
+| 2     | gemini                 | 0.048    | 0.041    | 4            | 0.435     |
 | ...   | ...                    | ...      | ...      | ...          | ...       |
 +------------------------------------------------------------------------------+
 ```
@@ -190,7 +190,7 @@ A sorted ASCII table (best model first):
 | **Rank**         | Position in the final aggregated ranking (1 = best).                        |
 | **Model**        | Model identifier string (exactly as written in the file).                   |
 | **Avg Pctl**     | Median percentile after sparse-data penalty, 0–1 scale.                     |
-| **Std Dev**      | Population std dev of percentile scores, or `N/A`.                          |
+| **IQR/2**        | Semi-IQR (half the interquartile range) of percentile scores, or `N/A`.     |
 | **# Benchmarks** | Number of benchmarks the model was evaluated on.                            |
 | **Rel. Cost**    | Cost relative to the best-ranked model (best = 1.000), or `N/A` if unavailable. |
 
@@ -204,16 +204,16 @@ When using the `--plot` flag, the tool generates a PNG image with the same basen
 
 Models are grouped into performance tiers using a statistically rigorous approach:
 
-1. **Tier 1**: Contains the best-performing model (leader) plus any models whose performance is statistically indistinguishable from the leader (68% confidence interval overlap)
+1. **Tier 1**: Contains the best-performing model (leader) plus any models whose ±semi-IQR interval overlaps with the leader's interval
 2. **Tier 2**: After removing Tier 1 models, the next-best performer becomes the new leader; models overlapping with this leader form Tier 2
 3. **Repeat**: Continue until all models are categorized
 
 **Mathematical criterion**: A model belongs to the current tier if:
 ```
-(model_score - 1σ) ≤ (leader_score + 1σ)
+(model_score - semi-IQR) ≤ (leader_score + semi-IQR)
 ```
 
-This means if a model's best-case performance (score minus one standard deviation) could reach the leader's worst-case performance (score plus one standard deviation), they are statistically tied.
+This means if a model's best-case performance (score minus semi-IQR) could reach the leader's worst-case performance (score plus semi-IQR), they are considered statistically tied. Semi-IQR is used as the dispersion measure because it is the natural robust companion to the median aggregate and makes no distributional assumptions.
 
 ## Extending the data
 

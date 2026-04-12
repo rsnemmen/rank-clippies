@@ -33,7 +33,7 @@ Everything lives in `rank_models.py` (stdlib-only for core; pandas/matplotlib/nu
 
 - `parse_file()` — reads a `.txt` data file containing Python dict literals; returns `(benchmarks, cost_dict, open_dict)`
 - `main()` — computes percentile scores, applies sparse-data penalty, prints ASCII table, optionally calls plotting functions
-- `categorize_tiers()` — groups models into tiers via "Indistinguishable from Best" (1σ CI overlap); requires pandas
+- `categorize_tiers()` — groups models into tiers via "Indistinguishable from Best" (±semi-IQR interval overlap); requires pandas
 - `create_plot()` — scatter plot (performance vs. cost, log-scale X); cost is normalized so the best-ranked model = 1.0; saves `<basename>.png`; optional `-q`/`--quadrants` flag shades and labels four regions (Best value / Premium / Budget / Avoid) using geometric-mean cost and median score as midpoints
 - `create_ranking_plot()` — horizontal ranking chart; saves `<basename>_ranking.png`
 

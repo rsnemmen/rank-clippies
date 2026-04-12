@@ -28,15 +28,15 @@ A model's composite score is the unweighted median of its percentiles across all
 ### Statistical Tiering
 Models are grouped into tiers using the "indistinguishable from best" method:
 1. The best model becomes the tier leader
-2. Every remaining model whose ±1σ confidence interval overlaps with the leader joins the same tier
+2. Every remaining model whose ±semi-IQR interval overlaps with the leader's interval joins the same tier
 3. Remove the tier, promote the next-best model to leader, and repeat
 
 Model i is grouped with leader j if:
 ```
-score_i + σ_i >= score_j - σ_j
+score_i + IQR_half_i >= score_j - IQR_half_j
 ```
 
-Standard deviation is the population stddev around the mean (measuring spread for error bars, independent of the median aggregate). Models evaluated on fewer than two benchmarks have no standard deviation, so the average σ across all other models is used as a stand-in.
+Semi-IQR (half the interquartile range) is the dispersion measure for error bars and tiering — the natural robust companion to the median aggregate. Models evaluated on fewer than three benchmarks have no semi-IQR (IQR is degenerate for n<3), so the average semi-IQR across all other models is used as a stand-in.
 
 ### Cost Metric
 Use credit cost per 1,000 tokens from a single API provider (e.g., Poe) as a uniform pricing reference for consistent relative comparisons. In both the ASCII table and the scatter plot, costs are normalized so the best-ranked model = 1.000; all other values are multiples of that baseline.
