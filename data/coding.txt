@@ -16,19 +16,20 @@ LiveBench={"sonnet46":69.64,
 "kimi25":63.10, 
 "minimax27":52.45, 
 "deepseek32":61.18,
+"qwen36-plus": 66.59,
 "glm51":65.18,
 "min_score":25.27 }
 
 arena={"sonnet46":8, 
 "opus46":1, 
 "haiku45":40,
-"gpt54":4, 
+"gpt54":3, 
 "gpt-codex53":None, 
 "gpt-oss-120b":141, 
 "gpt-oss-20b":163,
 "gpt-mini54":20,
 "gemini-flash3":19, 
-"gemini-pro31": 3, 
+"gemini-pro31": 4, 
 "gemini-flash-lite31":58,
 "gemma4-31":32,
 "grok42":6, 
@@ -38,8 +39,9 @@ arena={"sonnet46":8,
 "deepseek32":43,
 "qwen35": 34,
 "qwen3-max": 38,
-"glm51":6,
-"known_totals":337}
+"glm51":7,
+"muse": 6,
+"known_totals":339}
 
 swebench_verified= {
     "mythos": 93.9,
@@ -81,7 +83,8 @@ swebench_pro_public={
 "nemotron3":None,
 "min_score":1.51 }
 
-sweatlas_codebase_qna={"sonnet46":31.2, 
+sweatlas_codebase_qna={
+"sonnet46":31.2, 
 "opus46":33.3, 
 "haiku45":None,
 "gpt-codex53":32.6, 
@@ -95,19 +98,6 @@ sweatlas_codebase_qna={"sonnet46":31.2,
 "deepseek32":None, 
 "glm51":None,
 "min_score":8.2 }
-
-
-berkeley={"sonnet46":None, 
-"opus46":None, 
-"haiku45":68.7,
-"gpt-pro52":None, 
-"gemini-flash3":None,
-"grok41":None, 
-"grok-fast41":69.57,
-"kimi25":None,
-"deepseek32":56.73,
-"glm51":None,
-"min_score":7.17 }
 
 aa_agentic={
     "sonnet46": 63,
@@ -129,6 +119,7 @@ aa_agentic={
     "deepseek32": 53,
     "qwen35": 56,
     "qwen3-max": 43,
+    "qwen36-plus": 62,
     "glm51": 67,
     "nemotron-super3": 40,
     "min_score": 5 }
@@ -154,6 +145,7 @@ aa_coding={
     "qwen35": 41,
     "qwen35-35b": None,
     "qwen3-max": 26.4,
+    "qwen36-plus": 43,
     "glm51": 43.4,
     "nemotron-super3": 31,
     "min_score": 1 }
@@ -191,14 +183,14 @@ open={"gpt-oss-120b":40, "gpt-oss-20b":15,
 "nemotron-super3": 40}
 
 # Credit cost per 1k tokens
-cost={"mythos": 3000, "sonnet46":510, "opus46":850, "haiku45":170,
+cost={"mythos": 4250, "sonnet46":510, "opus46":850, "haiku45":170,
 "gpt52":470, "gpt-pro52":5700, "gpt-instant53":473, "gpt-codex53":473, "gpt-oss-120b":40, "gpt-oss-20b":15, "gpt54":525, "gpt-mini54":158, 
 "gemini-pro3":370, "gemini-flash3":100, "gemini-pro31": 467, "gemini-flash-lite31":59, "gemma4-31":19,
 "grok41":600, "grok42":8500, "grok-fast41":24,
 "kimi25":120, 
 "minimax27":50,
 "deepseek32":23, 
-"qwen35":86, "qwen35-27b": 50, "qwen3-max": 220, "qwen35-35b": 50,
+"qwen35":86, "qwen35-27b": 50, "qwen35-35b": 50, "qwen3-max": 550, "qwen36-plus": 117,
 "glm51":194,
-"mistral":400,
+"muse":850,
 "nemotron-super3": 40}
