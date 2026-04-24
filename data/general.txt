@@ -62,12 +62,13 @@ arena={
 "kimi25":27, 
 "minimax27":86,
 "deepseek32":50,
+"deepseek32":20,
 "qwen3-max":46, 
 "qwen36-plus": 36,
 "qwen35": 37,
 "glm51":13,
 "muse":5,
-"known_totals":341}
+"known_totals":347}
 
 # without tools
 HLE={
