@@ -78,7 +78,7 @@ python rank_models.py [filename] [-p|--plot] [-d|--debug] [-q|--quadrants]
 
 | Argument | Description |
 |----------|-------------|
-| `filename` | Path to the input file containing benchmark data. Defaults to `ranks_general.txt` if not provided. |
+| `filename` | Path to the input file containing benchmark data. Defaults to `data/coding.txt` if not provided. |
 | `-p`, `--plot` | Generate a PNG scatter plot of model performance vs. cost with tiering visualization. |
 | `-d`, `--debug` | Show detailed tiering diagnostics including leader selection, overlap checks, and tier assignments. |
 | `-q`, `--quadrants` | Overlay quadrant dividers and labels on the scatter plot. Divides the chart into four regions — **Best value** (low cost, high perf), **Premium** (high cost, high perf), **Budget** (low cost, low perf), **Avoid** (high cost, low perf) — using the geometric mean of cost and median score as midpoints. Requires `--plot`. |

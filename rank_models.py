@@ -3,8 +3,8 @@
 Compute a unified model ranking from multiple benchmark leaderboards
 using percentile-normalized scores.
 
-Usage:  python rank_models.py [ranking.txt]
-        python rank_models.py [ranking.txt] --plot
+Usage:  python rank_models.py [data/coding.txt|data/general.txt]
+        python rank_models.py [data/coding.txt|data/general.txt] --plot
 """
 
 import argparse
@@ -602,7 +602,7 @@ def create_ranking_plot(
 
 
 def parse_file(filename: str) -> tuple[list, dict, dict, str | None]:
-    """Parse ranking.txt and return (list_of_benchmark_dicts, cost_dict, open_dict, title)."""
+    """Parse a ranking data file (e.g. data/coding.txt) and return (list_of_benchmark_dicts, cost_dict, open_dict, title)."""
     with open(filename, "r") as f:
         content = f.read()
 
@@ -666,8 +666,8 @@ def main():
     parser.add_argument(
         "filename",
         nargs="?",
-        default="ranking.txt",
-        help="Path to input file (default: ranking.txt)",
+        default="data/coding.txt",
+        help="Path to input file (default: data/coding.txt)",
     )
     parser.add_argument(
         "-p",
@@ -695,10 +695,10 @@ def main():
         print(f"Error: File '{filename}' not found.", file=sys.stderr)
         print("", file=sys.stderr)
         print("Usage: python rank_models.py [filename]", file=sys.stderr)
-        print("  filename  Path to input file (default: ranking.txt)", file=sys.stderr)
+        print("  filename  Path to input file (default: data/coding.txt)", file=sys.stderr)
         print("", file=sys.stderr)
-        print("Run with 'ranking_sample.txt' for an example:", file=sys.stderr)
-        print("  python rank_models.py ranking_sample.txt", file=sys.stderr)
+        print("Try one of the ranking files in data/, for example:", file=sys.stderr)
+        print("  python rank_models.py data/coding.txt", file=sys.stderr)
         sys.exit(1)
 
     benchmarks, cost_dict, open_dict, category = parse_file(filename)
@@ -828,13 +828,15 @@ def main():
             )
             sys.exit(1)
 
-        base_name = os.path.splitext(filename)[0]
+        stem = os.path.splitext(os.path.basename(filename))[0]
+        figures_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "figures")
+        os.makedirs(figures_dir, exist_ok=True)
         open_models = set(open_dict.keys()) if open_dict else set()
 
-        plot_filename = f"{base_name}.png"
+        plot_filename = os.path.join(figures_dir, f"{stem}.png")
         create_plot(plottable_results, plot_filename, open_models, debug=args.debug, category=category, quadrants=args.quadrants, model_scores=model_scores)
 
-        ranking_plot_filename = f"{base_name}_ranking.png"
+        ranking_plot_filename = os.path.join(figures_dir, f"{stem}_ranking.png")
         create_ranking_plot(results, ranking_plot_filename, open_models, debug=args.debug, category=category, model_scores=model_scores)
     elif args.debug:
         # Run tiering with debug output even without plot

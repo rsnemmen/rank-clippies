@@ -50,8 +50,8 @@ Use credit cost per 1,000 tokens from a single API provider (e.g., Poe) as a uni
 
 ```bash
 # Run the script
-python rank_models.py                              # default: ranking.txt
-python rank_models.py data/ranks_general.txt       # from data directory
+python rank_models.py                              # default: data/coding.txt
+python rank_models.py data/general.txt             # from data directory
 python rank_models.py my_data.txt                  # custom input file
 python rank_models.py my_data.txt --plot           # generate PNG visualization
 python rank_models.py my_data.txt -d               # show tiering debug output
@@ -83,7 +83,7 @@ python rank_models.py [filename] [-p|--plot] [-d|--debug] [-q|--quadrants]
 python rank_models.py -h                          # Show help
 ```
 
-- `filename` - Input file (default: `ranking.txt`)
+- `filename` - Input file (default: `data/coding.txt`)
 - `--plot`, `-p` - Generate PNG visualization with tiering
 - `--debug`, `-d` - Show detailed tiering diagnostics
 - `--quadrants`, `-q` - Overlay quadrant dividers and labels on the scatter plot (requires `--plot`)
@@ -172,8 +172,8 @@ except ImportError as exc:
 .
 ├── rank_models.py          # Main script (executable)
 ├── data/
-│   ├── ranks_general.txt   # Default data file
-│   ├── ranks_coding.txt    # Coding-specific benchmarks
+│   ├── general.txt         # General-purpose benchmarks
+│   ├── coding.txt          # Coding benchmarks
 │   └── rank_convert.nb     # Wolfram Mathematica notebook for data conversion
 ├── figures/                # Generated PNG plots
 ├── README.md               # User documentation

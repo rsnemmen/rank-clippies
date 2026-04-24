@@ -12,10 +12,10 @@ Single-file Python CLI (`rank_models.py`) that aggregates LLM benchmark leaderbo
 
 ```bash
 # Run rankings
-python rank_models.py data/ranks_general.txt
-python rank_models.py data/ranks_coding.txt --plot
-python rank_models.py data/ranks_general.txt -d -p   # debug + plot
-python rank_models.py data/ranks_general.txt -p -q   # plot with quadrant overlays
+python rank_models.py data/general.txt
+python rank_models.py data/coding.txt --plot
+python rank_models.py data/general.txt -d -p   # debug + plot
+python rank_models.py data/general.txt -p -q   # plot with quadrant overlays
 
 # Type checking
 mypy rank_models.py --strict
