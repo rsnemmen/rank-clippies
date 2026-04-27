@@ -32,16 +32,16 @@ print_banner() {
   echo "+--------------------+"
 }
 
-print_banner "GENERAL"
-"$DIR/rank_models.py" -p -q "$DIR/data/general.txt"
+CATEGORIES=(general coding agentic stem)
 
-print_banner "CODING"
-"$DIR/rank_models.py" -p -q "$DIR/data/coding.txt"
+for cat in "${CATEGORIES[@]}"; do
+  print_banner "${cat^^}"
+  "$DIR/rank_models.py" -p -q "$cat"
+done
 
-# Move PNGs only if they exist
+# Copy PNGs only if they exist
 shopt -s nullglob
-pngs=("$DIR/data/"*png)
+pngs=("$DIR/figures/"*png)
 if ((${#pngs[@]})); then
   cp "${pngs[@]}" "$PATH_WEBSITE/"
-  mv "${pngs[@]}" "$DIR/figures/"
 fi
