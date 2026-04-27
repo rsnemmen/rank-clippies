@@ -161,7 +161,7 @@ arena_general = {
 
 # https://github.com/wenqiglantz/charxiv — chart reasoning (with tools)
 charxiv = {
-    "categories": ["general"],
+    "categories": ["general", "stem"],
     "min_score": 31.6,
     "scores": {
         "deepseek32": None,
