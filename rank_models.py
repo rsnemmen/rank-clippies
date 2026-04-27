@@ -531,7 +531,7 @@ def create_ranking_plot(
                 capthick=0.9,
                 markeredgecolor="white",
                 markeredgewidth=0.6,
-                zorder=3,
+                zorder=2,
             )
 
             # Overlay individual benchmark percentiles as jittered faint dots
@@ -543,10 +543,11 @@ def create_ranking_plot(
                         i + jitter,
                         marker="o",
                         color=color,
-                        alpha=0.35,
+                        alpha=0.55,
                         markersize=3,
-                        markeredgewidth=0,
-                        zorder=2,
+                        markeredgecolor="white",
+                        markeredgewidth=0.4,
+                        zorder=4,
                     )
 
         y_labels = [f"{i + 1}. {model}" for i, (model, *_) in enumerate(sorted_results)]
