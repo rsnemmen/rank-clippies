@@ -42,9 +42,13 @@ Semi-IQR (half the interquartile range) is the dispersion measure for error bars
 Use credit cost per 1,000 tokens from a single API provider (e.g., Poe) as a uniform pricing reference for consistent relative comparisons. In both the ASCII table and the scatter plot, costs are normalized so the best-ranked model = 1.000; all other values are multiples of that baseline.
 
 ### Benchmark Sources
-**General reasoning:** LiveBench, Arena, Artificial Analysis Intelligence Index, Scale's Humanity's Last Exam
+**General reasoning:** LiveBench, Arena, Artificial Analysis Intelligence Index, Scale's Humanity's Last Exam, SimpleBench, MMMLU, GPQA Diamond, CharXiv, NYT Connections
 
-**Coding and agentic coding:** LiveBench (coding), Arena (coding), Artificial Analysis, SWE Bench Pro Public, Berkeley Function-Calling Leaderboard (BFCL), SWE-bench Verified, Terminal-Bench 2.0
+**Coding and agentic coding:** LiveBench (coding), Arena (coding), Artificial Analysis, SWE-bench Verified, SWE-bench Pro Public, SWEatlas Codebase Q&A, Terminal-Bench 2.0
+
+**Agentic and computer use:** OSWorld, Terminal-Bench 2.0, Artificial Analysis Agentic Index, SWE-bench Verified, SWE-bench Pro Public
+
+**Math and STEM expert reasoning:** GPQA Diamond, Humanity's Last Exam, USA Math Olympiad (USAMO)
 
 ## Build/Lint/Test Commands
 
@@ -172,8 +176,10 @@ except ImportError as exc:
 .
 ├── rank_models.py          # Main script (executable)
 ├── data/
-│   ├── general.txt         # General-purpose benchmarks
+│   ├── general.txt         # General reasoning benchmarks
 │   ├── coding.txt          # Coding benchmarks
+│   ├── agentic.txt         # Agentic and computer use benchmarks
+│   ├── stem.txt            # Math and STEM expert reasoning benchmarks
 │   └── rank_convert.nb     # Wolfram Mathematica notebook for data conversion
 ├── figures/                # Generated PNG plots
 ├── README.md               # User documentation
