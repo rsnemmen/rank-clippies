@@ -11,11 +11,11 @@ Single-file Python CLI (`rank_models.py`) that aggregates LLM benchmark leaderbo
 ## Commands
 
 ```bash
-# Run rankings
-python rank_models.py data/general.txt
-python rank_models.py data/coding.txt --plot
-python rank_models.py data/general.txt -d -p   # debug + plot
-python rank_models.py data/general.txt -p -q   # plot with quadrant overlays
+# Run rankings  (valid categories: general, coding, agentic, stem)
+python rank_models.py general
+python rank_models.py coding -p
+python rank_models.py general -d -p   # debug + plot
+python rank_models.py general -p -q   # plot with quadrant overlays
 
 # Type checking
 mypy rank_models.py --strict
@@ -31,7 +31,8 @@ No tests exist yet; if added, place them in `tests/` and run with `pytest tests/
 
 Everything lives in `rank_models.py` (stdlib-only for core; pandas/matplotlib/numpy imported lazily inside plotting functions):
 
-- `parse_file()` — reads a `.txt` data file containing Python dict literals; returns `(benchmarks, cost_dict, open_dict)`
+- `load_data(category)` — loads `data/benchmarks.txt` + `data/models.txt`, filters by category tag, returns `(benchmarks, cost_dict, open_dict, title)`
+- `_extract_raw_dicts(filepath)` — brace-depth parser that extracts top-level dict literals from a file
 - `main()` — computes percentile scores, applies sparse-data penalty, prints ASCII table, optionally calls plotting functions
 - `categorize_tiers()` — groups models into tiers via "Indistinguishable from Best" (±semi-IQR interval overlap); requires pandas
 - `create_plot()` — scatter plot (performance vs. cost, log-scale X); cost is normalized so the best-ranked model = 1.0; saves `<basename>.png`; optional `-q`/`--quadrants` flag shades and labels four regions (Best value / Premium / Budget / Avoid) using geometric-mean cost and median score as midpoints
@@ -39,12 +40,31 @@ Everything lives in `rank_models.py` (stdlib-only for core; pandas/matplotlib/nu
 
 ## Data File Format
 
-Files in `data/` contain Python dict literals parsed with `ast.literal_eval`:
-- **Benchmark dicts** — two forms:
-  - Rank-based: `{model: rank, ..., "known_totals": N}` — `known_totals` is required; percentile = rank / N
-  - Score-based: `{model: score, ..., "min_score": floor}` — `known_totals` is optional; percentile derived from score range
-- **Open-source dict** (optional) — `{model: True, ...}` (no `known_totals`, no `min_score`, no `cost` key); controls marker shape in plots
-- **Cost dict** (last) — `{model: credits_per_1k_tokens, ...}` (no `known_totals`)
+Two centralized files in `data/`, both containing Python dict literals parsed with `ast.literal_eval`:
+
+**`data/benchmarks.txt`** — one dict per benchmark, alphabetical order:
+```python
+benchmark_name = {
+    "categories": ["general", "stem"],   # one or more category tags
+    "min_score": 13.2,                   # score-based: floor value
+    # OR "known_totals": 347,            # rank-based: total models evaluated
+    "scores": {"model_a": 94.2, "model_b": None, ...},  # alphabetical by model
+}
+```
+- Score-based (`min_score`): percentile derived from score range; higher = better
+- Rank-based (`known_totals`): percentile = rank / total; lower rank number = better
+- `None` scores mean the model was not evaluated on that benchmark
+- Valid category tags: `general`, `coding`, `agentic`, `stem` (defined in `CATEGORIES` in `rank_models.py`)
+
+**`data/models.txt`** — single `models` dict, alphabetical by model name:
+```python
+models = {
+    "model_name": {"cost": 510, "open": False},  # cost = credits per 1k tokens (Poe)
+    "open_model":  {"cost": 23,  "open": True},  # open-weight: gets diamond marker in plots
+}
+```
+- `cost: None` — model is tracked but pricing is unknown
+- `open: True` — model gets a diamond marker in scatter plots; `False` = circle
 
 Full-line `#` comments are stripped before parsing.
 
