@@ -168,27 +168,6 @@ GPQA_diamond={
     "glm51": 86.8,
     "muse":89.5,
     "min_score": 13.2 }
-# USA Math Olympiad 
-usamo={
-    "mythos": 97.6,
-    "sonnet46": None,
-    "haiku45": None,
-    "gpt54": 95.2,
-    "gpt-oss-120b": None,
-    "gpt-codex53": None,
-    "gpt-oss-20b": None,
-    "gpt-mini54": None, 
-    "gemini-flash3": None,
-    "gemini-pro31": 74.4,
-    "gemma4-31": None,
-    "grok-fast41": None,
-    "grok42":None,
-    "minimax27": None,
-    "deepseek32": None,
-    "qwen35": 36.31,
-    "glm51": 35.12,
-    "muse":None,
-    "min_score": 35.12 }
 # with tools
 charxiv={
     "mythos": 93.2,
@@ -243,33 +222,6 @@ nyt_connections={
     "glm51": 84.3,
     "muse":None,
     "min_score": 15.3 }
-osworld={
-    "mythos": 79.6,
-    "sonnet46": 72.5,
-    "opus47": 78,
-    "haiku45": 50.7,
-    "gpt54": 75,
-    "gpt55":78.7,
-    "gpt-oss-120b": None,
-    "gpt-codex53": None,
-    "gpt-oss-20b": None,
-    "gpt-mini54": None, 
-    "gemini-flash3": None,
-    "gemini-flash-lite31": None,
-    "gemini-pro31": None,
-    "gemma4-31": None,
-    "grok-fast41": None,
-    "grok42": None,
-    "grok-multi-agent42": None,
-    "kimi26": 73.1,
-    "minimax27": None,
-    "deepseek32": None,
-    "qwen35": None,
-    "qwen36-plus": None,
-    "glm51": None,
-    "muse":None,
-    "min_score": 3
-}
 # Open weights?
 open={"gpt-oss-120b":40, "gpt-oss-20b":15,
 "gemma4-31":19,
