@@ -41,14 +41,12 @@ python rank_models.py data/general.txt --plot --quadrants
 ```
 
 This will output two plots. The first is the average ranking as a function of API cost:
-![](figures/general.png)  
+![](docs/general.png)  
 **Figure 1: General intelligence vs model cost.** Y-axis indicates the median percentile rank on a scale from 1 (best) to 100 (worst). X-axis is the cost relative to the best-ranked model (log scale; best model = 1). Colors indicate the model tier. Error bars (±semi-IQR) indicate the variation of a model ranking across different benchmarks.
 
 The second plot is a different visualization of the tiers: 
-![](figures/general_ranking.png)  
+![](docs/general_ranking.png)  
 **Figure 2: Model ranking (general intelligence).** Bigger circles indicate more expensive models. Small semi-transparent dots show the individual per-benchmark percentile values, revealing the spread, skewness, and outliers behind each aggregate score.
-
-The same plots but evaluating coding and agentic coding performance are available in the `data` folder (files `coding.png` and `coding_ranking.png`).
 
 For more detailed information about the ranking procedure and for debugging:
 

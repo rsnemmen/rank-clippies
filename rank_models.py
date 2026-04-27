@@ -3,8 +3,8 @@
 Compute a unified model ranking from multiple benchmark leaderboards
 using percentile-normalized scores.
 
-Usage:  python rank_models.py [data/coding.txt|data/general.txt]
-        python rank_models.py [data/coding.txt|data/general.txt] --plot
+Usage:  python rank_models.py [general|coding|agentic|stem]
+        python rank_models.py coding --plot
 """
 
 import argparse
@@ -12,6 +12,14 @@ import ast
 import math
 import os
 import sys
+from typing import Any
+
+CATEGORIES: dict[str, str] = {
+    "general": "General intelligence",
+    "coding": "Coding and agentic coding",
+    "agentic": "Agentic and computer use",
+    "stem": "Math and STEM expert reasoning",
+}
 
 
 def get_y_upper_limit(max_score: float) -> int:
@@ -601,60 +609,86 @@ def create_ranking_plot(
     print(f"Ranking plot saved to: {output_filename}")
 
 
-def parse_file(filename: str) -> tuple[list, dict, dict, str | None]:
-    """Parse a ranking data file (e.g. data/coding.txt) and return (list_of_benchmark_dicts, cost_dict, open_dict, title)."""
-    with open(filename, "r") as f:
+def _extract_raw_dicts(filepath: str) -> list[dict[str, Any]]:
+    """Extract and parse all top-level dict literals from a file using brace-depth matching."""
+    with open(filepath, "r") as f:
         content = f.read()
-
-    # Scan for "# title:" before stripping comments
-    title: str | None = None
-    for ln in content.split("\n"):
-        stripped = ln.strip()
-        if stripped.startswith("# title:"):
-            title = stripped[len("# title:"):].strip()
-            break
-
-    # Strip full-line comments (lines whose first non-space char is '#')
-    lines = content.split("\n")
-    clean_lines = [ln for ln in lines if not ln.strip().startswith("#")]
-    content = "\n".join(clean_lines)
-
-    # Extract every top-level { … } block via brace-depth matching
-    dicts = []
+    clean = "\n".join(ln for ln in content.split("\n") if not ln.strip().startswith("#"))
+    dicts: list[dict[str, Any]] = []
     i = 0
-    while i < len(content):
-        if content[i] == "{":
+    while i < len(clean):
+        if clean[i] == "{":
             depth = 1
             j = i + 1
-            while j < len(content) and depth > 0:
-                if content[j] == "{":
+            while j < len(clean) and depth > 0:
+                if clean[j] == "{":
                     depth += 1
-                elif content[j] == "}":
+                elif clean[j] == "}":
                     depth -= 1
                 j += 1
             try:
-                dicts.append(ast.literal_eval(content[i:j]))
+                dicts.append(ast.literal_eval(clean[i:j]))
             except (ValueError, SyntaxError) as exc:
-                print(f"Warning: skipping unparseable block – {exc}", file=sys.stderr)
+                print(f"Warning: skipping unparseable block in {filepath} – {exc}", file=sys.stderr)
             i = j
         else:
             i += 1
+    return dicts
 
-    if len(dicts) < 2:
-        sys.exit("Error: need at least one benchmark dict + one cost dict.")
 
-    # Find the 'open' dictionary (if exists) and 'cost' dictionary (last one)
-    cost_dict = dicts[-1]
-    open_dict = {}
+def load_data(category: str) -> tuple[list[dict[str, Any]], dict[str, float], dict[str, bool], str]:
+    """Load benchmarks for a category and model metadata from centralized data files.
 
-    # Find open dict: not a benchmark (no known_totals, no min_score) and no cost key
-    for d in dicts[:-1]:
-        if "known_totals" not in d and "min_score" not in d and "cost" not in d:
-            open_dict = d
-            break
+    Returns (benchmarks, cost_dict, open_dict, title) — same shape consumed by main().
+    """
+    data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+    benchmarks_file = os.path.join(data_dir, "benchmarks.txt")
+    models_file = os.path.join(data_dir, "models.txt")
 
-    # Benchmarks: rank-based dicts have "known_totals"; score-based dicts have "min_score"
-    benchmarks = [d for d in dicts[:-1] if "known_totals" in d or "min_score" in d]
+    for path in (benchmarks_file, models_file):
+        if not os.path.exists(path):
+            sys.exit(f"Error: Required data file '{path}' not found.")
+
+    raw_benchmarks = _extract_raw_dicts(benchmarks_file)
+    raw_models = _extract_raw_dicts(models_file)
+
+    if not raw_models:
+        sys.exit("Error: No model metadata found in data/models.txt.")
+    models_dict: dict[str, dict[str, Any]] = {
+        k: v for k, v in raw_models[0].items() if isinstance(v, dict)
+    }
+
+    # Filter to the requested category and flatten each benchmark to the legacy schema
+    benchmarks: list[dict[str, Any]] = []
+    for b in raw_benchmarks:
+        cats = b.get("categories")
+        if not isinstance(cats, list) or category not in cats:
+            continue
+        scores = b.get("scores")
+        if not isinstance(scores, dict):
+            continue
+        flat: dict[str, Any] = dict(scores)
+        if "min_score" in b:
+            flat["min_score"] = b["min_score"]
+        if "known_totals" in b:
+            flat["known_totals"] = b["known_totals"]
+        benchmarks.append(flat)
+
+    if not benchmarks:
+        sys.exit(
+            f"Error: No benchmarks tagged '{category}'. "
+            f"Valid categories: {', '.join(CATEGORIES)}"
+        )
+
+    print(f"Loaded {len(benchmarks)} benchmarks for category '{category}'.")
+
+    cost_dict: dict[str, float] = {
+        m: float(v["cost"]) for m, v in models_dict.items() if v.get("cost") is not None
+    }
+    open_dict: dict[str, bool] = {
+        m: True for m, v in models_dict.items() if v.get("open")
+    }
+    title = CATEGORIES[category]
 
     return benchmarks, cost_dict, open_dict, title
 
@@ -664,10 +698,10 @@ def main():
         description="Compute a unified model ranking from multiple benchmark leaderboards."
     )
     parser.add_argument(
-        "filename",
+        "category",
         nargs="?",
-        default="data/coding.txt",
-        help="Path to input file (default: data/coding.txt)",
+        default="coding",
+        help=f"Ranking category to compute (default: coding). Valid: {', '.join(CATEGORIES)}",
     )
     parser.add_argument(
         "-p",
@@ -689,19 +723,14 @@ def main():
     )
     args = parser.parse_args()
 
-    filename = args.filename
+    category = args.category
 
-    if not os.path.exists(filename):
-        print(f"Error: File '{filename}' not found.", file=sys.stderr)
-        print("", file=sys.stderr)
-        print("Usage: python rank_models.py [filename]", file=sys.stderr)
-        print("  filename  Path to input file (default: data/coding.txt)", file=sys.stderr)
-        print("", file=sys.stderr)
-        print("Try one of the ranking files in data/, for example:", file=sys.stderr)
-        print("  python rank_models.py data/coding.txt", file=sys.stderr)
+    if category not in CATEGORIES:
+        print(f"Error: Unknown category '{category}'.", file=sys.stderr)
+        print(f"Valid categories: {', '.join(CATEGORIES)}", file=sys.stderr)
         sys.exit(1)
 
-    benchmarks, cost_dict, open_dict, category = parse_file(filename)
+    benchmarks, cost_dict, open_dict, category = load_data(category)
 
     # ── Collect percentile scores per model ──────────────────────────────
     model_scores: dict[str, list[float]] = {}
@@ -828,7 +857,7 @@ def main():
             )
             sys.exit(1)
 
-        stem = os.path.splitext(os.path.basename(filename))[0]
+        stem = category
         figures_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "figures")
         os.makedirs(figures_dir, exist_ok=True)
         open_models = set(open_dict.keys()) if open_dict else set()

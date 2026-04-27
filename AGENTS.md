@@ -53,14 +53,13 @@ Use credit cost per 1,000 tokens from a single API provider (e.g., Poe) as a uni
 ## Build/Lint/Test Commands
 
 ```bash
-# Run the script
-python rank_models.py                              # default: data/coding.txt
-python rank_models.py data/general.txt             # from data directory
-python rank_models.py my_data.txt                  # custom input file
-python rank_models.py my_data.txt --plot           # generate PNG visualization
-python rank_models.py my_data.txt -d               # show tiering debug output
-python rank_models.py my_data.txt -d -p            # debug + plot
-python rank_models.py my_data.txt -p -q            # plot with quadrant overlays
+# Run the script  (valid categories: general, coding, agentic, stem)
+python rank_models.py                              # default: coding
+python rank_models.py general                      # general intelligence ranking
+python rank_models.py coding --plot               # generate PNG visualization
+python rank_models.py agentic -d                  # show tiering debug output
+python rank_models.py stem -d -p                  # debug + plot
+python rank_models.py general -p -q               # plot with quadrant overlays
 
 # Type checking
 mypy rank_models.py --strict
@@ -83,11 +82,11 @@ python -m pytest tests/test_file.py::test_function -v  # single test
 ## CLI Usage
 
 ```bash
-python rank_models.py [filename] [-p|--plot] [-d|--debug] [-q|--quadrants]
+python rank_models.py [category] [-p|--plot] [-d|--debug] [-q|--quadrants]
 python rank_models.py -h                          # Show help
 ```
 
-- `filename` - Input file (default: `data/coding.txt`)
+- `category` - Ranking category: `general`, `coding`, `agentic`, `stem` (default: `coding`)
 - `--plot`, `-p` - Generate PNG visualization with tiering
 - `--debug`, `-d` - Show detailed tiering diagnostics
 - `--quadrants`, `-q` - Overlay quadrant dividers and labels on the scatter plot (requires `--plot`)
@@ -98,7 +97,7 @@ python rank_models.py -h                          # Show help
 - Python 3.10+ (uses `dict[str, ...]` and `|` union syntax)
 
 ### Imports
-- **Core:** stdlib imports only (argparse, ast, math, os, sys)
+- **Core:** stdlib imports only (argparse, ast, math, os, sys, typing)
 - **Optional plotting:** pandas, matplotlib, numpy imported inside functions
 - Sort alphabetically within groups
 - One blank line between groups
@@ -176,10 +175,8 @@ except ImportError as exc:
 .
 ├── rank_models.py          # Main script (executable)
 ├── data/
-│   ├── general.txt         # General reasoning benchmarks
-│   ├── coding.txt          # Coding benchmarks
-│   ├── agentic.txt         # Agentic and computer use benchmarks
-│   ├── stem.txt            # Math and STEM expert reasoning benchmarks
+│   ├── benchmarks.txt      # All benchmarks with category tags (single source of truth)
+│   ├── models.txt          # All model metadata: cost and open-weight flag
 │   └── rank_convert.nb     # Wolfram Mathematica notebook for data conversion
 ├── figures/                # Generated PNG plots
 ├── README.md               # User documentation
