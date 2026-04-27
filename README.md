@@ -8,8 +8,10 @@ Visualize model performance with robust tiering: Generate scatter plots showing 
 
 ```shell
 # evaluate across general reasoning leaderboards 
-python rank_models.py data/general.txt  
+python rank_models.py general  
 ```
+
+Valid categories: `general`, `coding`, `agentic`, `stem`.
 
 The above command will produce the following output:
 
@@ -34,28 +36,38 @@ For the plots:
 
 ```shell
 # generate performance plot for general reasoning
-python rank_models.py data/general.txt --plot
+python rank_models.py general --plot
 
 # generate scatter plot with quadrant overlays
-python rank_models.py data/general.txt --plot --quadrants
+python rank_models.py general --plot --quadrants
 ```
+
+Plots are written to `figures/General intelligence.png` and `figures/General intelligence_ranking.png` (the `figures/` directory is created automatically).
 
 This will output two plots. The first is the average ranking as a function of API cost:
 ![](docs/general.png)  
-**Figure 1: General intelligence vs model cost.** Y-axis indicates the median percentile rank on a scale from 1 (best) to 100 (worst). X-axis is the cost relative to the best-ranked model (log scale; best model = 1). Colors indicate the model tier. Error bars (±semi-IQR) indicate the variation of a model ranking across different benchmarks.
+**Figure 1: General intelligence vs model cost.** Y-axis indicates the median percentile rank on a scale from 1 (best) to 100 (worst). X-axis is the cost relative to the best-ranked model (log scale; best model = 1). Colors indicate the model tier. Error bars (±semi-IQR) indicate the variation of a model ranking across different benchmarks. Circles = proprietary models; diamonds = open-weight models.
 
 The second plot is a different visualization of the tiers: 
 ![](docs/general_ranking.png)  
 **Figure 2: Model ranking (general intelligence).** Bigger circles indicate more expensive models. Small semi-transparent dots show the individual per-benchmark percentile values, revealing the spread, skewness, and outliers behind each aggregate score.
 
+To regenerate plots for all four categories in one shot:
+
+```shell
+./plots.sh
+```
+
+`plots.sh` loops over `general`, `coding`, `agentic`, and `stem`, calling `rank_models.py -p -q <category>` for each and writing all PNGs into `figures/`. Note: the script also copies PNGs to a hard-coded personal path — edit or remove that block before running in a fresh checkout.
+
 For more detailed information about the ranking procedure and for debugging:
 
 ```
 # show detailed tiering diagnostics
-python rank_models.py data/general.txt --debug
+python rank_models.py general --debug
 
 # combine debug and plot
-python rank_models.py data/general.txt -d -p
+python rank_models.py general -d -p
 ```
 
 
@@ -71,41 +83,60 @@ pip install pandas matplotlib numpy  # only needed for --plot flag
 ### Command-line Arguments
 
 ```
-python rank_models.py [filename] [-p|--plot] [-d|--debug] [-q|--quadrants]
+python rank_models.py [category] [-p|--plot] [-d|--debug] [-q|--quadrants]
 ```
 
 | Argument | Description |
 |----------|-------------|
-| `filename` | Path to the input file containing benchmark data. Defaults to `data/coding.txt` if not provided. |
-| `-p`, `--plot` | Generate a PNG scatter plot of model performance vs. cost with tiering visualization. |
+| `category` | Ranking category to compute. One of `general`, `coding`, `agentic`, `stem`. Defaults to `coding` if not provided. |
+| `-p`, `--plot` | Generate PNG scatter plots of model performance vs. cost with tiering visualization. Written to `figures/<Category title>.png` and `figures/<Category title>_ranking.png`. |
 | `-d`, `--debug` | Show detailed tiering diagnostics including leader selection, overlap checks, and tier assignments. |
 | `-q`, `--quadrants` | Overlay quadrant dividers and labels on the scatter plot. Divides the chart into four regions — **Best value** (low cost, high perf), **Premium** (high cost, high perf), **Budget** (low cost, low perf), **Avoid** (high cost, low perf) — using the geometric mean of cost and median score as midpoints. Requires `--plot`. |
 
-## Input format for datafile
+## Input format for data files
 
-The file contains one or more **benchmark dictionaries** followed by exactly one **cost dictionary** as the last entry. Each dictionary is a standard Python `dict` literal and may span multiple lines.
+Model data lives in two centralized files under `data/`, both containing Python dict literals parsed with `ast.literal_eval`. Full-line `#` comments are stripped before parsing.
 
-### Benchmark dictionaries
+### `data/benchmarks.txt`
 
-Each benchmark is written as `name={...}` (the name is purely cosmetic and not used in output). There are two forms:
+One dict per benchmark, alphabetical order. Each dict has:
 
-**Rank-based** — models are mapped to integer ranks (lower = better). `known_totals` is required and indicates how many models were evaluated on that leaderboard. Non-evaluated models are `None`.
+- `"categories"`: **required** list of one or more category tags (`"general"`, `"coding"`, `"agentic"`, `"stem"`). Benchmarks without this field are ignored.
+- Either `"min_score"` (score-based) or `"known_totals"` (rank-based) — see below.
+- `"scores"`: nested dict mapping model name → score or rank (`None` = model not evaluated).
 
-```python
-LiveBench={"sonnet":12, "opus":1, "haiku":41,
-"gpt":3, "gemini":6,
-"known_totals":52}
-```
-
-**Score-based** — models are mapped to numeric scores (higher = better). `min_score` is required and sets the floor for percentile normalization. `known_totals` is optional and ignored.
+**Score-based** — model scores are numeric, higher = better. `min_score` sets the floor for percentile normalization.
 
 ```python
-HLE={"sonnet":50.1, "opus":72.5, "haiku":18.3,
-"gpt":61.2, "gemini":55.8,
-"min_score":2.72}
+aa_agentic = {
+    "categories": ["coding", "agentic"],
+    "min_score": 5,
+    "scores": {
+        "gemini-flash3": 50,
+        "gpt55": 74,
+        "opus47": 70,
+        "sonnet46": 63,
+        # ...
+    },
+}
 ```
 
-The included files contain leaderboards which are current as of Feb. 11 2026 manually pulled from the following websites:
+**Rank-based** — models are mapped to integer ranks (lower = better). `known_totals` is the total number of models evaluated on that leaderboard.
+
+```python
+arena_coding = {
+    "categories": ["coding"],
+    "known_totals": 347,
+    "scores": {
+        "deepseek4": 34,
+        "gemini-flash3": 19,
+        "gpt55": None,   # not evaluated on this benchmark
+        # ...
+    },
+}
+```
+
+The included benchmarks are manually refreshed periodically; see commit history for the last update. Sources include:
 
 https://livebench.ai/#/  
 https://scale.com/leaderboard/  
@@ -115,25 +146,44 @@ https://artificialanalysis.ai
 https://gorilla.cs.berkeley.edu/leaderboard.html#leaderboard  
 https://www.swebench.com
 
-### Cost dictionary
+### `data/models.txt`
 
-The last dictionary in the file holds credit costs per 1 000 tokens. It has no `known_totals` key and needs no variable-name prefix. Models missing from this dictionary will show `N/A` in the output. The value here is arbitrary. In the sample data included, it corresponds to Poe API credits.
+A single `models = {...}` dict, alphabetical by model name. Each entry holds credit cost and model type:
 
 ```python
-# Credit cost per 1k tokens
-{"sonnet":500, "opus":850, "haiku":170, "gpt":470, "gemini":370}
+models = {
+    "deepseek4":   {"cost": 149,  "open": True},
+    "gemini-pro31":{"cost": 467,  "open": False},
+    "glm5":        {"cost": None, "open": True},
+    # ...
+}
 ```
+
+| Field | Description |
+|-------|-------------|
+| `cost` | Poe API credits per 1 000 tokens. `None` = pricing unknown → shows `N/A` in Rel. Cost column. |
+| `open` | `True` = open-weight model (drawn as a **diamond** in scatter plots). `False` = proprietary (drawn as a **circle**). |
+
+Models absent from `models.txt` show `N/A` in the Rel. Cost column.
 
 
 ## Methodology
 
 ### 1. Percentile normalization
 
-For every model with a non-`None` rank in a given benchmark:
+**Rank-based benchmarks:**
 
 ```
 percentile = rank / known_totals
 ```
+
+**Score-based benchmarks:**
+
+```
+percentile = (max_score - score) / (max_score - min_score)
+```
+
+In both cases, 0.0 = best and 1.0 = worst.
 
 **Why percentile normalization?**  
 Raw ranks from different benchmarks are not directly comparable. A rank of 10 on a 300-model leaderboard is far more impressive than a rank of 10 on a 30-model leaderboard. Dividing each rank by the total number of evaluated models (`known_totals`) maps every score onto a 0–1 fractional percentile (0 = best, 1 = worst), making cross-benchmark comparison meaningful.
@@ -194,7 +244,14 @@ A sorted ASCII table (best model first):
 
 ### Visualization Plot (`--plot`)
 
-When using the `--plot` flag, the tool generates a PNG image with the same basename as your input file (e.g., `general.txt` → `general.png`).
+When using the `--plot` flag, the tool generates two PNG images in a `figures/` subdirectory (auto-created next to `rank_models.py`):
+
+- `figures/<Category title>.png` — scatter plot of performance vs. cost
+- `figures/<Category title>_ranking.png` — horizontal ranking chart
+
+e.g. `python rank_models.py general --plot` writes `figures/General intelligence.png` and `figures/General intelligence_ranking.png`.
+
+Open-weight models are drawn as **diamonds**; proprietary models are drawn as **circles**.
 
 **Quadrant overlay (`--quadrants`, `-q`):** Pass this flag together with `--plot` to divide the scatter plot into four labelled, shaded regions. The vertical divider is placed at the geometric mean of all plotted model costs (log-scale midpoint); the horizontal divider sits at the median aggregate score. This makes it easy to spot which models offer the best performance per dollar.
 
@@ -215,13 +272,24 @@ This means if a model's best-case performance (score minus semi-IQR) could reach
 
 ## Extending the data
 
-To add a new benchmark, append a new dictionary above the cost dictionary in your data file:
+To add a new benchmark, append a new dict to `data/benchmarks.txt` (above any existing entry alphabetically):
 
 ```python
-new_bench={"opus":2, "sonnet":5, "gpt":1, "known_totals":40}
+new_bench = {
+    "categories": ["general"],
+    "known_totals": 40,
+    "scores": {"opus47": 2, "sonnet46": 5, "gpt55": 1},
+}
 ```
 
-To add a new model, insert its key and rank into each relevant benchmark dictionary and, optionally, add its cost to the cost dictionary.
+Use `"min_score"` instead of `"known_totals"` for score-based benchmarks. `None` scores mean the model was not evaluated.
+
+To add a new model, insert its key into `data/models.txt` and into each relevant benchmark's `"scores"` dict:
+
+```python
+# in data/models.txt
+"new-model": {"cost": 300, "open": False},
+```
 
 
 ## Why "Indistinguishable from Best" Tiering?
