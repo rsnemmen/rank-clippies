@@ -35,7 +35,7 @@ print_banner() {
 CATEGORIES=(general coding agentic stem)
 
 for cat in "${CATEGORIES[@]}"; do
-  print_banner "${cat^^}"
+  print_banner "$(tr '[:lower:]' '[:upper:]' <<< "$cat")"
   "$DIR/rank_models.py" -p -q "$cat"
 done
 
