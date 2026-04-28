@@ -8,6 +8,22 @@ async function loadCategory(cat) {
   return resp.json();
 }
 
+function formatGeneratedAt(generatedAt) {
+  if (!generatedAt) return "unknown";
+  const timestamp = Date.parse(generatedAt);
+  if (Number.isNaN(timestamp)) return generatedAt;
+  return new Intl.DateTimeFormat("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "UTC",
+  }).format(timestamp) + " UTC";
+}
+
+function updateDataTimestamp(data) {
+  const el = document.getElementById("data-updated-at");
+  el.textContent = `Benchmark data last updated: ${formatGeneratedAt(data.generated_at)}`;
+}
+
 function getFilters() {
   return {
     hideOpen: document.getElementById("hideOpen").checked,
@@ -358,9 +374,11 @@ async function switchCategory(cat) {
   document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.cat === cat));
   try {
     currentData = await loadCategory(cat);
+    updateDataTimestamp(currentData);
     renderCharts(currentData);
   } catch (err) {
     console.error(err);
+    updateDataTimestamp({ generated_at: null });
     document.getElementById("scatter-chart").innerHTML =
       `<p style="color:#c00;padding:1rem">Error loading data: ${err.message}</p>`;
   }

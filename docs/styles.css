@@ -52,6 +52,12 @@ h1 { font-size: 1.7rem; font-weight: bold; }
   user-select: none;
 }
 
+.data-updated-at {
+  margin: 0 0 0.9rem;
+  font-size: 0.87rem;
+  color: #666;
+}
+
 .chart { width: 100%; margin-bottom: 1rem; }
 
 .methodology {
