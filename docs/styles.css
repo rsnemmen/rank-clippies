@@ -58,6 +58,47 @@ h1 { font-size: 1.7rem; font-weight: bold; }
   color: #666;
 }
 
+.benchmark-sources {
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  background: #f8f8f8;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+}
+
+.benchmark-sources h2 {
+  margin-bottom: 0.55rem;
+  font-size: 0.98rem;
+}
+
+.benchmark-sources-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.6rem;
+  list-style: none;
+}
+
+.benchmark-sources-list a {
+  display: inline-block;
+  padding: 0.22rem 0.5rem;
+  border-radius: 999px;
+  background: #eef6ff;
+  color: #005b99;
+  font-size: 0.86rem;
+  text-decoration: none;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.benchmark-sources-list a:hover {
+  background: #dcecff;
+  color: #004a7d;
+}
+
+.benchmark-sources-list .benchmark-missing {
+  font-size: 0.86rem;
+  color: #666;
+}
+
 .chart { width: 100%; margin-bottom: 1rem; }
 
 .methodology {

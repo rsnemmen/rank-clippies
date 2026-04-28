@@ -2,6 +2,30 @@
 
 let currentData = null;
 
+const BENCHMARK_METADATA = {
+  GPQA_diamond: { label: "GPQA Diamond", url: "https://github.com/idavidrein/gpqa" },
+  GraphWalks_BFS_1M: { label: "GraphWalks BFS 1M", url: "https://epoch.ai/benchmarks?view=graph&tab=eci" },
+  HLE: { label: "Humanity's Last Exam", url: "https://labs.scale.com/leaderboard" },
+  LiveBench_coding: { label: "LiveBench Coding", url: "https://livebench.ai/#/" },
+  LiveBench_general: { label: "LiveBench General", url: "https://livebench.ai/#/" },
+  MMMLU: { label: "MMMLU", url: "https://github.com/modelscope/evalscope/blob/main/docs/en/benchmarks/mmmlu.md" },
+  aa_agentic: { label: "Artificial Analysis Agentic Index", url: "https://artificialanalysis.ai/leaderboards/models" },
+  aa_coding: { label: "Artificial Analysis Coding Index", url: "https://artificialanalysis.ai/leaderboards/models" },
+  aa_intelligence: { label: "Artificial Analysis Intelligence Index", url: "https://artificialanalysis.ai/leaderboards/models" },
+  arena_coding: { label: "Chatbot Arena Coding", url: "https://arena.ai/leaderboard/" },
+  arena_general: { label: "Chatbot Arena General", url: "https://arena.ai/leaderboard/" },
+  charxiv: { label: "CharXiv", url: "https://charxiv.github.io/" },
+  frontiermath: { label: "FrontierMath", url: "https://epoch.ai/benchmarks?view=graph&tab=eci" },
+  nyt_connections: { label: "NYT Connections", url: "https://github.com/lechmazur/nyt-connections" },
+  osworld: { label: "OSWorld", url: "https://os-world.github.io/" },
+  simpleBench: { label: "SimpleBench", url: "https://github.com/openai/simple-evals" },
+  sweatlas_codebase_qna: { label: "SWE Atlas Codebase Q&A", url: "https://labs.scale.com/leaderboard/sweatlas-qna" },
+  swebench_pro_public: { label: "SWE-bench Pro Public", url: "https://www.swebench.com/" },
+  swebench_verified: { label: "SWE-bench Verified", url: "https://www.swebench.com/verified.html" },
+  terminal_bench: { label: "Terminal-Bench 2.0", url: "https://www.tbench.ai/leaderboard/terminal-bench/2.0" },
+  usamo: { label: "USAMO", url: "https://artofproblemsolving.com/wiki/index.php/USA_Mathematical_Olympiad" },
+};
+
 async function loadCategory(cat) {
   const resp = await fetch(`data/${cat}.json`);
   if (!resp.ok) throw new Error(`Failed to load data/${cat}.json: ${resp.status}`);
@@ -22,6 +46,34 @@ function formatGeneratedAt(generatedAt) {
 function updateDataTimestamp(data) {
   const el = document.getElementById("data-updated-at");
   el.textContent = `Benchmark data last updated: ${formatGeneratedAt(data.generated_at)}`;
+}
+
+function renderBenchmarkSources(data) {
+  const listEl = document.getElementById("benchmark-sources-list");
+  listEl.replaceChildren();
+
+  for (const benchmarkName of data.benchmark_names ?? []) {
+    const metadata = BENCHMARK_METADATA[benchmarkName];
+    const item = document.createElement("li");
+
+    if (!metadata) {
+      console.warn(`Missing benchmark metadata for ${benchmarkName}`);
+      const missing = document.createElement("span");
+      missing.className = "benchmark-missing";
+      missing.textContent = benchmarkName;
+      item.appendChild(missing);
+      listEl.appendChild(item);
+      continue;
+    }
+
+    const link = document.createElement("a");
+    link.href = metadata.url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = metadata.label;
+    item.appendChild(link);
+    listEl.appendChild(item);
+  }
 }
 
 function getFilters() {
@@ -375,10 +427,12 @@ async function switchCategory(cat) {
   try {
     currentData = await loadCategory(cat);
     updateDataTimestamp(currentData);
+    renderBenchmarkSources(currentData);
     renderCharts(currentData);
   } catch (err) {
     console.error(err);
     updateDataTimestamp({ generated_at: null });
+    renderBenchmarkSources({ benchmark_names: [] });
     document.getElementById("scatter-chart").innerHTML =
       `<p style="color:#c00;padding:1rem">Error loading data: ${err.message}</p>`;
   }
