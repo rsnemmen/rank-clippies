@@ -55,10 +55,18 @@ The second plot is a different visualization of the tiers:
 To regenerate plots for all four categories in one shot:
 
 ```shell
-./plots.sh
+make refresh-plots
 ```
 
-`plots.sh` loops over `general`, `coding`, `agentic`, and `stem`, calling `rank_models.py -p -q <category>` for each and writing all PNGs into `figures/`. Note: the script also copies PNGs to a hard-coded personal path — edit or remove that block before running in a fresh checkout.
+`make refresh-plots` loops over `general`, `coding`, `agentic`, and `stem`, calling `rank_models.py --plot --quadrants <category>` for each and writing all PNGs into `figures/`.
+
+If you want to mirror those PNGs into another directory, set `WEBSITE_PLOTS_DIR`:
+
+```shell
+make refresh-plots WEBSITE_PLOTS_DIR=/path/to/site/assets
+```
+
+`./plots.sh` remains available as a thin wrapper around the Makefile target.
 
 For more detailed information about the ranking procedure and for debugging:
 
@@ -92,6 +100,20 @@ python rank_models.py [category] [-p|--plot] [-d|--debug] [-q|--quadrants]
 | `-p`, `--plot` | Generate PNG scatter plots of model performance vs. cost with tiering visualization. Written to `figures/<Category title>.png` and `figures/<Category title>_ranking.png`. |
 | `-d`, `--debug` | Show detailed tiering diagnostics including leader selection, overlap checks, and tier assignments. |
 | `-q`, `--quadrants` | Overlay quadrant dividers and labels on the scatter plot. Divides the chart into four regions — **Best value** (low cost, high perf), **Premium** (high cost, high perf), **Budget** (low cost, low perf), **Avoid** (high cost, low perf) — using the geometric mean of cost and median score as midpoints. Requires `--plot`. |
+
+### Automation shortcuts
+
+```bash
+make refresh-plots
+make refresh-ranking-data
+make test
+make validate
+```
+
+- `make refresh-plots` regenerates all plot PNGs for the four categories.
+- `make refresh-ranking-data` rewrites website JSON under `docs/data/`.
+- `make test` runs `pytest tests/ -v` when a `tests/` directory exists.
+- `make validate` runs `ruff`, `make test`, and a temporary-directory JSON export smoke test.
 
 ## Input format for data files
 

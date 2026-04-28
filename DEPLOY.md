@@ -24,11 +24,16 @@ You only need to do steps 2–4 once. Future pushes to `main` that include chang
 Run the exporter whenever you add or update benchmarks or model scores in `data/`:
 
 ```bash
-python rank_models.py --export-json          # writes to docs/data/ (default)
+make refresh-ranking-data                    # writes to docs/data/
+python rank_models.py --export-json          # equivalent direct command
 python rank_models.py --export-json path/to/dir   # custom output directory
 ```
 
-This regenerates all four category JSON files (`general`, `coding`, `agentic`, `stem`) in one shot. Then commit and push:
+This regenerates all four category JSON files (`general`, `coding`, `agentic`, `stem`) in one shot.
+
+## Update the website manually
+
+If you are updating the site locally, commit and push the regenerated files:
 
 ```bash
 git add docs/data/
@@ -40,3 +45,9 @@ GitHub Pages picks up the new JSON automatically on the next page load.
 
 > **Note:** `--export-json` requires `pandas` (same dependency as `--plot`).
 > Install with `pip install pandas` if not already present.
+
+## Update the website via GitHub Actions
+
+This repository also includes a workflow that watches `data/**`, `rank_models.py`, and `Makefile` on `main`. When one of those inputs changes, GitHub Actions runs `make refresh-ranking-data` and commits updated `docs/data/` files back to `main` automatically.
+
+If the workflow can read the repository but cannot push the regenerated JSON, enable **Settings → Actions → General → Workflow permissions → Read and write permissions** for the repository.
