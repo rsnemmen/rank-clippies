@@ -324,6 +324,7 @@ def create_plot(
                 "Semi-IQR": effective_spread * 100,
                 "Credit Cost (per 1k)": cost,
                 "Tier": tier_mapping.get(model, 0),
+                "N Bench": n,
             }
         )
 
@@ -394,8 +395,10 @@ def create_plot(
 
         # Annotate points
         for _, row in plot_df.iterrows():
+            n_b = int(row["N Bench"])
+            penalty_suffix = "‡" if n_b == 1 else ("†" if n_b == 2 else "")
             ax.annotate(
-                str(row["Model Name"]),
+                str(row["Model Name"]) + penalty_suffix,
                 (float(row["Credit Cost (per 1k)"]), float(row["Average Score"])),
                 xytext=(5, 3),
                 textcoords="offset points",
@@ -421,6 +424,8 @@ def create_plot(
                 [0], [0], marker="D", color="w", markerfacecolor="#666666",
                 markersize=8, label="Open-weight", markeredgecolor="white", markeredgewidth=0.8,
             ),
+            Line2D([], [], linestyle="none", label="† few benchmarks (n=2)"),
+            Line2D([], [], linestyle="none", label="‡ very few benchmarks (n=1)"),
         ]
         ax.legend(handles=legend_elements, loc="center right", bbox_to_anchor=(1, 0.3))
 
@@ -565,7 +570,10 @@ def create_ranking_plot(
                         zorder=4,
                     )
 
-        y_labels = [f"{i + 1}. {model}" for i, (model, *_) in enumerate(sorted_results)]
+        y_labels = [
+            f"{i + 1}. {model}" + ("‡" if n_b == 1 else ("†" if n_b == 2 else ""))
+            for i, (model, _, _, n_b, _) in enumerate(sorted_results)
+        ]
         ax.set_yticks(range(n_models))
         ax.set_yticklabels(y_labels)
 
@@ -611,6 +619,8 @@ def create_ranking_plot(
                 [0], [0], marker="D", color="w", markerfacecolor="#666666",
                 markersize=8, label="Open-weight", markeredgecolor="white", markeredgewidth=0.6,
             ),
+            Line2D([], [], linestyle="none", label="† few benchmarks (n=2)"),
+            Line2D([], [], linestyle="none", label="‡ very few benchmarks (n=1)"),
         ]
         ax.legend(
             handles=marker_legend,
