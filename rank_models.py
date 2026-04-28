@@ -610,31 +610,32 @@ def create_ranking_plot(
     print(f"Ranking plot saved to: {output_filename}")
 
 
-def _extract_raw_dicts(filepath: str) -> list[dict[str, Any]]:
-    """Extract and parse all top-level dict literals from a file using brace-depth matching."""
+def _extract_raw_dicts(filepath: str) -> list[tuple[str, dict[str, Any]]]:
+    """Extract top-level `name = {...}` dict literals from a Python data file.
+
+    Returns (variable_name, parsed_dict) pairs in source order.
+    """
     with open(filepath, "r") as f:
-        content = f.read()
-    clean = "\n".join(ln for ln in content.split("\n") if not ln.strip().startswith("#"))
-    dicts: list[dict[str, Any]] = []
-    i = 0
-    while i < len(clean):
-        if clean[i] == "{":
-            depth = 1
-            j = i + 1
-            while j < len(clean) and depth > 0:
-                if clean[j] == "{":
-                    depth += 1
-                elif clean[j] == "}":
-                    depth -= 1
-                j += 1
-            try:
-                dicts.append(ast.literal_eval(clean[i:j]))
-            except (ValueError, SyntaxError) as exc:
-                print(f"Warning: skipping unparseable block in {filepath} – {exc}", file=sys.stderr)
-            i = j
-        else:
-            i += 1
-    return dicts
+        tree = ast.parse(f.read(), filename=filepath)
+
+    results: list[tuple[str, dict[str, Any]]] = []
+    for node in tree.body:
+        if not isinstance(node, ast.Assign) or len(node.targets) != 1:
+            continue
+        target = node.targets[0]
+        if not isinstance(target, ast.Name):
+            continue
+        try:
+            value = ast.literal_eval(node.value)
+        except (ValueError, SyntaxError) as exc:
+            print(
+                f"Warning: skipping unparseable assignment '{target.id}' in {filepath} – {exc}",
+                file=sys.stderr,
+            )
+            continue
+        if isinstance(value, dict):
+            results.append((target.id, value))
+    return results
 
 
 def load_data(category: str) -> tuple[list[dict[str, Any]], dict[str, float], dict[str, bool], str]:
@@ -656,12 +657,13 @@ def load_data(category: str) -> tuple[list[dict[str, Any]], dict[str, float], di
     if not raw_models:
         sys.exit("Error: No model metadata found in data/models.txt.")
     models_dict: dict[str, dict[str, Any]] = {
-        k: v for k, v in raw_models[0].items() if isinstance(v, dict)
+        k: v for k, v in raw_models[0][1].items() if isinstance(v, dict)
     }
 
     # Filter to the requested category and flatten each benchmark to the legacy schema
     benchmarks: list[dict[str, Any]] = []
-    for b in raw_benchmarks:
+    benchmark_names: list[str] = []
+    for name, b in raw_benchmarks:
         cats = b.get("categories")
         if not isinstance(cats, list) or category not in cats:
             continue
@@ -674,6 +676,7 @@ def load_data(category: str) -> tuple[list[dict[str, Any]], dict[str, float], di
         if "known_totals" in b:
             flat["known_totals"] = b["known_totals"]
         benchmarks.append(flat)
+        benchmark_names.append(name)
 
     if not benchmarks:
         sys.exit(
@@ -681,7 +684,10 @@ def load_data(category: str) -> tuple[list[dict[str, Any]], dict[str, float], di
             f"Valid categories: {', '.join(CATEGORIES)}"
         )
 
-    print(f"Loaded {len(benchmarks)} benchmarks for category '{category}'.")
+    print(
+        f"Loaded {len(benchmarks)} benchmarks for category '{category}': "
+        f"{', '.join(benchmark_names)}"
+    )
 
     cost_dict: dict[str, float] = {
         m: float(v["cost"]) for m, v in models_dict.items() if v.get("cost") is not None

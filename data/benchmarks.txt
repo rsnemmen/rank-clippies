@@ -31,13 +31,14 @@ aa_agentic = {
     },
 }
 
+# +stem because this benchmark includes scicode
 aa_coding = {
-    "categories": ["coding"],
+    "categories": ["coding", "stem"],
     "min_score": 1,
     "scores": {
-        "deepseek-flash4": 40,
+        "deepseek-flash4": 39,
         "deepseek32": 37,
-        "deepseek4": None,
+        "deepseek4": 47,
         "gemini-flash-lite31": 30,
         "gemini-flash3": 43,
         "gemini-pro31": 56,
