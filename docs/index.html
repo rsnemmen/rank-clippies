@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Rankings</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+</head>
+<body>
+  <header>
+    <h1>LLM Rankings</h1>
+    <p class="subtitle">Unified benchmark leaderboard — percentile normalization &amp; statistical tiering across multiple leaderboards</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-cat="general">General</button>
+    <button class="tab" data-cat="coding">Coding</button>
+    <button class="tab" data-cat="agentic">Agentic</button>
+    <button class="tab" data-cat="stem">STEM</button>
+  </nav>
+
+  <div class="controls">
+    <label><input type="checkbox" id="hideOpen"> Hide open-weight models</label>
+    <label><input type="checkbox" id="hideSparse"> Hide n&#x2264;2 benchmarks</label>
+    <label><input type="checkbox" id="showQuadrants"> Show quadrants (scatter)</label>
+  </div>
+
+  <div id="scatter-chart" class="chart"></div>
+  <div id="ranking-chart" class="chart"></div>
+
+  <section class="methodology">
+    <h2>Methodology</h2>
+    <p>Scores are percentile-normalized across all models on each benchmark (0 = best, 1 = worst).
+       The final score is the median percentile across all benchmarks a model was evaluated on.
+       Models with fewer than 3 benchmarks receive a sparse-data penalty (+0.25 for n=1, +0.10 for n=2).
+       Tiers use the "Indistinguishable from Best" method: models whose &#x00B1;semi-IQR interval overlaps
+       the tier leader are grouped together. Error bars = semi-IQR (half the interquartile range).
+       Marker size in the ranking chart scales with cost. Diamonds = open-weight models.
+       &#x2020; = n=2 benchmarks &nbsp;&nbsp; &#x2021; = n=1 benchmark.</p>
+    <p>
+      <a href="https://github.com/rsnemmen/rank-clippies/blob/main/AGENTS.md" target="_blank">Full methodology</a> &#xB7;
+      <a href="https://github.com/rsnemmen/rank-clippies" target="_blank">Source on GitHub</a>
+    </p>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>

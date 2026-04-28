@@ -9,6 +9,8 @@ Usage:  python rank_models.py [general|coding|agentic|stem]
 
 import argparse
 import ast
+import datetime
+import json
 import math
 import os
 import sys
@@ -663,7 +665,7 @@ def _extract_raw_dicts(filepath: str) -> list[tuple[str, dict[str, Any]]]:
     return results
 
 
-def load_data(category: str) -> tuple[list[dict[str, Any]], dict[str, float], dict[str, bool], str]:
+def load_data(category: str) -> tuple[list[dict[str, Any]], dict[str, float], dict[str, bool], str, list[str]]:
     """Load benchmarks for a category and model metadata from centralized data files.
 
     Returns (benchmarks, cost_dict, open_dict, title) — same shape consumed by main().
@@ -722,7 +724,120 @@ def load_data(category: str) -> tuple[list[dict[str, Any]], dict[str, float], di
     }
     title = CATEGORIES[category]
 
-    return benchmarks, cost_dict, open_dict, title
+    return benchmarks, cost_dict, open_dict, title, benchmark_names
+
+
+def _compute_raw(
+    category: str,
+) -> tuple[list[tuple[Any, ...]], dict[str, list[float]], dict[str, float], dict[str, bool], str, list[str]]:
+    """Load data and compute ranked results. Returns raw objects for table/plot rendering or JSON export."""
+    benchmarks, cost_dict, open_dict, title, benchmark_names = load_data(category)
+
+    model_scores: dict[str, list[float]] = {}
+
+    for bench in benchmarks:
+        min_score = bench.get("min_score")
+        if min_score is not None:
+            observed = [
+                v for k, v in bench.items()
+                if k not in ("known_totals", "min_score") and v is not None
+            ]
+            if not observed:
+                continue
+            max_score = max(observed)
+            score_range = max_score - min_score
+            if score_range == 0:
+                continue
+            for model, score in bench.items():
+                if model in ("known_totals", "min_score"):
+                    continue
+                if score is None:
+                    continue
+                pct = (max_score - score) / score_range
+                model_scores.setdefault(model, []).append(pct)
+        else:
+            total = bench.get("known_totals")
+            if not total:
+                continue
+            for model, rank in bench.items():
+                if model == "known_totals":
+                    continue
+                if rank is None:
+                    continue
+                pct = rank / total
+                model_scores.setdefault(model, []).append(pct)
+
+    results = []
+    for model, scores in model_scores.items():
+        n = len(scores)
+        if n == 0:
+            continue
+
+        sorted_scores = sorted(scores)
+        mid = n // 2
+        median = sorted_scores[mid] if n % 2 == 1 else (sorted_scores[mid - 1] + sorted_scores[mid]) / 2
+
+        penalty = 0.25 if n == 1 else (0.10 if n == 2 else 0.0)
+        avg = min(median + penalty, 1.0)
+
+        if n >= 3:
+            q1_idx = (n - 1) * 0.25
+            q3_idx = (n - 1) * 0.75
+            q1 = sorted_scores[int(q1_idx)] + (q1_idx % 1) * (
+                sorted_scores[min(int(q1_idx) + 1, n - 1)] - sorted_scores[int(q1_idx)]
+            )
+            q3 = sorted_scores[int(q3_idx)] + (q3_idx % 1) * (
+                sorted_scores[min(int(q3_idx) + 1, n - 1)] - sorted_scores[int(q3_idx)]
+            )
+            spread = (q3 - q1) / 2
+        else:
+            spread = None
+
+        cost = cost_dict.get(model)
+        results.append((model, avg, spread, n, cost))
+
+    results.sort(key=lambda r: r[1])
+    return results, model_scores, cost_dict, open_dict, title, benchmark_names
+
+
+def compute_rankings(category: str) -> dict[str, Any]:
+    """Compute rankings and return a JSON-serializable dict for web export. Requires pandas."""
+    try:
+        import pandas as pd  # noqa: F401
+    except ImportError:
+        sys.exit("Error: --export-json requires pandas. Install with: pip install pandas")
+
+    results, model_scores, cost_dict, open_dict, title, benchmark_names = _compute_raw(category)
+    tier_mapping = categorize_tiers(results, k=1.0, debug=False)
+
+    costs_with_values = [r[4] for r in results if r[4] is not None]
+    best_cost = costs_with_values[0] if costs_with_values else None
+
+    models_out: list[dict[str, Any]] = []
+    for idx, (model, avg, spread, n, cost) in enumerate(results, 1):
+        rel_cost = cost / best_cost if (cost is not None and best_cost is not None) else None
+        models_out.append({
+            "rank": idx,
+            "name": model,
+            "avg_pct": round(avg, 6),
+            "semi_iqr": round(spread, 6) if spread is not None else None,
+            "n_bench": n,
+            "cost": cost,
+            "rel_cost": round(rel_cost, 6) if rel_cost is not None else None,
+            "tier": tier_mapping.get(model, 0),
+            "is_open": model in open_dict,
+            "raw_scores": [round(s, 6) for s in model_scores.get(model, [])],
+        })
+
+    return {
+        "category": category,
+        "title": title,
+        "generated_at": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "n_benchmarks": len(benchmark_names),
+        "benchmark_names": benchmark_names,
+        "palette": _NATURE_COLORS,
+        "models": models_out,
+    }
 
 
 def main():
@@ -758,8 +873,27 @@ def main():
         action="store_true",
         help="Disable ANSI color in terminal output",
     )
+    parser.add_argument(
+        "--export-json",
+        nargs="?",
+        const="docs/data",
+        default=None,
+        metavar="DIR",
+        help="Export ranking data as JSON for all categories to DIR (default: docs/data). Requires pandas.",
+    )
     args = parser.parse_args()
     color = _supports_color(args.no_color)
+
+    if args.export_json is not None:
+        out_dir = args.export_json
+        os.makedirs(out_dir, exist_ok=True)
+        for cat in CATEGORIES:
+            data = compute_rankings(cat)
+            out_path = os.path.join(out_dir, f"{cat}.json")
+            with open(out_path, "w") as f:
+                json.dump(data, f, indent=2)
+            print(f"Exported: {out_path}")
+        return
 
     category = args.category
 
@@ -768,79 +902,7 @@ def main():
         print(f"Valid categories: {', '.join(CATEGORIES)}", file=sys.stderr)
         sys.exit(1)
 
-    benchmarks, cost_dict, open_dict, category = load_data(category)
-
-    # ── Collect percentile scores per model ──────────────────────────────
-    model_scores: dict[str, list[float]] = {}
-
-    for bench in benchmarks:
-        min_score = bench.get("min_score")
-        if min_score is not None:
-            # Score-based benchmark: higher score = better
-            # Percentile: 0.0 = best, 1.0 = worst (min_score); known_totals not required
-            observed = [
-                v for k, v in bench.items()
-                if k not in ("known_totals", "min_score") and v is not None
-            ]
-            if not observed:
-                continue
-            max_score = max(observed)
-            score_range = max_score - min_score
-            if score_range == 0:
-                continue
-            for model, score in bench.items():
-                if model in ("known_totals", "min_score"):
-                    continue
-                if score is None:
-                    continue
-                pct = (max_score - score) / score_range
-                model_scores.setdefault(model, []).append(pct)
-        else:
-            # Rank-based benchmark: lower rank number = better; known_totals required
-            total = bench.get("known_totals")
-            if not total:  # None or 0 → skip benchmark
-                continue
-            for model, rank in bench.items():
-                if model == "known_totals":
-                    continue
-                if rank is None:  # model not evaluated here
-                    continue
-                pct = rank / total
-                model_scores.setdefault(model, []).append(pct)
-
-    # ── Compute average, std-dev, apply penalty ──────────────────────────
-    results = []
-    for model, scores in model_scores.items():
-        n = len(scores)
-        if n == 0:
-            continue
-
-        sorted_scores = sorted(scores)
-        mid = n // 2
-        median = sorted_scores[mid] if n % 2 == 1 else (sorted_scores[mid - 1] + sorted_scores[mid]) / 2
-
-        # Sparse-data penalty (added to the median, capped at 1.0)
-        penalty = 0.25 if n == 1 else (0.10 if n == 2 else 0.0)
-        avg = min(median + penalty, 1.0)
-
-        # Semi-IQR of raw percentile scores (robust dispersion for error bars; IQR needs n>=3)
-        if n >= 3:
-            q1_idx = (n - 1) * 0.25
-            q3_idx = (n - 1) * 0.75
-            q1 = sorted_scores[int(q1_idx)] + (q1_idx % 1) * (
-                sorted_scores[min(int(q1_idx) + 1, n - 1)] - sorted_scores[int(q1_idx)]
-            )
-            q3 = sorted_scores[int(q3_idx)] + (q3_idx % 1) * (
-                sorted_scores[min(int(q3_idx) + 1, n - 1)] - sorted_scores[int(q3_idx)]
-            )
-            spread = (q3 - q1) / 2
-        else:
-            spread = None
-
-        cost = cost_dict.get(model)  # None → "N/A" later
-        results.append((model, avg, spread, n, cost))
-
-    results.sort(key=lambda r: r[1])  # ascending = best first
+    results, model_scores, cost_dict, open_dict, category, _bnames = _compute_raw(category)
 
     # ── Normalize costs relative to best-ranked model with cost data ─────
     costs_with_values = [r[4] for r in results if r[4] is not None]
