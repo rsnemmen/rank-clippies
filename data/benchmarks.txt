@@ -221,6 +221,38 @@ GPQA_diamond = {
     },
 }
 
+GraphWalks_BFS_1M = {
+    "categories": ["general", "stem"],
+    "min_score": 2.9,
+    "scores": {
+        "deepseek-flash4": None,
+        "deepseek32": None,
+        "deepseek4": None,
+        "gemini-flash3": None,
+        "gemini-pro31": None,
+        "gemma4-31": None,
+        "glm51": None,
+        "gpt-codex53": None,
+        "gpt-mini54": None,
+        "gpt-oss-120b": None,
+        "gpt-oss-20b": None,
+        "gpt54": 21.4,
+        "gpt55": 45.4,
+        "grok-fast41": None,
+        "grok42": None,
+        "haiku45": None,
+        "kimi26": None,
+        "minimax27": None,
+        "muse": None,
+        "mythos": 80,
+        "opus47": 61.5,
+        "qwen35": None,
+        "qwen36-27b": None,
+        "qwen36-plus": None,
+        "sonnet46": 73.8,
+    },
+}
+
 # Scale's Humanity's Last Exam (without tools)
 HLE = {
     "categories": ["general", "stem"],
