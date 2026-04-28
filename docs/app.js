@@ -100,14 +100,19 @@ function buildScatterLayout(models, palette, showQuadrants, title) {
   const plottable = models.filter(m => m.rel_cost != null);
   const scores = plottable.map(m => m.avg_pct * 100);
   const costs = plottable.map(m => m.rel_cost);
+  const logCosts = costs.map(c => Math.log10(c));
   const maxScore = scores.length ? Math.max(...scores) : 100;
   const upper = Math.min(Math.ceil(maxScore / 10) * 10, 100);
+  const xPadding = 0.4;
+  const logXMin = logCosts.length ? Math.min(...logCosts) - xPadding : -xPadding;
+  const logXMax = logCosts.length ? Math.max(...logCosts) + xPadding : xPadding;
 
   const layout = {
     title: { text: `LLM Performance vs. Cost<br><sub>${title}</sub>`, x: 0.5, xanchor: "center" },
     xaxis: {
       title: "Cost relative to best model (log scale)",
       type: "log",
+      range: [logXMin, logXMax],
       showgrid: true,
       gridcolor: "#d0d0d0",
       gridwidth: 0.6,
@@ -147,27 +152,28 @@ function buildScatterLayout(models, palette, showQuadrants, title) {
   };
 
   if (showQuadrants && costs.length >= 2) {
-    const logCosts = costs.map(c => Math.log10(c));
     const logXMid = logCosts.reduce((a, b) => a + b, 0) / logCosts.length;
-    const logXMin = Math.min(...logCosts) - 0.4;
-    const logXMax = Math.max(...logCosts) + 0.4;
+    const xMin = 10 ** logXMin;
     const yMid = [...scores].sort((a, b) => a - b)[Math.floor(scores.length / 2)];
+    const xMid = 10 ** logXMid;
+    const xMax = 10 ** logXMax;
+    const labelOffset = 0.15;
+    const leftLabelX = 10 ** (logXMin + labelOffset);
+    const rightLabelX = 10 ** (logXMax - labelOffset);
 
-    // Shapes use log10 values for x when xaxis.type is 'log'
     layout.shapes = [
-      { type: "rect", x0: logXMin, x1: logXMid, y0: 0,    y1: yMid,  fillcolor: "#a8d8a8", opacity: 0.25, line: { width: 0 }, layer: "below" },
-      { type: "rect", x0: logXMid, x1: logXMax, y0: 0,    y1: yMid,  fillcolor: "#a8c8e8", opacity: 0.25, line: { width: 0 }, layer: "below" },
-      { type: "rect", x0: logXMin, x1: logXMid, y0: yMid, y1: upper, fillcolor: "#f8e8a0", opacity: 0.25, line: { width: 0 }, layer: "below" },
-      { type: "rect", x0: logXMid, x1: logXMax, y0: yMid, y1: upper, fillcolor: "#f8b8b8", opacity: 0.25, line: { width: 0 }, layer: "below" },
-      { type: "line", x0: logXMid, x1: logXMid, y0: 0,    y1: upper, line: { color: "#aaaaaa", width: 1, dash: "dash" }, layer: "below" },
-      { type: "line", x0: logXMin, x1: logXMax, y0: yMid, y1: yMid,  line: { color: "#aaaaaa", width: 1, dash: "dash" }, layer: "below" },
+      { type: "rect", x0: xMin, x1: xMid, y0: 0,    y1: yMid,  fillcolor: "#a8d8a8", opacity: 0.25, line: { width: 0 }, layer: "below" },
+      { type: "rect", x0: xMid, x1: xMax, y0: 0,    y1: yMid,  fillcolor: "#a8c8e8", opacity: 0.25, line: { width: 0 }, layer: "below" },
+      { type: "rect", x0: xMin, x1: xMid, y0: yMid, y1: upper, fillcolor: "#f8e8a0", opacity: 0.25, line: { width: 0 }, layer: "below" },
+      { type: "rect", x0: xMid, x1: xMax, y0: yMid, y1: upper, fillcolor: "#f8b8b8", opacity: 0.25, line: { width: 0 }, layer: "below" },
+      { type: "line", x0: xMid, x1: xMid, y0: 0,    y1: upper, line: { color: "#aaaaaa", width: 1, dash: "dash" }, layer: "below" },
+      { type: "line", x0: xMin, x1: xMax, y0: yMid, y1: yMid,  line: { color: "#aaaaaa", width: 1, dash: "dash" }, layer: "below" },
     ];
-    // Annotations also use log10 x values
     layout.annotations = [
-      { x: logXMin + 0.15, y: yMid * 0.08 + 1,  xref: "x", yref: "y", text: "Best value", showarrow: false, font: { size: 12, color: "#888888" }, fontstyle: "italic" },
-      { x: logXMax - 0.15, y: yMid * 0.08 + 1,  xref: "x", yref: "y", text: "Premium",    showarrow: false, font: { size: 12, color: "#888888" }, xanchor: "right" },
-      { x: logXMin + 0.15, y: upper - 2,          xref: "x", yref: "y", text: "Budget",     showarrow: false, font: { size: 12, color: "#888888" }, yanchor: "bottom" },
-      { x: logXMax - 0.15, y: upper - 2,          xref: "x", yref: "y", text: "Avoid",      showarrow: false, font: { size: 12, color: "#888888" }, xanchor: "right", yanchor: "bottom" },
+      { x: leftLabelX, y: yMid * 0.08 + 1, xref: "x", yref: "y", text: "Best value", showarrow: false, font: { size: 12, color: "#888888" }, fontstyle: "italic" },
+      { x: rightLabelX, y: yMid * 0.08 + 1, xref: "x", yref: "y", text: "Premium", showarrow: false, font: { size: 12, color: "#888888" }, xanchor: "right" },
+      { x: leftLabelX, y: upper - 2, xref: "x", yref: "y", text: "Budget", showarrow: false, font: { size: 12, color: "#888888" }, yanchor: "bottom" },
+      { x: rightLabelX, y: upper - 2, xref: "x", yref: "y", text: "Avoid", showarrow: false, font: { size: 12, color: "#888888" }, xanchor: "right", yanchor: "bottom" },
     ];
   }
 
