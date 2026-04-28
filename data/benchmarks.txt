@@ -189,6 +189,42 @@ charxiv = {
     },
 }
 
+# https://epoch.ai/benchmarks?view=graph&tab=eci
+frontiermath = {
+    "categories": ["stem"],
+    "min_score":0,
+    "scores": {
+        "deepseek-flash4": None,
+        "deepseek32": 2.1,
+        "deepseek4": None,
+        "gemini-flash-lite31": None,
+        "gemini-flash3": 4.2,
+        "gemini-pro31": 16.7,
+        "gemma4-31": None,
+        "glm51": 2.1,
+        "gpt-codex53": None,
+        "gpt-instant53": None,
+        "gpt-mini54": 2.1,
+        "gpt-oss-120b": None,
+        "gpt-oss-20b": None,
+        "gpt-pro55": 39.6,
+        "gpt54": 27.1,
+        "gpt55": 35.4,
+        "grok-fast41": None,
+        "grok42": None,
+        "haiku45": 2.1,
+        "kimi26": None,
+        "minimax27": None,
+        "muse": 14.6,
+        "opus47": 22.9,
+        "qwen35": None,
+        "qwen36-27b": None,
+        "qwen36-max": None,
+        "qwen36-plus": None,
+        "sonnet46": 8.3,
+    },
+}
+
 GPQA_diamond = {
     "categories": ["general", "stem"],
     "min_score": 13.2,
