@@ -49,6 +49,9 @@ _NATURE_COLORS = [
     "#882255",  # wine
 ]
 
+# ANSI 256-color approximations of _NATURE_COLORS (same order, for terminal output)
+_OKABE_ITO_256 = [33, 214, 36, 166, 175, 117, 227, 246, 28, 89]
+
 # rcParams for a Nature-style figure
 _NATURE_RC: dict[str, object] = {
     "font.family": "sans-serif",
@@ -79,6 +82,18 @@ _NATURE_RC: dict[str, object] = {
     "savefig.dpi": 300,
     "savefig.bbox": "tight",
 }
+
+
+def _supports_color(no_color_flag: bool) -> bool:
+    return (
+        not no_color_flag
+        and not os.environ.get("NO_COLOR")
+        and sys.stdout.isatty()
+    )
+
+
+def _c(text: str, code: str, enabled: bool) -> str:
+    return f"\x1b[{code}m{text}\x1b[0m" if (enabled and code) else text
 
 
 def categorize_tiers(
@@ -728,7 +743,13 @@ def main():
         action="store_true",
         help="Add quadrant dividers and labels to the scatter plot",
     )
+    parser.add_argument(
+        "--no-color",
+        action="store_true",
+        help="Disable ANSI color in terminal output",
+    )
     args = parser.parse_args()
+    color = _supports_color(args.no_color)
 
     category = args.category
 
@@ -817,34 +838,65 @@ def main():
 
     # ── Pretty-print ASCII table ─────────────────────────────────────────
     col = {"rank": 6, "model": 24, "avg": 10, "sd": 10, "nb": 14, "cost": 10}
+    total_w = sum(col.values()) + 2 * len(col) + 1
+    sep = "+" + "-" * (total_w - 2) + "+"
 
-    def row(*cells):
-        return (
-            f"| {cells[0]:<{col['rank']}}"
-            f"| {cells[1]:<{col['model']}}"
-            f"| {cells[2]:<{col['avg']}}"
-            f"| {cells[3]:<{col['sd']}}"
-            f"| {cells[4]:<{col['nb']}}"
-            f"| {cells[5]:<{col['cost']}}|"
-        )
+    # Compute tier mapping for table colors; skipped silently if pandas is missing
+    tier_mapping: dict[str, int] = {}
+    if color:
+        try:
+            tier_mapping = categorize_tiers(results, k=1.0, debug=False)
+        except ImportError:
+            pass
 
-    width = len(row("", "", "", "", "", ""))
-    sep = "+" + "-" * (width - 2) + "+"
+    def _row(rk: str, md: str, av: str, sd: str, nb: str, ct: str) -> str:
+        return f"| {rk}| {md}| {av}| {sd}| {nb}| {ct}|"
 
-    print(sep)
-    print(row("Rank", "Model", "Avg Pctl", "IQR/2", "# Benchmarks", "Rel. Cost"))
-    print(sep)
+    sep_line = _c(sep, "2", color)
+    hdr = (
+        _c(f"{'Rank':<{col['rank']}}", "1", color),
+        _c(f"{'Model':<{col['model']}}", "1", color),
+        _c(f"{'Avg Pctl':<{col['avg']}}", "1", color),
+        _c(f"{'IQR/2':<{col['sd']}}", "1", color),
+        _c(f"{'# Benchmarks':<{col['nb']}}", "1", color),
+        _c(f"{'Rel. Cost':<{col['cost']}}", "1", color),
+    )
+
+    print(sep_line)
+    print(_row(*hdr))
+    print(sep_line)
+
+    _rank_codes = {1: "1;38;5;220", 2: "1;38;5;250", 3: "1;38;5;208"}
 
     for idx, (model, avg, spread, n, cost) in enumerate(results, 1):
         avg_s = f"{avg:.3f}"
         sd_s = f"{spread:.3f}" if spread is not None else "N/A"
-        if cost is not None and best_cost_table is not None:
-            cost_s = f"{cost / best_cost_table:.3f}"
-        else:
-            cost_s = "N/A"
-        print(row(str(idx), model, avg_s, sd_s, str(n), cost_s))
+        cost_val = cost / best_cost_table if (cost is not None and best_cost_table is not None) else None
+        cost_s = f"{cost_val:.3f}" if cost_val is not None else "N/A"
 
-    print(sep)
+        model_disp = model + ("*" if model in open_dict else "")
+
+        # Pad to column width before applying color so ANSI codes don't affect alignment
+        rank_p = _c(f"{str(idx):<{col['rank']}}", _rank_codes.get(idx, ""), color)
+        model_p = f"{model_disp:<{col['model']}}"
+        avg_p = f"{avg_s:<{col['avg']}}"
+        sd_p = f"{sd_s:<{col['sd']}}"
+        nb_p = f"{str(n):<{col['nb']}}"
+        cost_p = f"{cost_s:<{col['cost']}}"
+
+        tier = tier_mapping.get(model, 0)
+        if 1 <= tier <= len(_OKABE_ITO_256):
+            model_p = _c(model_p, f"38;5;{_OKABE_ITO_256[tier - 1]}", color)
+
+        if cost_val is not None:
+            cost_code = "32" if cost_val <= 2.0 else ("33" if cost_val <= 10.0 else "31")
+            cost_p = _c(cost_p, cost_code, color)
+
+        print(_row(rank_p, model_p, avg_p, sd_p, nb_p, cost_p))
+
+    print(sep_line)
+    if color and open_dict:
+        print("  * open-weight model")
 
     # Generate plot if requested
     if args.plot:
