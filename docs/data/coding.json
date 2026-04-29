@@ -1,13 +1,14 @@
 {
   "category": "coding",
   "title": "Coding and agentic coding",
-  "generated_at": "2026-04-29T19:31:24Z",
-  "n_benchmarks": 8,
+  "generated_at": "2026-04-29T19:45:02Z",
+  "n_benchmarks": 9,
   "benchmark_names": [
     "aa_agentic",
     "aa_coding",
     "arena_coding",
     "LiveBench_coding",
+    "LiveBench_agents",
     "swebench_pro_public",
     "swebench_verified",
     "sweatlas_codebase_qna",
@@ -45,9 +46,9 @@
     {
       "rank": 2,
       "name": "gpt55",
-      "avg_pct": 0.009475,
-      "semi_iqr": 0.012039,
-      "n_bench": 6,
+      "avg_pct": 0.01895,
+      "semi_iqr": 0.034445,
+      "n_bench": 7,
       "cost": 1050.0,
       "rel_cost": 0.247059,
       "tier": 1,
@@ -57,6 +58,7 @@
         0.0,
         0.025788,
         0.01895,
+        0.111993,
         0.251671,
         0.0
       ]
@@ -64,9 +66,9 @@
     {
       "rank": 3,
       "name": "gpt54",
-      "avg_pct": 0.072464,
-      "semi_iqr": 0.045961,
-      "n_bench": 7,
+      "avg_pct": 0.053473,
+      "semi_iqr": 0.039844,
+      "n_bench": 8,
       "cost": 525.0,
       "rel_cost": 0.123529,
       "tier": 2,
@@ -76,6 +78,7 @@
         0.034483,
         0.022923,
         0.145773,
+        0.030176,
         0.263468,
         0.0,
         0.095477
@@ -84,9 +87,9 @@
     {
       "rank": 4,
       "name": "opus47",
-      "avg_pct": 0.103448,
-      "semi_iqr": 0.064152,
-      "n_bench": 7,
+      "avg_pct": 0.126903,
+      "semi_iqr": 0.062679,
+      "n_bench": 8,
       "cost": 851.0,
       "rel_cost": 0.200235,
       "tier": 2,
@@ -96,6 +99,7 @@
         0.103448,
         0.002865,
         0.0,
+        0.192565,
         0.176956,
         0.150358,
         0.167085
@@ -103,10 +107,52 @@
     },
     {
       "rank": 5,
+      "name": "gpt-codex53",
+      "avg_pct": 0.145773,
+      "semi_iqr": 0.081656,
+      "n_bench": 7,
+      "cost": 473.0,
+      "rel_cost": 0.111294,
+      "tier": 2,
+      "is_open": false,
+      "raw_scores": [
+        0.246377,
+        0.103448,
+        0.145773,
+        0.047441,
+        0.275265,
+        0.251534,
+        0.067839
+      ]
+    },
+    {
+      "rank": 6,
+      "name": "sonnet46",
+      "avg_pct": 0.162389,
+      "semi_iqr": 0.078274,
+      "n_bench": 9,
+      "cost": 510.0,
+      "rel_cost": 0.12,
+      "tier": 2,
+      "is_open": false,
+      "raw_scores": [
+        0.15942,
+        0.137931,
+        0.028653,
+        0.093294,
+        0.162389,
+        0.270022,
+        0.341289,
+        0.294479,
+        0.398241
+      ]
+    },
+    {
+      "rank": 7,
       "name": "qwen36-plus",
-      "avg_pct": 0.159843,
-      "semi_iqr": 0.033574,
-      "n_bench": 4,
+      "avg_pct": 0.173913,
+      "semi_iqr": 0.046728,
+      "n_bench": 5,
       "cost": 117.0,
       "rel_cost": 0.027529,
       "tier": 3,
@@ -115,34 +161,16 @@
         0.173913,
         0.275862,
         0.091691,
-        0.145773
-      ]
-    },
-    {
-      "rank": 6,
-      "name": "gpt-codex53",
-      "avg_pct": 0.196075,
-      "semi_iqr": 0.068108,
-      "n_bench": 6,
-      "cost": 473.0,
-      "rel_cost": 0.111294,
-      "tier": 3,
-      "is_open": false,
-      "raw_scores": [
-        0.246377,
-        0.103448,
         0.145773,
-        0.275265,
-        0.251534,
-        0.067839
+        0.239228
       ]
     },
     {
-      "rank": 7,
+      "rank": 8,
       "name": "kimi26",
-      "avg_pct": 0.201005,
-      "semi_iqr": 0.052056,
-      "n_bench": 7,
+      "avg_pct": 0.183719,
+      "semi_iqr": 0.044151,
+      "n_bench": 8,
       "cost": 120.0,
       "rel_cost": 0.028235,
       "tier": 3,
@@ -152,26 +180,28 @@
         0.206897,
         0.054441,
         0.134402,
+        0.166433,
         0.251671,
         0.326969,
         0.201005
       ]
     },
     {
-      "rank": 8,
+      "rank": 9,
       "name": "gemini-pro31",
-      "avg_pct": 0.206801,
-      "semi_iqr": 0.08232,
-      "n_bench": 8,
+      "avg_pct": 0.19621,
+      "semi_iqr": 0.128811,
+      "n_bench": 9,
       "cost": 467.0,
       "rel_cost": 0.109882,
-      "tier": 3,
+      "tier": 2,
       "is_open": false,
       "raw_scores": [
         0.217391,
         0.051724,
         0.020057,
         0.19621,
+        0.0,
         0.309346,
         0.317422,
         0.837423,
@@ -179,11 +209,11 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 10,
       "name": "deepseek4",
-      "avg_pct": 0.206897,
-      "semi_iqr": 0.080915,
-      "n_bench": 7,
+      "avg_pct": 0.200975,
+      "semi_iqr": 0.067379,
+      "n_bench": 8,
       "cost": 149.0,
       "rel_cost": 0.035059,
       "tier": 3,
@@ -193,30 +223,10 @@
         0.206897,
         0.100287,
         0.384548,
+        0.195054,
         0.293616,
         0.317422,
         0.18593
-      ]
-    },
-    {
-      "rank": 10,
-      "name": "sonnet46",
-      "avg_pct": 0.214721,
-      "semi_iqr": 0.089705,
-      "n_bench": 8,
-      "cost": 510.0,
-      "rel_cost": 0.12,
-      "tier": 3,
-      "is_open": false,
-      "raw_scores": [
-        0.15942,
-        0.137931,
-        0.028653,
-        0.093294,
-        0.270022,
-        0.341289,
-        0.294479,
-        0.398241
       ]
     },
     {
@@ -240,9 +250,9 @@
     {
       "rank": 12,
       "name": "glm51",
-      "avg_pct": 0.234451,
-      "semi_iqr": 0.059005,
-      "n_bench": 6,
+      "avg_pct": 0.227697,
+      "semi_iqr": 0.058382,
+      "n_bench": 7,
       "cost": 194.0,
       "rel_cost": 0.045647,
       "tier": 3,
@@ -252,6 +262,7 @@
         0.268966,
         0.037249,
         0.227697,
+        0.160523,
         0.254293,
         0.241206
       ]
@@ -259,9 +270,9 @@
     {
       "rank": 13,
       "name": "gpt-mini54",
-      "avg_pct": 0.273023,
-      "semi_iqr": 0.025349,
-      "n_bench": 6,
+      "avg_pct": 0.282937,
+      "semi_iqr": 0.02095,
+      "n_bench": 7,
       "cost": 158.0,
       "rel_cost": 0.037176,
       "tier": 4,
@@ -271,30 +282,17 @@
         0.37931,
         0.083095,
         0.24723,
+        0.282937,
         0.306724,
         0.285176
       ]
     },
     {
       "rank": 14,
-      "name": "grok-multi-agent42",
-      "avg_pct": 0.290115,
-      "semi_iqr": null,
-      "n_bench": 1,
-      "cost": 8500.0,
-      "rel_cost": 2.0,
-      "tier": 4,
-      "is_open": false,
-      "raw_scores": [
-        0.040115
-      ]
-    },
-    {
-      "rank": 15,
       "name": "minimax27",
-      "avg_pct": 0.293103,
-      "semi_iqr": 0.168955,
-      "n_bench": 7,
+      "avg_pct": 0.288117,
+      "semi_iqr": 0.104399,
+      "n_bench": 8,
       "cost": 50.0,
       "rel_cost": 0.011765,
       "tier": 3,
@@ -304,13 +302,46 @@
         0.293103,
         0.174785,
         0.82449,
+        0.256494,
         0.28313,
         0.935583,
         0.322864
       ]
     },
     {
+      "rank": 15,
+      "name": "grok-multi-agent42",
+      "avg_pct": 0.290115,
+      "semi_iqr": null,
+      "n_bench": 1,
+      "cost": 8500.0,
+      "rel_cost": 2.0,
+      "tier": 3,
+      "is_open": false,
+      "raw_scores": [
+        0.040115
+      ]
+    },
+    {
       "rank": 16,
+      "name": "grok42",
+      "avg_pct": 0.293103,
+      "semi_iqr": 0.02131,
+      "n_bench": 5,
+      "cost": 227.0,
+      "rel_cost": 0.053412,
+      "tier": 4,
+      "is_open": false,
+      "raw_scores": [
+        0.333333,
+        0.293103,
+        0.034384,
+        0.498251,
+        0.290714
+      ]
+    },
+    {
+      "rank": 17,
       "name": "muse",
       "avg_pct": 0.29886,
       "semi_iqr": 0.123719,
@@ -326,7 +357,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 18,
       "name": "qwen35",
       "avg_pct": 0.310345,
       "semi_iqr": 0.059264,
@@ -344,24 +375,28 @@
       ]
     },
     {
-      "rank": 18,
-      "name": "grok42",
-      "avg_pct": 0.313218,
-      "semi_iqr": 0.07307,
-      "n_bench": 4,
-      "cost": 227.0,
-      "rel_cost": 0.053412,
-      "tier": 4,
+      "rank": 19,
+      "name": "gemini-flash3",
+      "avg_pct": 0.311844,
+      "semi_iqr": 0.130648,
+      "n_bench": 8,
+      "cost": 100.0,
+      "rel_cost": 0.023529,
+      "tier": 3,
       "is_open": false,
       "raw_scores": [
-        0.333333,
-        0.293103,
-        0.034384,
-        0.498251
+        0.347826,
+        0.275862,
+        0.068768,
+        0.134402,
+        0.227407,
+        0.565867,
+        0.431981,
+        1.0
       ]
     },
     {
-      "rank": 19,
+      "rank": 20,
       "name": "qwen36-27b",
       "avg_pct": 0.318521,
       "semi_iqr": 0.04267,
@@ -379,11 +414,11 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 21,
       "name": "deepseek-flash4",
-      "avg_pct": 0.330319,
-      "semi_iqr": 0.046977,
-      "n_bench": 7,
+      "avg_pct": 0.32722,
+      "semi_iqr": 0.059917,
+      "n_bench": 8,
       "cost": 12.0,
       "rel_cost": 0.002824,
       "tier": 4,
@@ -393,17 +428,18 @@
         0.344828,
         0.148997,
         0.406706,
+        0.240784,
         0.330319,
         0.355609,
         0.324121
       ]
     },
     {
-      "rank": 21,
+      "rank": 22,
       "name": "deepseek32",
-      "avg_pct": 0.341829,
-      "semi_iqr": 0.141385,
-      "n_bench": 6,
+      "avg_pct": 0.37931,
+      "semi_iqr": 0.120649,
+      "n_bench": 7,
       "cost": 23.0,
       "rel_cost": 0.005412,
       "tier": 4,
@@ -413,36 +449,17 @@
         0.37931,
         0.163324,
         0.218367,
+        0.434904,
         0.815834,
         0.570406
       ]
     },
     {
-      "rank": 22,
-      "name": "gemini-flash3",
-      "avg_pct": 0.347826,
-      "semi_iqr": 0.146896,
-      "n_bench": 7,
-      "cost": 100.0,
-      "rel_cost": 0.023529,
-      "tier": 4,
-      "is_open": false,
-      "raw_scores": [
-        0.347826,
-        0.275862,
-        0.068768,
-        0.134402,
-        0.565867,
-        0.431981,
-        1.0
-      ]
-    },
-    {
       "rank": 23,
       "name": "grok-fast41",
-      "avg_pct": 0.378973,
-      "semi_iqr": 0.050271,
-      "n_bench": 4,
+      "avg_pct": 0.395627,
+      "semi_iqr": 0.06022,
+      "n_bench": 5,
       "cost": 24.0,
       "rel_cost": 0.005647,
       "tier": 5,
@@ -451,33 +468,35 @@
         0.362319,
         0.482759,
         0.180516,
-        0.395627
+        0.395627,
+        0.655001
       ]
     },
     {
       "rank": 24,
       "name": "gemini-flash-lite31",
-      "avg_pct": 0.48237,
-      "semi_iqr": 0.036297,
-      "n_bench": 5,
+      "avg_pct": 0.454888,
+      "semi_iqr": 0.07147,
+      "n_bench": 6,
       "cost": 59.0,
       "rel_cost": 0.013882,
-      "tier": 6,
+      "tier": 5,
       "is_open": false,
       "raw_scores": [
         0.695652,
         0.5,
         0.166189,
         0.427405,
+        0.327734,
         0.48237
       ]
     },
     {
       "rank": 25,
       "name": "haiku45",
-      "avg_pct": 0.492754,
-      "semi_iqr": 0.086097,
-      "n_bench": 7,
+      "avg_pct": 0.470515,
+      "semi_iqr": 0.07101,
+      "n_bench": 8,
       "cost": 170.0,
       "rel_cost": 0.04,
       "tier": 5,
@@ -487,6 +506,7 @@
         0.448276,
         0.157593,
         0.302332,
+        0.40955,
         0.502032,
         0.651551,
         0.592965
@@ -495,9 +515,9 @@
     {
       "rank": 26,
       "name": "gemma4-31",
-      "avg_pct": 0.5,
-      "semi_iqr": 0.098733,
-      "n_bench": 7,
+      "avg_pct": 0.48913,
+      "semi_iqr": 0.1254,
+      "n_bench": 8,
       "cost": 19.0,
       "rel_cost": 0.004471,
       "tier": 5,
@@ -507,6 +527,7 @@
         0.344828,
         0.091691,
         0.666181,
+        0.284026,
         0.551842,
         1.0,
         0.5
@@ -515,9 +536,9 @@
     {
       "rank": 27,
       "name": "gpt-oss-120b",
-      "avg_pct": 0.521739,
-      "semi_iqr": 0.076219,
-      "n_bench": 5,
+      "avg_pct": 0.560838,
+      "semi_iqr": 0.066939,
+      "n_bench": 6,
       "cost": 40.0,
       "rel_cost": 0.009412,
       "tier": 6,
@@ -527,6 +548,7 @@
         0.517241,
         0.404011,
         0.669679,
+        0.599938,
         0.862498
       ]
     },
@@ -555,7 +577,7 @@
       "n_bench": 4,
       "cost": 15.0,
       "rel_cost": 0.003529,
-      "tier": 7,
+      "tier": 6,
       "is_open": true,
       "raw_scores": [
         0.666667,
