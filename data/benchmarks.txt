@@ -357,7 +357,7 @@ LiveBench_coding = {
 
 # LiveBench — agentic coding + IF subscore
 LiveBench_agents = {
-    "categories": ["agentic"],
+    "categories": ["agentic", "coding"],
     "min_score": 7.76,
     "scores": {
         "deepseek-flash4": 56.57,
