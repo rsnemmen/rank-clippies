@@ -1,7 +1,7 @@
 {
   "category": "general",
   "title": "General intelligence",
-  "generated_at": "2026-04-28T17:56:03Z",
+  "generated_at": "2026-04-29T19:31:24Z",
   "n_benchmarks": 13,
   "benchmark_names": [
     "aa_intelligence",
@@ -227,24 +227,6 @@
     },
     {
       "rank": 10,
-      "name": "deepseek4",
-      "avg_pct": 0.145455,
-      "semi_iqr": 0.105064,
-      "n_bench": 5,
-      "cost": 149.0,
-      "rel_cost": 0.035059,
-      "tier": 2,
-      "is_open": true,
-      "raw_scores": [
-        0.145455,
-        0.063037,
-        0.055283,
-        0.347633,
-        0.273165
-      ]
-    },
-    {
-      "rank": 11,
       "name": "qwen36-max",
       "avg_pct": 0.145455,
       "semi_iqr": 0.033693,
@@ -257,6 +239,25 @@
         0.145455,
         0.060172,
         0.194946
+      ]
+    },
+    {
+      "rank": 11,
+      "name": "deepseek4",
+      "avg_pct": 0.147045,
+      "semi_iqr": 0.079195,
+      "n_bench": 6,
+      "cost": 149.0,
+      "rel_cost": 0.035059,
+      "tier": 2,
+      "is_open": true,
+      "raw_scores": [
+        0.145455,
+        0.063037,
+        0.055283,
+        0.347633,
+        0.148635,
+        0.273165
       ]
     },
     {
@@ -379,24 +380,6 @@
     },
     {
       "rank": 18,
-      "name": "deepseek-flash4",
-      "avg_pct": 0.236364,
-      "semi_iqr": 0.136067,
-      "n_bench": 5,
-      "cost": 12.0,
-      "rel_cost": 0.002824,
-      "tier": 2,
-      "is_open": true,
-      "raw_scores": [
-        0.236364,
-        0.13467,
-        0.079853,
-        0.406805,
-        0.543923
-      ]
-    },
-    {
-      "rank": 19,
       "name": "gpt-codex53",
       "avg_pct": 0.23741,
       "semi_iqr": null,
@@ -411,7 +394,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "name": "qwen36-27b",
       "avg_pct": 0.254545,
       "semi_iqr": 0.130743,
@@ -424,6 +407,25 @@
         0.254545,
         0.083538,
         0.606509
+      ]
+    },
+    {
+      "rank": 20,
+      "name": "deepseek-flash4",
+      "avg_pct": 0.258478,
+      "semi_iqr": 0.107579,
+      "n_bench": 6,
+      "cost": 12.0,
+      "rel_cost": 0.002824,
+      "tier": 3,
+      "is_open": true,
+      "raw_scores": [
+        0.236364,
+        0.13467,
+        0.079853,
+        0.406805,
+        0.280592,
+        0.543923
       ]
     },
     {
