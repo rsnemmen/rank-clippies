@@ -1,8 +1,8 @@
 {
   "category": "stem",
   "title": "Math and STEM expert reasoning",
-  "generated_at": "2026-04-28T17:56:03Z",
-  "n_benchmarks": 7,
+  "generated_at": "2026-04-29T19:31:24Z",
+  "n_benchmarks": 8,
   "benchmark_names": [
     "aa_coding",
     "charxiv",
@@ -10,6 +10,7 @@
     "GPQA_diamond",
     "GraphWalks_BFS_1M",
     "HLE",
+    "LiveBench_stem",
     "usamo"
   ],
   "palette": [
@@ -45,10 +46,30 @@
     },
     {
       "rank": 2,
+      "name": "gpt54",
+      "avg_pct": 0.038412,
+      "semi_iqr": 0.140655,
+      "n_bench": 7,
+      "cost": 525.0,
+      "rel_cost": 0.123529,
+      "tier": 1,
+      "is_open": false,
+      "raw_scores": [
+        0.034483,
+        0.315657,
+        0.022113,
+        0.760052,
+        0.314349,
+        0.032905,
+        0.038412
+      ]
+    },
+    {
+      "rank": 3,
       "name": "gpt55",
-      "avg_pct": 0.106061,
-      "semi_iqr": 0.136239,
-      "n_bench": 5,
+      "avg_pct": 0.059173,
+      "semi_iqr": 0.118508,
+      "n_bench": 6,
       "cost": 1050.0,
       "rel_cost": 0.247059,
       "tier": 1,
@@ -58,15 +79,16 @@
         0.106061,
         0.012285,
         0.448768,
-        0.284763
+        0.284763,
+        0.0
       ]
     },
     {
-      "rank": 3,
+      "rank": 4,
       "name": "opus47",
-      "avg_pct": 0.143255,
-      "semi_iqr": 0.086539,
-      "n_bench": 6,
+      "avg_pct": 0.103448,
+      "semi_iqr": 0.084213,
+      "n_bench": 7,
       "cost": 851.0,
       "rel_cost": 0.200235,
       "tier": 2,
@@ -77,30 +99,68 @@
         0.421717,
         0.004914,
         0.239948,
-        0.183062
-      ]
-    },
-    {
-      "rank": 4,
-      "name": "gpt54",
-      "avg_pct": 0.176381,
-      "semi_iqr": 0.139932,
-      "n_bench": 6,
-      "cost": 525.0,
-      "rel_cost": 0.123529,
-      "tier": 2,
-      "is_open": false,
-      "raw_scores": [
-        0.034483,
-        0.315657,
-        0.022113,
-        0.760052,
-        0.314349,
-        0.038412
+        0.183062,
+        0.050443
       ]
     },
     {
       "rank": 5,
+      "name": "sonnet46",
+      "avg_pct": 0.137931,
+      "semi_iqr": 0.125093,
+      "n_bench": 7,
+      "cost": 510.0,
+      "rel_cost": 0.12,
+      "tier": 2,
+      "is_open": false,
+      "raw_scores": [
+        0.137931,
+        0.256494,
+        0.790404,
+        0.088452,
+        0.080415,
+        0.436391,
+        0.104059
+      ]
+    },
+    {
+      "rank": 6,
+      "name": "gemini-pro31",
+      "avg_pct": 0.147299,
+      "semi_iqr": 0.140346,
+      "n_bench": 6,
+      "cost": 467.0,
+      "rel_cost": 0.109882,
+      "tier": 2,
+      "is_open": false,
+      "raw_scores": [
+        0.051724,
+        0.578283,
+        0.003686,
+        0.22929,
+        0.065308,
+        0.371319
+      ]
+    },
+    {
+      "rank": 7,
+      "name": "deepseek4",
+      "avg_pct": 0.154308,
+      "semi_iqr": 0.075985,
+      "n_bench": 4,
+      "cost": 149.0,
+      "rel_cost": 0.035059,
+      "tier": 2,
+      "is_open": true,
+      "raw_scores": [
+        0.206897,
+        0.055283,
+        0.347633,
+        0.10172
+      ]
+    },
+    {
+      "rank": 8,
       "name": "muse",
       "avg_pct": 0.184633,
       "semi_iqr": 0.126765,
@@ -117,46 +177,27 @@
       ]
     },
     {
-      "rank": 6,
-      "name": "sonnet46",
-      "avg_pct": 0.197212,
-      "semi_iqr": 0.145297,
-      "n_bench": 6,
-      "cost": 510.0,
-      "rel_cost": 0.12,
-      "tier": 2,
-      "is_open": false,
-      "raw_scores": [
-        0.137931,
-        0.256494,
-        0.790404,
-        0.088452,
-        0.080415,
-        0.436391
-      ]
-    },
-    {
-      "rank": 7,
-      "name": "deepseek4",
-      "avg_pct": 0.206897,
-      "semi_iqr": 0.073088,
+      "rank": 9,
+      "name": "qwen36-plus",
+      "avg_pct": 0.19843,
+      "semi_iqr": 0.049309,
       "n_bench": 3,
-      "cost": 149.0,
-      "rel_cost": 0.035059,
+      "cost": 117.0,
+      "rel_cost": 0.027529,
       "tier": 2,
       "is_open": true,
       "raw_scores": [
-        0.206897,
-        0.055283,
-        0.347633
+        0.275862,
+        0.078624,
+        0.19843
       ]
     },
     {
-      "rank": 8,
+      "rank": 10,
       "name": "kimi26",
-      "avg_pct": 0.206897,
-      "semi_iqr": 0.039356,
-      "n_bench": 3,
+      "avg_pct": 0.207344,
+      "semi_iqr": 0.023249,
+      "n_bench": 4,
       "cost": 120.0,
       "rel_cost": 0.028235,
       "tier": 2,
@@ -164,11 +205,12 @@
       "raw_scores": [
         0.206897,
         0.207792,
-        0.050369
+        0.050369,
+        0.233673
       ]
     },
     {
-      "rank": 9,
+      "rank": 11,
       "name": "gpt-pro55",
       "avg_pct": 0.226664,
       "semi_iqr": null,
@@ -183,29 +225,11 @@
       ]
     },
     {
-      "rank": 10,
-      "name": "gemini-pro31",
-      "avg_pct": 0.22929,
-      "semi_iqr": 0.159797,
-      "n_bench": 5,
-      "cost": 467.0,
-      "rel_cost": 0.109882,
-      "tier": 2,
-      "is_open": false,
-      "raw_scores": [
-        0.051724,
-        0.578283,
-        0.003686,
-        0.22929,
-        0.371319
-      ]
-    },
-    {
-      "rank": 11,
+      "rank": 12,
       "name": "gemini-flash3",
-      "avg_pct": 0.275862,
-      "semi_iqr": 0.308569,
-      "n_bench": 5,
+      "avg_pct": 0.242639,
+      "semi_iqr": 0.260451,
+      "n_bench": 6,
       "cost": 100.0,
       "rel_cost": 0.023529,
       "tier": 1,
@@ -215,62 +239,48 @@
         0.209416,
         0.893939,
         0.140049,
-        0.826553
-      ]
-    },
-    {
-      "rank": 12,
-      "name": "qwen36-plus",
-      "avg_pct": 0.277243,
-      "semi_iqr": null,
-      "n_bench": 2,
-      "cost": 117.0,
-      "rel_cost": 0.027529,
-      "tier": 2,
-      "is_open": true,
-      "raw_scores": [
-        0.275862,
-        0.078624
+        0.826553,
+        0.154167
       ]
     },
     {
       "rank": 13,
       "name": "grok42",
-      "avg_pct": 0.293103,
-      "semi_iqr": 0.097759,
-      "n_bench": 3,
+      "avg_pct": 0.2613,
+      "semi_iqr": 0.072732,
+      "n_bench": 4,
       "cost": 227.0,
       "rel_cost": 0.053412,
-      "tier": 2,
+      "tier": 3,
       "is_open": false,
       "raw_scores": [
         0.293103,
         0.074939,
-        0.465976
+        0.465976,
+        0.229497
       ]
     },
     {
       "rank": 14,
-      "name": "minimax27",
-      "avg_pct": 0.293103,
-      "semi_iqr": 0.110561,
-      "n_bench": 3,
-      "cost": 50.0,
-      "rel_cost": 0.011765,
+      "name": "gpt-codex53",
+      "avg_pct": 0.263967,
+      "semi_iqr": null,
+      "n_bench": 2,
+      "cost": 473.0,
+      "rel_cost": 0.111294,
       "tier": 2,
-      "is_open": true,
+      "is_open": false,
       "raw_scores": [
-        0.293103,
-        0.088452,
-        0.530695
+        0.103448,
+        0.224486
       ]
     },
     {
       "rank": 15,
       "name": "deepseek-flash4",
-      "avg_pct": 0.344828,
-      "semi_iqr": 0.081738,
-      "n_bench": 3,
+      "avg_pct": 0.296516,
+      "semi_iqr": 0.077103,
+      "n_bench": 4,
       "cost": 12.0,
       "rel_cost": 0.002824,
       "tier": 3,
@@ -278,41 +288,82 @@
       "raw_scores": [
         0.344828,
         0.079853,
-        0.406805
+        0.406805,
+        0.248204
       ]
     },
     {
       "rank": 16,
-      "name": "gemma4-31",
-      "avg_pct": 0.344828,
-      "semi_iqr": 0.140796,
-      "n_bench": 3,
-      "cost": 19.0,
-      "rel_cost": 0.004471,
-      "tier": 2,
+      "name": "minimax27",
+      "avg_pct": 0.315752,
+      "semi_iqr": 0.072267,
+      "n_bench": 4,
+      "cost": 50.0,
+      "rel_cost": 0.011765,
+      "tier": 3,
       "is_open": true,
       "raw_scores": [
-        0.344828,
-        0.126536,
-        0.689719
+        0.293103,
+        0.088452,
+        0.530695,
+        0.3384
       ]
     },
     {
       "rank": 17,
-      "name": "gpt-codex53",
-      "avg_pct": 0.353448,
-      "semi_iqr": null,
-      "n_bench": 1,
-      "cost": 473.0,
-      "rel_cost": 0.111294,
-      "tier": 2,
-      "is_open": false,
+      "name": "gemma4-31",
+      "avg_pct": 0.359068,
+      "semi_iqr": 0.081078,
+      "n_bench": 4,
+      "cost": 19.0,
+      "rel_cost": 0.004471,
+      "tier": 3,
+      "is_open": true,
       "raw_scores": [
-        0.103448
+        0.344828,
+        0.126536,
+        0.689719,
+        0.373309
       ]
     },
     {
       "rank": 18,
+      "name": "deepseek32",
+      "avg_pct": 0.37931,
+      "semi_iqr": 0.116201,
+      "n_bench": 5,
+      "cost": 23.0,
+      "rel_cost": 0.005412,
+      "tier": 3,
+      "is_open": true,
+      "raw_scores": [
+        0.37931,
+        0.94697,
+        0.137592,
+        0.586169,
+        0.353766
+      ]
+    },
+    {
+      "rank": 19,
+      "name": "gpt-mini54",
+      "avg_pct": 0.37931,
+      "semi_iqr": 0.147921,
+      "n_bench": 5,
+      "cost": 158.0,
+      "rel_cost": 0.037176,
+      "tier": 3,
+      "is_open": false,
+      "raw_scores": [
+        0.37931,
+        0.94697,
+        0.081081,
+        0.528846,
+        0.233005
+      ]
+    },
+    {
+      "rank": 20,
       "name": "qwen36-27b",
       "avg_pct": 0.37931,
       "semi_iqr": 0.130743,
@@ -328,125 +379,11 @@
       ]
     },
     {
-      "rank": 19,
-      "name": "qwen35",
-      "avg_pct": 0.414973,
-      "semi_iqr": 0.192951,
-      "n_bench": 4,
-      "cost": 86.0,
-      "rel_cost": 0.020235,
-      "tier": 2,
-      "is_open": true,
-      "raw_scores": [
-        0.310345,
-        0.065111,
-        0.519601,
-        0.980954
-      ]
-    },
-    {
-      "rank": 20,
-      "name": "gpt-mini54",
-      "avg_pct": 0.454078,
-      "semi_iqr": 0.164312,
-      "n_bench": 4,
-      "cost": 158.0,
-      "rel_cost": 0.037176,
-      "tier": 3,
-      "is_open": false,
-      "raw_scores": [
-        0.37931,
-        0.94697,
-        0.081081,
-        0.528846
-      ]
-    },
-    {
       "rank": 21,
-      "name": "deepseek32",
-      "avg_pct": 0.482739,
-      "semi_iqr": 0.178744,
-      "n_bench": 4,
-      "cost": 23.0,
-      "rel_cost": 0.005412,
-      "tier": 3,
-      "is_open": true,
-      "raw_scores": [
-        0.37931,
-        0.94697,
-        0.137592,
-        0.586169
-      ]
-    },
-    {
-      "rank": 22,
-      "name": "qwen36-max",
-      "avg_pct": 0.491379,
-      "semi_iqr": null,
-      "n_bench": 1,
-      "cost": 550.0,
-      "rel_cost": 0.129412,
-      "tier": 3,
-      "is_open": true,
-      "raw_scores": [
-        0.241379
-      ]
-    },
-    {
-      "rank": 23,
-      "name": "haiku45",
-      "avg_pct": 0.511364,
-      "semi_iqr": 0.211328,
-      "n_bench": 5,
-      "cost": 170.0,
-      "rel_cost": 0.04,
-      "tier": 3,
-      "is_open": false,
-      "raw_scores": [
-        0.448276,
-        0.511364,
-        0.94697,
-        0.287469,
-        0.870932
-      ]
-    },
-    {
-      "rank": 24,
-      "name": "gemini-flash-lite31",
-      "avg_pct": 0.512338,
-      "semi_iqr": null,
-      "n_bench": 2,
-      "cost": 59.0,
-      "rel_cost": 0.013882,
-      "tier": 3,
-      "is_open": false,
-      "raw_scores": [
-        0.5,
-        0.324675
-      ]
-    },
-    {
-      "rank": 25,
-      "name": "gpt-oss-120b",
-      "avg_pct": 0.517241,
-      "semi_iqr": 0.151618,
-      "n_bench": 3,
-      "cost": 40.0,
-      "rel_cost": 0.009412,
-      "tier": 3,
-      "is_open": true,
-      "raw_scores": [
-        0.517241,
-        0.168305,
-        0.774778
-      ]
-    },
-    {
-      "rank": 26,
       "name": "glm51",
-      "avg_pct": 0.532544,
-      "semi_iqr": 0.339002,
-      "n_bench": 5,
+      "avg_pct": 0.400755,
+      "semi_iqr": 0.296362,
+      "n_bench": 6,
       "cost": 194.0,
       "rel_cost": 0.045647,
       "tier": 2,
@@ -456,31 +393,99 @@
         0.94697,
         0.095823,
         0.532544,
+        0.24453,
         1.0
       ]
     },
     {
-      "rank": 27,
-      "name": "gpt-oss-20b",
-      "avg_pct": 0.689655,
-      "semi_iqr": 0.139704,
+      "rank": 22,
+      "name": "gemini-flash-lite31",
+      "avg_pct": 0.408719,
+      "semi_iqr": 0.043831,
       "n_bench": 3,
-      "cost": 15.0,
-      "rel_cost": 0.003529,
+      "cost": 59.0,
+      "rel_cost": 0.013882,
       "tier": 4,
-      "is_open": true,
+      "is_open": false,
       "raw_scores": [
-        0.689655,
-        0.289926,
-        0.848743
+        0.5,
+        0.324675,
+        0.408719
       ]
     },
     {
-      "rank": 28,
+      "rank": 23,
+      "name": "qwen35",
+      "avg_pct": 0.414973,
+      "semi_iqr": 0.192951,
+      "n_bench": 4,
+      "cost": 86.0,
+      "rel_cost": 0.020235,
+      "tier": 3,
+      "is_open": true,
+      "raw_scores": [
+        0.310345,
+        0.065111,
+        0.519601,
+        0.980954
+      ]
+    },
+    {
+      "rank": 24,
+      "name": "haiku45",
+      "avg_pct": 0.47982,
+      "semi_iqr": 0.207398,
+      "n_bench": 6,
+      "cost": 170.0,
+      "rel_cost": 0.04,
+      "tier": 3,
+      "is_open": false,
+      "raw_scores": [
+        0.448276,
+        0.511364,
+        0.94697,
+        0.287469,
+        0.870932,
+        0.338901
+      ]
+    },
+    {
+      "rank": 25,
+      "name": "qwen36-max",
+      "avg_pct": 0.491379,
+      "semi_iqr": null,
+      "n_bench": 1,
+      "cost": 550.0,
+      "rel_cost": 0.129412,
+      "tier": 4,
+      "is_open": true,
+      "raw_scores": [
+        0.241379
+      ]
+    },
+    {
+      "rank": 26,
+      "name": "gpt-oss-120b",
+      "avg_pct": 0.549751,
+      "semi_iqr": 0.100192,
+      "n_bench": 4,
+      "cost": 40.0,
+      "rel_cost": 0.009412,
+      "tier": 4,
+      "is_open": true,
+      "raw_scores": [
+        0.517241,
+        0.168305,
+        0.774778,
+        0.582262
+      ]
+    },
+    {
+      "rank": 27,
       "name": "grok-fast41",
-      "avg_pct": 0.710059,
-      "semi_iqr": 0.12931,
-      "n_bench": 3,
+      "avg_pct": 0.596409,
+      "semi_iqr": 0.166977,
+      "n_bench": 4,
       "cost": 24.0,
       "rel_cost": 0.005647,
       "tier": 4,
@@ -488,7 +493,24 @@
       "raw_scores": [
         0.482759,
         1.0,
-        0.710059
+        0.710059,
+        0.346083
+      ]
+    },
+    {
+      "rank": 28,
+      "name": "gpt-oss-20b",
+      "avg_pct": 0.689655,
+      "semi_iqr": 0.139704,
+      "n_bench": 3,
+      "cost": 15.0,
+      "rel_cost": 0.003529,
+      "tier": 5,
+      "is_open": true,
+      "raw_scores": [
+        0.689655,
+        0.289926,
+        0.848743
       ]
     },
     {
@@ -499,7 +521,7 @@
       "n_bench": 1,
       "cost": 40.0,
       "rel_cost": 0.009412,
-      "tier": 4,
+      "tier": 5,
       "is_open": true,
       "raw_scores": [
         0.482759
