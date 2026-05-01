@@ -59,7 +59,7 @@ benchmark_name = {
 **`data/models.txt`** — single `models` dict, alphabetical by model name:
 ```python
 models = {
-    "model_name": {"cost": 510, "open": False},  # cost = credits per 1k tokens (Poe)
+    "model_name": {"cost": 510, "open": False},  # cost = USD per 1M tokens (input + output)
     "open_model":  {"cost": 23,  "open": True},  # open-weight: gets diamond marker in plots
 }
 ```

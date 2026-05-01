@@ -384,7 +384,7 @@ LiveBench_agents = {
     },
 }
 
-# LiveBench — math/stem (math + data subscore)
+# LiveBench — math/stem (math + data analysis subscore)
 LiveBench_stem = {
     "categories": ["stem"],
     "min_score": 28.83,

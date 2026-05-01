@@ -324,20 +324,20 @@ def create_plot(
                 "Model Name": model,
                 "Average Score": avg * 100,
                 "Semi-IQR": effective_spread * 100,
-                "Credit Cost (per 1k)": cost,
+                "Cost (USD per 1M)": cost,
                 "Tier": tier_mapping.get(model, 0),
                 "N Bench": n,
             }
         )
 
     df = pd.DataFrame(df_data)
-    df["Credit Cost (per 1k)"] = pd.to_numeric(df["Credit Cost (per 1k)"], errors="coerce")
-    plot_df = df.dropna(subset=["Credit Cost (per 1k)"])
+    df["Cost (USD per 1M)"] = pd.to_numeric(df["Cost (USD per 1M)"], errors="coerce")
+    plot_df = df.dropna(subset=["Cost (USD per 1M)"])
 
     # Normalize cost so best-ranked model (lowest avg score) = 1.0
-    best_cost = float(plot_df.loc[plot_df["Average Score"].idxmin(), "Credit Cost (per 1k)"])
+    best_cost = float(plot_df.loc[plot_df["Average Score"].idxmin(), "Cost (USD per 1M)"])
     plot_df = plot_df.copy()  # avoid pandas SettingWithCopyWarning
-    plot_df["Credit Cost (per 1k)"] = plot_df["Credit Cost (per 1k)"] / best_cost
+    plot_df["Cost (USD per 1M)"] = plot_df["Cost (USD per 1M)"] / best_cost
 
     with matplotlib.rc_context(_NATURE_RC):
         fig, ax = plt.subplots(figsize=(11, 7))
@@ -364,7 +364,7 @@ def create_plot(
 
             if len(closed_data) > 0:
                 ax.errorbar(
-                    closed_data["Credit Cost (per 1k)"],
+                    closed_data["Cost (USD per 1M)"],
                     closed_data["Average Score"],
                     yerr=closed_data["Semi-IQR"],
                     fmt="o",
@@ -381,7 +381,7 @@ def create_plot(
             if len(open_data) > 0:
                 label = f"Tier {tier_num}" if len(closed_data) == 0 else None
                 ax.errorbar(
-                    open_data["Credit Cost (per 1k)"],
+                    open_data["Cost (USD per 1M)"],
                     open_data["Average Score"],
                     yerr=open_data["Semi-IQR"],
                     fmt="D",  # diamond for open-weight models
@@ -401,7 +401,7 @@ def create_plot(
             penalty_suffix = "‡" if n_b == 1 else ("†" if n_b == 2 else "")
             ax.annotate(
                 str(row["Model Name"]) + penalty_suffix,
-                (float(row["Credit Cost (per 1k)"]), float(row["Average Score"])),
+                (float(row["Cost (USD per 1M)"]), float(row["Average Score"])),
                 xytext=(5, 3),
                 textcoords="offset points",
                 fontsize=7,
@@ -446,7 +446,7 @@ def create_plot(
         if quadrants:
             import numpy as np
 
-            x_mid = 10 ** float(np.mean(np.log10(plot_df["Credit Cost (per 1k)"])))
+            x_mid = 10 ** float(np.mean(np.log10(plot_df["Cost (USD per 1M)"])))
             y_mid = float(plot_df["Average Score"].median())
             x_lo, x_hi = ax.get_xlim()
 

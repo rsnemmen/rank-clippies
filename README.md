@@ -170,7 +170,7 @@ https://www.swebench.com
 
 ### `data/models.txt`
 
-A single `models = {...}` dict, alphabetical by model name. Each entry holds credit cost and model type:
+A single `models = {...}` dict, alphabetical by model name. Each entry holds USD cost and model type:
 
 ```python
 models = {
@@ -183,7 +183,7 @@ models = {
 
 | Field | Description |
 |-------|-------------|
-| `cost` | Poe API credits per 1 000 tokens. `None` = pricing unknown → shows `N/A` in Rel. Cost column. |
+| `cost` | USD per 1M tokens (input + output combined). `None` = pricing unknown → shows `N/A` in Rel. Cost column. |
 | `open` | `True` = open-weight model (drawn as a **diamond** in scatter plots). `False` = proprietary (drawn as a **circle**). |
 
 Models absent from `models.txt` show `N/A` in the Rel. Cost column.
