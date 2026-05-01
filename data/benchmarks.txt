@@ -99,6 +99,42 @@ aa_intelligence = {
     },
 }
 
+# AISI advanced CTF / expert
+# https://www.aisi.gov.uk/blog/our-evaluation-of-openais-gpt-5-5-cyber-capabilities
+aisi_ctf = {
+    "categories": ["coding", "agentic"],
+    "min_score": 27.7,
+    "scores": {
+        "deepseek-flash4": None,
+        "deepseek32": None,
+        "deepseek4": None,
+        "gemini-flash-lite31": None,
+        "gemini-flash3": None,
+        "gemini-pro31": None,
+        "gemma4-31": None,
+        "glm51": None,
+        "gpt-codex53": 44.3,
+        "gpt-mini54": None,
+        "gpt-oss-120b": None,
+        "gpt-oss-20b": None,
+        "gpt54": 52.7,
+        "gpt55": 71.8,
+        "grok-fast41": None,
+        "grok-multi-agent42": None,
+        "grok42": None,
+        "haiku45": None,
+        "kimi26": None,
+        "minimax27": None,
+        "muse": None,
+        "mythos": 68.8,
+        "opus47": 48.7,
+        "qwen35": None,
+        "qwen36-max": None,
+        "qwen36-plus": None,
+        "sonnet46": 27.8,
+    },
+}
+
 # Coding leaderboard (Chatbot Arena — coding subset)
 arena_coding = {
     "categories": ["coding"],
