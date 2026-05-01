@@ -1,10 +1,11 @@
 {
   "category": "agentic",
   "title": "Agentic and computer use",
-  "generated_at": "2026-05-01T17:57:18Z",
-  "n_benchmarks": 6,
+  "generated_at": "2026-05-01T18:20:06Z",
+  "n_benchmarks": 7,
   "benchmark_names": [
     "aa_agentic",
+    "aisi_ctf",
     "LiveBench_agents",
     "osworld",
     "swebench_pro_public",
@@ -28,13 +29,14 @@
       "rank": 1,
       "name": "mythos",
       "avg_pct": 0.0,
-      "semi_iqr": 0.001099,
-      "n_bench": 4,
+      "semi_iqr": 0.004397,
+      "n_bench": 5,
       "cost": 150.0,
       "rel_cost": 1.0,
       "tier": 1,
       "is_open": false,
       "raw_scores": [
+        0.068027,
         0.0,
         0.0,
         0.0,
@@ -44,14 +46,15 @@
     {
       "rank": 2,
       "name": "gpt55",
-      "avg_pct": 0.011749,
-      "semi_iqr": 0.055996,
-      "n_bench": 5,
+      "avg_pct": 0.005875,
+      "semi_iqr": 0.043466,
+      "n_bench": 6,
       "cost": 35.0,
       "rel_cost": 0.233333,
       "tier": 1,
       "is_open": false,
       "raw_scores": [
+        0.0,
         0.0,
         0.111993,
         0.011749,
@@ -62,15 +65,16 @@
     {
       "rank": 3,
       "name": "gpt54",
-      "avg_pct": 0.072464,
-      "semi_iqr": 0.017713,
-      "n_bench": 5,
+      "avg_pct": 0.083971,
+      "semi_iqr": 0.079158,
+      "n_bench": 6,
       "cost": 18.0,
       "rel_cost": 0.12,
       "tier": 2,
       "is_open": false,
       "raw_scores": [
         0.072464,
+        0.433107,
         0.030176,
         0.060052,
         0.263468,
@@ -79,33 +83,17 @@
     },
     {
       "rank": 4,
-      "name": "gpt-codex53",
-      "avg_pct": 0.157108,
-      "semi_iqr": 0.09543,
-      "n_bench": 4,
-      "cost": 16.2,
-      "rel_cost": 0.108,
+      "name": "opus47",
+      "avg_pct": 0.167085,
+      "semi_iqr": 0.040298,
+      "n_bench": 7,
+      "cost": 30.0,
+      "rel_cost": 0.2,
       "tier": 2,
       "is_open": false,
       "raw_scores": [
-        0.246377,
-        0.047441,
-        0.275265,
-        0.067839
-      ]
-    },
-    {
-      "rank": 5,
-      "name": "opus47",
-      "avg_pct": 0.158722,
-      "semi_iqr": 0.04671,
-      "n_bench": 6,
-      "cost": 30.0,
-      "rel_cost": 0.2,
-      "tier": 3,
-      "is_open": false,
-      "raw_scores": [
         0.057971,
+        0.52381,
         0.192565,
         0.020888,
         0.176956,
@@ -114,14 +102,14 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 5,
       "name": "kimi26",
       "avg_pct": 0.183719,
       "semi_iqr": 0.05522,
       "n_bench": 6,
       "cost": 4.1,
       "rel_cost": 0.027333,
-      "tier": 3,
+      "tier": 2,
       "is_open": true,
       "raw_scores": [
         0.115942,
@@ -133,14 +121,14 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "name": "deepseek4",
       "avg_pct": 0.195054,
       "semi_iqr": 0.053843,
       "n_bench": 5,
       "cost": 5.1,
       "rel_cost": 0.034,
-      "tier": 3,
+      "tier": 2,
       "is_open": true,
       "raw_scores": [
         0.101449,
@@ -151,14 +139,14 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 7,
       "name": "glm51",
       "avg_pct": 0.200864,
       "semi_iqr": 0.049362,
       "n_bench": 4,
       "cost": 6.7,
       "rel_cost": 0.044667,
-      "tier": 3,
+      "tier": 2,
       "is_open": true,
       "raw_scores": [
         0.101449,
@@ -168,26 +156,7 @@
       ]
     },
     {
-      "rank": 9,
-      "name": "sonnet46",
-      "avg_pct": 0.216206,
-      "semi_iqr": 0.081655,
-      "n_bench": 6,
-      "cost": 17.5,
-      "rel_cost": 0.116667,
-      "tier": 3,
-      "is_open": false,
-      "raw_scores": [
-        0.15942,
-        0.162389,
-        0.092689,
-        0.270022,
-        0.341289,
-        0.398241
-      ]
-    },
-    {
-      "rank": 10,
+      "rank": 8,
       "name": "qwen36-max",
       "avg_pct": 0.217337,
       "semi_iqr": 0.034569,
@@ -203,14 +172,14 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 9,
       "name": "gemini-pro31",
       "avg_pct": 0.217391,
       "semi_iqr": 0.065477,
       "n_bench": 5,
       "cost": 16.0,
       "rel_cost": 0.106667,
-      "tier": 3,
+      "tier": 2,
       "is_open": false,
       "raw_scores": [
         0.217391,
@@ -221,20 +190,58 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 10,
+      "name": "gpt-codex53",
+      "avg_pct": 0.246377,
+      "semi_iqr": 0.103713,
+      "n_bench": 5,
+      "cost": 16.2,
+      "rel_cost": 0.108,
+      "tier": 2,
+      "is_open": false,
+      "raw_scores": [
+        0.246377,
+        0.623583,
+        0.047441,
+        0.275265,
+        0.067839
+      ]
+    },
+    {
+      "rank": 11,
       "name": "minimax27",
       "avg_pct": 0.269812,
       "semi_iqr": 0.026796,
       "n_bench": 4,
       "cost": 1.7,
       "rel_cost": 0.011333,
-      "tier": 4,
+      "tier": 3,
       "is_open": true,
       "raw_scores": [
         0.188406,
         0.256494,
         0.28313,
         0.322864
+      ]
+    },
+    {
+      "rank": 12,
+      "name": "sonnet46",
+      "avg_pct": 0.270022,
+      "semi_iqr": 0.10443,
+      "n_bench": 7,
+      "cost": 17.5,
+      "rel_cost": 0.116667,
+      "tier": 3,
+      "is_open": false,
+      "raw_scores": [
+        0.15942,
+        0.997732,
+        0.162389,
+        0.092689,
+        0.270022,
+        0.341289,
+        0.398241
       ]
     },
     {
@@ -279,7 +286,7 @@
       "n_bench": 2,
       "cost": 4.0,
       "rel_cost": 0.026667,
-      "tier": 4,
+      "tier": 3,
       "is_open": true,
       "raw_scores": [
         0.173913,
