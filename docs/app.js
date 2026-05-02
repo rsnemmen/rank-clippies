@@ -127,7 +127,9 @@ function buildScatterTraces(models, palette) {
       y: gm.map(m => m.avg_pct * 100),
       error_y: {
         type: "data",
-        array: gm.map(m => (m.semi_iqr ?? 0) * 100),
+        array: gm.map(m => (m.upper_err ?? 0) * 100),
+        arrayminus: gm.map(m => (m.lower_err ?? 0) * 100),
+        symmetric: false,
         visible: true,
         color,
         thickness: 1.5,
@@ -281,7 +283,9 @@ function buildRankingTraces(models, palette) {
         y: gm.map(m => m.pos),
         error_x: {
           type: "data",
-          array: gm.map(m => (m.semi_iqr ?? 0) * 100),
+          array: gm.map(m => (m.upper_err ?? 0) * 100),
+          arrayminus: gm.map(m => (m.lower_err ?? 0) * 100),
+          symmetric: false,
           visible: true,
           color,
           thickness: 1.2,

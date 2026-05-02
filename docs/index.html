@@ -40,8 +40,8 @@
     <p>Scores are percentile-normalized across all models on each benchmark (0 = best, 1 = worst).
        The final score is the median percentile across all benchmarks a model was evaluated on.
        Models with fewer than 3 benchmarks receive a sparse-data penalty (+0.25 for n=1, +0.10 for n=2).
-       Tiers use the "Indistinguishable from Best" method: models whose &#x00B1;semi-IQR interval overlaps
-       the tier leader are grouped together. Error bars = semi-IQR (half the interquartile range).
+       Tiers use the "Indistinguishable from Best" method: models whose asymmetric Q1&#x2013;Q3 interval overlaps
+       the tier leader are grouped together. Error bars span Q1 to Q3 around the median (asymmetric).
        Marker size in the ranking chart scales with cost. Diamonds = open-weight models.
        &#x2020; = n=2 benchmarks &nbsp;&nbsp; &#x2021; = n=1 benchmark.</p>
     <p>

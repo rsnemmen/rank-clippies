@@ -107,8 +107,8 @@ def categorize_tiers(
     overlap with the leader's interval are placed in the same tier.
 
     Args:
-        results: List of tuples (model, avg, spread, n, cost) from main computation
-        k: Multiplier for the semi-IQR interval (1.0 = ±semi-IQR, 2.0 = wider)
+        results: List of tuples (model, avg, lower_err, upper_err, n, cost) from main computation
+        k: Multiplier for the asymmetric IQR interval (1.0 = ±bounds, 2.0 = wider)
         debug: If True, print detailed tiering debug output
 
     Returns:
@@ -116,9 +116,11 @@ def categorize_tiers(
     """
     import pandas as pd
 
-    # Calculate average semi-IQR from models with valid spread
-    valid_spreads = [spread for _, _, spread, _, _ in results if spread is not None]
-    avg_spread = sum(valid_spreads) / len(valid_spreads) if valid_spreads else 0.0
+    # Calculate fallback averages for models without enough data (n < 3)
+    valid_lowers = [le for _, _, le, _, _, _ in results if le is not None]
+    valid_uppers = [ue for _, _, _, ue, _, _ in results if ue is not None]
+    avg_lower = sum(valid_lowers) / len(valid_lowers) if valid_lowers else 0.0
+    avg_upper = sum(valid_uppers) / len(valid_uppers) if valid_uppers else 0.0
 
     if debug:
         print("\n" + "=" * 80)
@@ -126,30 +128,32 @@ def categorize_tiers(
         print("=" * 80)
         print("\n📊 INITIAL DATA PREPARATION")
         print(f"   Total models: {len(results)}")
-        print(f"   Models with valid semi-IQR: {len(valid_spreads)}")
-        print(f"   Average semi-IQR (for models without spread): {avg_spread:.6f}")
+        print(f"   Models with valid bounds: {len(valid_lowers)}")
+        print(f"   Average lower err (fallback): {avg_lower:.6f}")
+        print(f"   Average upper err (fallback): {avg_upper:.6f}")
         print(f"   k (interval multiplier): {k}")
 
-    # Prepare data - convert scores and spreads to percentage scale
+    # Prepare data - convert scores and bounds to percentage scale
     df_data = []
     if debug:
         print("\n📋 MODEL DATA (converted to percentage scale):")
-        print(f"   {'Model':<30} {'Score':<12} {'Semi-IQR':<12} {'Source':<15}")
-        print(f"   {'-' * 30} {'-' * 12} {'-' * 12} {'-' * 15}")
+        print(f"   {'Model':<30} {'Score':<12} {'-err':<12} {'+err':<12} {'Source':<15}")
+        print(f"   {'-' * 30} {'-' * 12} {'-' * 12} {'-' * 12} {'-' * 15}")
 
-    for model, avg, spread, n, cost in results:
-        # Use average semi-IQR for models with spread=None
-        effective_spread = spread if spread is not None else avg_spread
-        spread_source = "measured" if spread is not None else "average"
+    for model, avg, lower_err, upper_err, n, cost in results:
+        eff_lower = lower_err if lower_err is not None else avg_lower
+        eff_upper = upper_err if upper_err is not None else avg_upper
+        spread_source = "measured" if lower_err is not None else "average"
         if debug:
             print(
-                f"   {model:<30} {avg * 100:>11.4f} {effective_spread * 100:>11.4f} {spread_source:<15}"
+                f"   {model:<30} {avg * 100:>11.4f} {eff_lower * 100:>11.4f} {eff_upper * 100:>11.4f} {spread_source:<15}"
             )
         df_data.append(
             {
                 "model": model,
-                "score": avg * 100,  # Convert to percentage scale
-                "sd": effective_spread * 100,  # internal column name kept for DataFrame ops
+                "score": avg * 100,
+                "lower": eff_lower * 100,
+                "upper": eff_upper * 100,
             }
         )
 
@@ -187,29 +191,29 @@ def categorize_tiers(
         # Identify the leader (lowest scoring/best performing remaining item)
         leader_idx = remaining_indices[0]
         leader_score = df.loc[leader_idx, "score"]
-        leader_sd = df.loc[leader_idx, "sd"]
-        leader_max = leader_score + (k * leader_sd)
+        leader_upper = df.loc[leader_idx, "upper"]
+        leader_max = leader_score + (k * leader_upper)
 
         if debug:
             print("\n   👑 LEADER SELECTION:")
             print(f"      Leader: {df.loc[leader_idx, 'model']}")
             print(f"      Leader score: {leader_score:.4f}")
-            print(f"      Leader semi-IQR: {leader_sd:.4f}")
+            print(f"      Leader +err: {leader_upper:.4f}")
             print(
-                f"      Leader's upper bound (score + {k}×semi-IQR): {leader_max:.4f}"
+                f"      Leader's upper bound (score + {k}×upper_err): {leader_max:.4f}"
             )
             print(
                 "\n   🔍 OVERLAP CHECK (candidate's lower bound ≤ leader's upper bound):"
             )
             print(f"      Leader's max (upper bound): {leader_max:.4f}")
             print(
-                f"\n      {'Model':<30} {'Score':<12} {'Semi-IQR':<12} {'Lower Bound':<15} {'Overlap?':<10}"
+                f"\n      {'Model':<30} {'Score':<12} {'-err':<12} {'Lower Bound':<15} {'Overlap?':<10}"
             )
             print(f"      {'-' * 30} {'-' * 12} {'-' * 12} {'-' * 15} {'-' * 10}")
 
         # Find all items whose lower bound overlaps with leader's upper bound
         current_batch = df.loc[remaining_indices]
-        candidate_mins = current_batch["score"] - (k * current_batch["sd"])
+        candidate_mins = current_batch["score"] - (k * current_batch["lower"])
 
         # Check overlap condition: if candidate's best case overlaps with leader's worst case
         tier_members_mask = candidate_mins <= leader_max
@@ -219,12 +223,12 @@ def categorize_tiers(
             for idx in remaining_indices:
                 model = df.loc[idx, "model"]
                 score = df.loc[idx, "score"]
-                sd = df.loc[idx, "sd"]
-                lower_bound = score - (k * sd)
+                lower = df.loc[idx, "lower"]
+                lower_bound = score - (k * lower)
                 overlaps = lower_bound <= leader_max
                 overlap_str = "YES ✓" if overlaps else "NO ✗"
                 print(
-                    f"      {model:<30} {score:>11.4f} {sd:>11.4f} {lower_bound:>14.4f} {overlap_str:<10}"
+                    f"      {model:<30} {score:>11.4f} {lower:>11.4f} {lower_bound:>14.4f} {overlap_str:<10}"
                 )
 
         # Assign tier
@@ -290,7 +294,7 @@ def create_plot(
     """Create a scatter plot of model performance vs. cost and save to PNG.
 
     Args:
-        results: List of tuples (model, avg, sd, n, cost) from main computation
+        results: List of tuples (model, avg, lower_err, upper_err, n, cost) from main computation
         output_filename: Path to save the PNG output
         debug: If True, show detailed tiering debug output
         category: Optional category label shown as subtitle
@@ -308,22 +312,26 @@ def create_plot(
         print("  pip install pandas matplotlib", file=sys.stderr)
         sys.exit(1)
 
-    # Calculate average semi-IQR for models with spread=None
-    valid_spreads = [spread for _, _, spread, _, _ in results if spread is not None]
-    avg_spread = sum(valid_spreads) / len(valid_spreads) if valid_spreads else 0.0
+    # Calculate fallback averages for models without enough data (n < 3)
+    valid_lowers = [le for _, _, le, _, _, _ in results if le is not None]
+    valid_uppers = [ue for _, _, _, ue, _, _ in results if ue is not None]
+    avg_lower = sum(valid_lowers) / len(valid_lowers) if valid_lowers else 0.0
+    avg_upper = sum(valid_uppers) / len(valid_uppers) if valid_uppers else 0.0
 
     # Categorize models into tiers
     tier_mapping = categorize_tiers(results, k=1.0, debug=debug)
 
     # Convert results to DataFrame
     df_data = []
-    for model, avg, spread, n, cost in results:
-        effective_spread = spread if spread is not None else avg_spread
+    for model, avg, lower_err, upper_err, n, cost in results:
+        eff_lower = lower_err if lower_err is not None else avg_lower
+        eff_upper = upper_err if upper_err is not None else avg_upper
         df_data.append(
             {
                 "Model Name": model,
                 "Average Score": avg * 100,
-                "Semi-IQR": effective_spread * 100,
+                "Lower": eff_lower * 100,
+                "Upper": eff_upper * 100,
                 "Cost (USD per 1M)": cost,
                 "Tier": tier_mapping.get(model, 0),
                 "N Bench": n,
@@ -366,7 +374,7 @@ def create_plot(
                 ax.errorbar(
                     closed_data["Cost (USD per 1M)"],
                     closed_data["Average Score"],
-                    yerr=closed_data["Semi-IQR"],
+                    yerr=[closed_data["Lower"], closed_data["Upper"]],
                     fmt="o",
                     color=color,
                     ecolor=color,
@@ -383,7 +391,7 @@ def create_plot(
                 ax.errorbar(
                     open_data["Cost (USD per 1M)"],
                     open_data["Average Score"],
-                    yerr=open_data["Semi-IQR"],
+                    yerr=[open_data["Lower"], open_data["Upper"]],
                     fmt="D",  # diamond for open-weight models
                     color=color,
                     ecolor=color,
@@ -439,7 +447,7 @@ def create_plot(
         )
         ax.invert_yaxis()
 
-        max_score = max(avg for _, avg, _, _, _ in results) * 100
+        max_score = max(avg for _, avg, _, _, _, _ in results) * 100
         upper_limit = get_y_upper_limit(max_score)
         ax.set_ylim(top=0, bottom=upper_limit)
 
@@ -482,7 +490,7 @@ def create_ranking_plot(
     """Create a horizontal ranking plot with models ordered by score.
 
     Args:
-        results: List of tuples (model, avg, sd, n, cost) from main computation
+        results: List of tuples (model, avg, lower_err, upper_err, n, cost) from main computation
         output_filename: Path to save the PNG output
         open_models: Set of open source model names
         debug: If True, show detailed tiering debug output
@@ -502,8 +510,10 @@ def create_ranking_plot(
     import random
     random.seed(42)
 
-    valid_spreads = [spread for _, _, spread, _, _ in results if spread is not None]
-    avg_spread = sum(valid_spreads) / len(valid_spreads) if valid_spreads else 0.0
+    valid_lowers = [le for _, _, le, _, _, _ in results if le is not None]
+    valid_uppers = [ue for _, _, _, ue, _, _ in results if ue is not None]
+    avg_lower = sum(valid_lowers) / len(valid_lowers) if valid_lowers else 0.0
+    avg_upper = sum(valid_uppers) / len(valid_uppers) if valid_uppers else 0.0
 
     tier_mapping = categorize_tiers(results, k=1.0, debug=debug)
     sorted_results = sorted(results, key=lambda r: r[1])
@@ -515,7 +525,7 @@ def create_ranking_plot(
         max_tier = max(tier_mapping.values()) if tier_mapping else 1
         colors = [_NATURE_COLORS[i % len(_NATURE_COLORS)] for i in range(max_tier)]
 
-        costs = [cost for _, _, _, _, cost in sorted_results if cost is not None]
+        costs = [cost for _, _, _, _, _, cost in sorted_results if cost is not None]
         min_cost = min(costs) if costs else 1
         max_cost = max(costs) if costs else 100
         log_min = math.log10(min_cost)
@@ -526,8 +536,9 @@ def create_ranking_plot(
             if i % 2 == 0:
                 ax.axhspan(i - 0.5, i + 0.5, facecolor="#f5f5f5", alpha=1.0, zorder=0)
 
-        for i, (model, avg, spread, n_bench, cost) in enumerate(sorted_results):
-            effective_sd = spread if spread is not None else avg_spread
+        for i, (model, avg, lower_err, upper_err, n_bench, cost) in enumerate(sorted_results):
+            eff_lower = lower_err if lower_err is not None else avg_lower
+            eff_upper = upper_err if upper_err is not None else avg_upper
             tier = tier_mapping.get(model, 1)
             color = colors[tier - 1]
             is_open = open_models and model in open_models
@@ -542,7 +553,7 @@ def create_ranking_plot(
             ax.errorbar(
                 avg * 100,
                 i,
-                xerr=effective_sd * 100,
+                xerr=[[eff_lower * 100], [eff_upper * 100]],
                 fmt=marker,
                 color=color,
                 ecolor=color,
@@ -574,7 +585,7 @@ def create_ranking_plot(
 
         y_labels = [
             f"{i + 1}. {model}" + ("‡" if n_b == 1 else ("†" if n_b == 2 else ""))
-            for i, (model, _, _, n_b, _) in enumerate(sorted_results)
+            for i, (model, _, _, _, n_b, _) in enumerate(sorted_results)
         ]
         ax.set_yticks(range(n_models))
         ax.set_yticklabels(y_labels)
@@ -590,7 +601,7 @@ def create_ranking_plot(
 
         ax.invert_yaxis()
 
-        max_score = max(avg for _, avg, _, _, _ in results) * 100
+        max_score = max(avg for _, avg, _, _, _, _ in results) * 100
         upper_limit = get_y_upper_limit(max_score)
         ax.set_xlim(left=0, right=upper_limit)
 
@@ -789,12 +800,14 @@ def _compute_raw(
             q3 = sorted_scores[int(q3_idx)] + (q3_idx % 1) * (
                 sorted_scores[min(int(q3_idx) + 1, n - 1)] - sorted_scores[int(q3_idx)]
             )
-            spread = (q3 - q1) / 2
+            lower_err = median - q1
+            upper_err = q3 - median
         else:
-            spread = None
+            lower_err = None
+            upper_err = None
 
         cost = cost_dict.get(model)
-        results.append((model, avg, spread, n, cost))
+        results.append((model, avg, lower_err, upper_err, n, cost))
 
     results.sort(key=lambda r: r[1])
     return results, model_scores, cost_dict, open_dict, title, benchmark_names
@@ -810,17 +823,18 @@ def compute_rankings(category: str) -> dict[str, Any]:
     results, model_scores, cost_dict, open_dict, title, benchmark_names = _compute_raw(category)
     tier_mapping = categorize_tiers(results, k=1.0, debug=False)
 
-    costs_with_values = [r[4] for r in results if r[4] is not None]
+    costs_with_values = [r[5] for r in results if r[5] is not None]
     best_cost = costs_with_values[0] if costs_with_values else None
 
     models_out: list[dict[str, Any]] = []
-    for idx, (model, avg, spread, n, cost) in enumerate(results, 1):
+    for idx, (model, avg, lower_err, upper_err, n, cost) in enumerate(results, 1):
         rel_cost = cost / best_cost if (cost is not None and best_cost is not None) else None
         models_out.append({
             "rank": idx,
             "name": model,
             "avg_pct": round(avg, 6),
-            "semi_iqr": round(spread, 6) if spread is not None else None,
+            "lower_err": round(lower_err, 6) if lower_err is not None else None,
+            "upper_err": round(upper_err, 6) if upper_err is not None else None,
             "n_bench": n,
             "cost": cost,
             "rel_cost": round(rel_cost, 6) if rel_cost is not None else None,
@@ -905,11 +919,11 @@ def main():
     results, model_scores, cost_dict, open_dict, category, _bnames = _compute_raw(category)
 
     # ── Normalize costs relative to best-ranked model with cost data ─────
-    costs_with_values = [r[4] for r in results if r[4] is not None]
+    costs_with_values = [r[5] for r in results if r[5] is not None]
     best_cost_table = costs_with_values[0] if costs_with_values else None
 
     # ── Pretty-print ASCII table ─────────────────────────────────────────
-    col = {"rank": 6, "model": 24, "avg": 10, "sd": 10, "nb": 14, "cost": 10}
+    col = {"rank": 6, "model": 24, "avg": 10, "lower": 7, "upper": 7, "nb": 14, "cost": 10}
     total_w = sum(col.values()) + 2 * len(col) + 1
     sep = "+" + "-" * (total_w - 2) + "+"
 
@@ -921,15 +935,16 @@ def main():
         except ImportError:
             pass
 
-    def _row(rk: str, md: str, av: str, sd: str, nb: str, ct: str) -> str:
-        return f"| {rk}| {md}| {av}| {sd}| {nb}| {ct}|"
+    def _row(rk: str, md: str, av: str, lo: str, hi: str, nb: str, ct: str) -> str:
+        return f"| {rk}| {md}| {av}| {lo}| {hi}| {nb}| {ct}|"
 
     sep_line = _c(sep, "2", color)
     hdr = (
         _c(f"{'Rank':<{col['rank']}}", "1", color),
         _c(f"{'Model':<{col['model']}}", "1", color),
         _c(f"{'Avg Pctl':<{col['avg']}}", "1", color),
-        _c(f"{'IQR/2':<{col['sd']}}", "1", color),
+        _c(f"{'-err':<{col['lower']}}", "1", color),
+        _c(f"{'+err':<{col['upper']}}", "1", color),
         _c(f"{'# Benchmarks':<{col['nb']}}", "1", color),
         _c(f"{'Rel. Cost':<{col['cost']}}", "1", color),
     )
@@ -940,9 +955,10 @@ def main():
 
     _rank_codes = {1: "1;38;5;220", 2: "1;38;5;250", 3: "1;38;5;208"}
 
-    for idx, (model, avg, spread, n, cost) in enumerate(results, 1):
+    for idx, (model, avg, lower_err, upper_err, n, cost) in enumerate(results, 1):
         avg_s = f"{avg:.3f}"
-        sd_s = f"{spread:.3f}" if spread is not None else "N/A"
+        lower_s = f"{lower_err:.3f}" if lower_err is not None else "N/A"
+        upper_s = f"{upper_err:.3f}" if upper_err is not None else "N/A"
         cost_val = cost / best_cost_table if (cost is not None and best_cost_table is not None) else None
         cost_s = f"{cost_val:.3f}" if cost_val is not None else "N/A"
 
@@ -952,7 +968,8 @@ def main():
         rank_p = _c(f"{str(idx):<{col['rank']}}", _rank_codes.get(idx, ""), color)
         model_p = f"{model_disp:<{col['model']}}"
         avg_p = f"{avg_s:<{col['avg']}}"
-        sd_p = f"{sd_s:<{col['sd']}}"
+        lower_p = f"{lower_s:<{col['lower']}}"
+        upper_p = f"{upper_s:<{col['upper']}}"
         nb_p = f"{str(n):<{col['nb']}}"
         cost_p = f"{cost_s:<{col['cost']}}"
 
@@ -964,7 +981,7 @@ def main():
             cost_code = "32" if cost_val <= 2.0 else ("33" if cost_val <= 10.0 else "31")
             cost_p = _c(cost_p, cost_code, color)
 
-        print(_row(rank_p, model_p, avg_p, sd_p, nb_p, cost_p))
+        print(_row(rank_p, model_p, avg_p, lower_p, upper_p, nb_p, cost_p))
 
     print(sep_line)
     if color and open_dict:
@@ -973,8 +990,8 @@ def main():
     # Generate plot if requested
     if args.plot:
         # Filter results to only include models with cost data
-        plottable_results = [r for r in results if r[4] is not None]
-        excluded = [r[0] for r in results if r[4] is None]
+        plottable_results = [r for r in results if r[5] is not None]
+        excluded = [r[0] for r in results if r[5] is None]
 
         if excluded:
             print(
@@ -1001,7 +1018,7 @@ def main():
     elif args.debug:
         # Run tiering with debug output even without plot
         # Filter results to only include models with cost data for consistency
-        plottable_results = [r for r in results if r[4] is not None]
+        plottable_results = [r for r in results if r[5] is not None]
         if plottable_results:
             categorize_tiers(plottable_results, k=1.0, debug=True)
         else:
