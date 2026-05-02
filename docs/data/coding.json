@@ -1,7 +1,7 @@
 {
   "category": "coding",
   "title": "Coding and agentic coding",
-  "generated_at": "2026-05-02T07:20:14Z",
+  "generated_at": "2026-05-02T16:46:17Z",
   "n_benchmarks": 10,
   "benchmark_names": [
     "aa_agentic",
@@ -162,8 +162,8 @@
       "lower_err": 0.101529,
       "upper_err": 0.061392,
       "n_bench": 8,
-      "cost": 16.2,
-      "rel_cost": 0.108,
+      "cost": 15.75,
+      "rel_cost": 0.105,
       "tier": 2,
       "is_open": false,
       "raw_scores": [
@@ -229,8 +229,8 @@
       "lower_err": 0.072902,
       "upper_err": 0.11338,
       "n_bench": 10,
-      "cost": 17.5,
-      "rel_cost": 0.116667,
+      "cost": 18.0,
+      "rel_cost": 0.12,
       "tier": 2,
       "is_open": false,
       "raw_scores": [
@@ -529,8 +529,8 @@
       "lower_err": 0.087769,
       "upper_err": 0.05425,
       "n_bench": 8,
-      "cost": 5.8,
-      "rel_cost": 0.038667,
+      "cost": 6.0,
+      "rel_cost": 0.04,
       "tier": 4,
       "is_open": false,
       "raw_scores": [

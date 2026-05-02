@@ -1,7 +1,7 @@
 {
   "category": "general",
   "title": "General intelligence",
-  "generated_at": "2026-05-02T07:20:14Z",
+  "generated_at": "2026-05-02T16:46:17Z",
   "n_benchmarks": 13,
   "benchmark_names": [
     "aa_intelligence",
@@ -195,8 +195,8 @@
       "lower_err": 0.040902,
       "upper_err": 0.067403,
       "n_bench": 12,
-      "cost": 17.5,
-      "rel_cost": 0.116667,
+      "cost": 18.0,
+      "rel_cost": 0.12,
       "tier": 2,
       "is_open": false,
       "raw_scores": [
@@ -402,8 +402,8 @@
       "lower_err": null,
       "upper_err": null,
       "n_bench": 2,
-      "cost": 16.2,
-      "rel_cost": 0.108,
+      "cost": 15.75,
+      "rel_cost": 0.105,
       "tier": 2,
       "is_open": false,
       "raw_scores": [
@@ -581,8 +581,8 @@
       "lower_err": 0.101273,
       "upper_err": 0.369843,
       "n_bench": 10,
-      "cost": 5.8,
-      "rel_cost": 0.038667,
+      "cost": 6.0,
+      "rel_cost": 0.04,
       "tier": 3,
       "is_open": false,
       "raw_scores": [

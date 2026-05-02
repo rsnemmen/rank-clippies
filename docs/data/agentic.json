@@ -1,7 +1,7 @@
 {
   "category": "agentic",
   "title": "Agentic and computer use",
-  "generated_at": "2026-05-02T07:20:14Z",
+  "generated_at": "2026-05-02T16:46:17Z",
   "n_benchmarks": 7,
   "benchmark_names": [
     "aa_agentic",
@@ -205,8 +205,8 @@
       "lower_err": 0.178538,
       "upper_err": 0.028889,
       "n_bench": 5,
-      "cost": 16.2,
-      "rel_cost": 0.108,
+      "cost": 15.75,
+      "rel_cost": 0.105,
       "tier": 2,
       "is_open": false,
       "raw_scores": [
@@ -242,8 +242,8 @@
       "lower_err": 0.109118,
       "upper_err": 0.099743,
       "n_bench": 7,
-      "cost": 17.5,
-      "rel_cost": 0.116667,
+      "cost": 18.0,
+      "rel_cost": 0.12,
       "tier": 2,
       "is_open": false,
       "raw_scores": [
@@ -402,8 +402,8 @@
       "lower_err": 0.067041,
       "upper_err": 0.072839,
       "n_bench": 6,
-      "cost": 5.8,
-      "rel_cost": 0.038667,
+      "cost": 6.0,
+      "rel_cost": 0.04,
       "tier": 5,
       "is_open": false,
       "raw_scores": [
