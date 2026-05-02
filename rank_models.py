@@ -372,9 +372,9 @@ def create_plot(
 
             if len(closed_data) > 0:
                 ax.errorbar(
-                    closed_data["Cost (USD per 1M)"],
-                    closed_data["Average Score"],
-                    yerr=[closed_data["Lower"], closed_data["Upper"]],
+                    closed_data["Cost (USD per 1M)"].to_numpy(),
+                    closed_data["Average Score"].to_numpy(),
+                    yerr=[closed_data["Lower"].to_numpy(), closed_data["Upper"].to_numpy()],
                     fmt="o",
                     color=color,
                     ecolor=color,
@@ -389,9 +389,9 @@ def create_plot(
             if len(open_data) > 0:
                 label = f"Tier {tier_num}" if len(closed_data) == 0 else None
                 ax.errorbar(
-                    open_data["Cost (USD per 1M)"],
-                    open_data["Average Score"],
-                    yerr=[open_data["Lower"], open_data["Upper"]],
+                    open_data["Cost (USD per 1M)"].to_numpy(),
+                    open_data["Average Score"].to_numpy(),
+                    yerr=[open_data["Lower"].to_numpy(), open_data["Upper"].to_numpy()],
                     fmt="D",  # diamond for open-weight models
                     color=color,
                     ecolor=color,
