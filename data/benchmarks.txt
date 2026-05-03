@@ -101,7 +101,7 @@ aa_intelligence = {
 
 # AISI advanced CTF / expert
 # https://www.aisi.gov.uk/blog/our-evaluation-of-openais-gpt-5-5-cyber-capabilities
-aisi_ctf = {
+AISI_CTF = {
     "categories": ["coding", "agentic"],
     "min_score": 27.7,
     "scores": {
@@ -132,6 +132,41 @@ aisi_ctf = {
         "qwen36-max": None,
         "qwen36-plus": None,
         "sonnet46": 27.8,
+    },
+}
+
+# https://arcprize.org/leaderboard
+ARC_AGI_2 = {
+    "categories": ["general", "agentic"],
+    "min_score": 0,
+    "scores": {
+        "deepseek-flash4": None,
+        "deepseek32": 4,
+        "deepseek4": None,
+        "gemini-flash-lite31": None,
+        "gemini-flash3": 33.6,
+        "gemini-pro31": 77.1,
+        "gemma4-31": None,
+        "glm51": None,
+        "gpt-codex53": None,
+        "gpt-mini54": 13.2,
+        "gpt-oss-120b": None,
+        "gpt-oss-20b": None,
+        "gpt54": 67.5,
+        "gpt55": 83.3,
+        "gpt-pro55": 84.6,
+        "grok-fast41": None,
+        "grok-multi-agent42": None,
+        "grok42": 65.1,
+        "haiku45": 4,
+        "kimi26": None,
+        "minimax27": None,
+        "muse": None,
+        "opus47": 75.8,
+        "qwen35": None,
+        "qwen36-max": None,
+        "qwen36-plus": None,
+        "sonnet46": 60.4,
     },
 }
 

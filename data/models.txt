@@ -13,7 +13,6 @@ models = {
     "gpt-mini54":         {"cost": 5.4,   "open": False},
     "gpt-oss-120b":       {"cost": 1.4,   "open": True},
     "gpt-oss-20b":        {"cost": 0.5,   "open": True},
-    "gpt-pro52":          {"cost": 195.5, "open": False},
     "gpt-pro55":          {"cost": 216.1, "open": False},
     "gpt54":              {"cost": 18.0,  "open": False},
     "gpt55":              {"cost": 35.0,  "open": False},
