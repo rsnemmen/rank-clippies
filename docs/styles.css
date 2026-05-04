@@ -113,6 +113,37 @@ h1 { font-size: 1.7rem; font-weight: bold; }
 .methodology a { color: #0072B2; text-decoration: none; }
 .methodology a:hover { text-decoration: underline; }
 
+.changelog {
+  margin-top: 1rem;
+  padding: 1rem 1.3rem;
+  background: #f8f8f8;
+  border-radius: 6px;
+  border-left: 4px solid #888;
+}
+.changelog h2 { font-size: 1rem; margin-bottom: 0.65rem; }
+.changelog-list {
+  display: grid;
+  gap: 0.45rem;
+  list-style: none;
+}
+.changelog-list li {
+  display: grid;
+  grid-template-columns: 6.4rem 1fr;
+  gap: 0.8rem;
+  align-items: baseline;
+  font-size: 0.87rem;
+  line-height: 1.45;
+  color: #444;
+}
+.changelog-list time {
+  color: #666;
+  font-variant-numeric: tabular-nums;
+}
+.changelog-list .changelog-empty {
+  grid-template-columns: 1fr;
+  color: #666;
+}
+
 #loading {
   text-align: center;
   padding: 3rem;
@@ -124,4 +155,5 @@ h1 { font-size: 1.7rem; font-weight: bold; }
   .tabs { flex-wrap: wrap; }
   .tab { padding: 0.35rem 0.75rem; font-size: 0.85rem; }
   .controls { gap: 0.8rem; font-size: 0.85rem; }
+  .changelog-list li { grid-template-columns: 1fr; gap: 0.1rem; }
 }

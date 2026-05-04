@@ -1,0 +1,60 @@
+{
+  "entries": [
+    {
+      "date": "2026-05-04",
+      "message": "added grok 4.3"
+    },
+    {
+      "date": "2026-05-03",
+      "message": "added ARC-AGI-2 benchmarjs"
+    },
+    {
+      "date": "2026-05-02",
+      "message": "removed old cost data"
+    },
+    {
+      "date": "2026-05-02",
+      "message": "switch arena benchmarks to Elo scores, add BioMysteryBench"
+    },
+    {
+      "date": "2026-05-01",
+      "message": "added AISI CTF advanced where gpt 5.5 beats mythos"
+    },
+    {
+      "date": "2026-05-01",
+      "message": "switch cost metric from Poe credits/1k tokens to USD/1M tokens"
+    },
+    {
+      "date": "2026-04-29",
+      "message": "fixed category for livebench agents"
+    },
+    {
+      "date": "2026-04-29",
+      "message": "added agentic and stem livebench benchmarks"
+    },
+    {
+      "date": "2026-04-28",
+      "message": "updated benchmarks"
+    },
+    {
+      "date": "2026-04-28",
+      "message": "added frontiermath benchmakr"
+    },
+    {
+      "date": "2026-04-27",
+      "message": "added graphwalks 1m benchmark"
+    },
+    {
+      "date": "2026-04-27",
+      "message": "prints also which benchmarks were used"
+    },
+    {
+      "date": "2026-04-27",
+      "message": "added charxiv to stem as well"
+    },
+    {
+      "date": "2026-04-27",
+      "message": "centralize benchmark and model data into two files"
+    }
+  ]
+}

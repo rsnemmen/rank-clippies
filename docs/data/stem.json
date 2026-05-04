@@ -1,7 +1,7 @@
 {
   "category": "stem",
   "title": "Math and STEM expert reasoning",
-  "generated_at": "2026-05-02T16:46:17Z",
+  "generated_at": "2026-05-04T18:48:57Z",
   "n_benchmarks": 9,
   "benchmark_names": [
     "aa_coding",
@@ -261,24 +261,6 @@
     },
     {
       "rank": 13,
-      "name": "grok42",
-      "avg_pct": 0.2613,
-      "lower_err": 0.070443,
-      "upper_err": 0.075021,
-      "n_bench": 4,
-      "cost": 7.8,
-      "rel_cost": 0.052,
-      "tier": 2,
-      "is_open": false,
-      "raw_scores": [
-        0.293103,
-        0.074939,
-        0.465976,
-        0.229497
-      ]
-    },
-    {
-      "rank": 14,
       "name": "gpt-codex53",
       "avg_pct": 0.263967,
       "lower_err": null,
@@ -294,7 +276,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 14,
       "name": "deepseek-flash4",
       "avg_pct": 0.296516,
       "lower_err": 0.0904,
@@ -309,6 +291,24 @@
         0.079853,
         0.406805,
         0.248204
+      ]
+    },
+    {
+      "rank": 15,
+      "name": "grok43",
+      "avg_pct": 0.310843,
+      "lower_err": 0.064264,
+      "upper_err": 0.02344,
+      "n_bench": 4,
+      "cost": 3.75,
+      "rel_cost": 0.025,
+      "tier": 2,
+      "is_open": false,
+      "raw_scores": [
+        0.310345,
+        0.055283,
+        0.403107,
+        0.311341
       ]
     },
     {

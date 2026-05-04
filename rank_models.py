@@ -13,6 +13,7 @@ import datetime
 import json
 import math
 import os
+import subprocess
 import sys
 from typing import Any
 
@@ -854,6 +855,40 @@ def compute_rankings(category: str) -> dict[str, Any]:
     }
 
 
+def build_data_changelog() -> list[dict[str, str]]:
+    """Return Git commits that changed benchmark or model data, newest first."""
+    repo_dir = os.path.dirname(os.path.abspath(__file__))
+    cmd = [
+        "git",
+        "log",
+        "--date=short",
+        "--pretty=format:%ad%x09%s",
+        "--",
+        "data/benchmarks.txt",
+        "data/models.txt",
+    ]
+
+    try:
+        result = subprocess.run(
+            cmd,
+            cwd=repo_dir,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return []
+
+    entries: list[dict[str, str]] = []
+    for line in result.stdout.splitlines():
+        if not line.strip():
+            continue
+        date, _, message = line.partition("\t")
+        if date and message:
+            entries.append({"date": date, "message": message})
+    return entries
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Compute a unified model ranking from multiple benchmark leaderboards."
@@ -907,6 +942,10 @@ def main():
             with open(out_path, "w") as f:
                 json.dump(data, f, indent=2)
             print(f"Exported: {out_path}")
+        changelog_path = os.path.join(out_dir, "changelog.json")
+        with open(changelog_path, "w") as f:
+            json.dump({"entries": build_data_changelog()}, f, indent=2)
+        print(f"Exported: {changelog_path}")
         return
 
     category = args.category

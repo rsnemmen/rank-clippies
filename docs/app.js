@@ -32,6 +32,12 @@ async function loadCategory(cat) {
   return resp.json();
 }
 
+async function loadChangelog() {
+  const resp = await fetch("data/changelog.json");
+  if (!resp.ok) throw new Error(`Failed to load data/changelog.json: ${resp.status}`);
+  return resp.json();
+}
+
 function formatGeneratedAt(generatedAt) {
   if (!generatedAt) return "unknown";
   const timestamp = Date.parse(generatedAt);
@@ -72,6 +78,33 @@ function renderBenchmarkSources(data) {
     link.rel = "noopener noreferrer";
     link.textContent = metadata.label;
     item.appendChild(link);
+    listEl.appendChild(item);
+  }
+}
+
+function renderChangelog(changelog) {
+  const listEl = document.getElementById("changelog-list");
+  listEl.replaceChildren();
+
+  const entries = changelog.entries ?? [];
+  if (!entries.length) {
+    const item = document.createElement("li");
+    item.className = "changelog-empty";
+    item.textContent = "No data-file changes found in the available Git history.";
+    listEl.appendChild(item);
+    return;
+  }
+
+  for (const entry of entries) {
+    const item = document.createElement("li");
+    const date = document.createElement("time");
+    const message = document.createElement("span");
+
+    date.dateTime = entry.date;
+    date.textContent = entry.date;
+    message.textContent = entry.message;
+
+    item.append(date, message);
     listEl.appendChild(item);
   }
 }
@@ -451,5 +484,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (currentData) renderCharts(currentData);
     });
   });
+  loadChangelog()
+    .then(renderChangelog)
+    .catch(err => {
+      console.error(err);
+      renderChangelog({ entries: [] });
+    });
   switchCategory("general");
 });

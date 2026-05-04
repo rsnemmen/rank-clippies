@@ -1,12 +1,12 @@
 {
   "category": "coding",
   "title": "Coding and agentic coding",
-  "generated_at": "2026-05-02T16:46:17Z",
+  "generated_at": "2026-05-04T18:48:57Z",
   "n_benchmarks": 10,
   "benchmark_names": [
     "aa_agentic",
     "aa_coding",
-    "aisi_ctf",
+    "AISI_CTF",
     "arena_coding",
     "LiveBench_coding",
     "LiveBench_agents",
@@ -288,6 +288,25 @@
     },
     {
       "rank": 13,
+      "name": "grok43",
+      "avg_pct": 0.243739,
+      "lower_err": 0.127797,
+      "upper_err": 0.066606,
+      "n_bench": 5,
+      "cost": 3.75,
+      "rel_cost": 0.025,
+      "tier": 2,
+      "is_open": false,
+      "raw_scores": [
+        0.115942,
+        0.310345,
+        0.112554,
+        0.386297,
+        0.243739
+      ]
+    },
+    {
+      "rank": 14,
       "name": "gpt-mini54",
       "avg_pct": 0.282937,
       "lower_err": 0.028887,
@@ -308,7 +327,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 15,
       "name": "minimax27",
       "avg_pct": 0.288117,
       "lower_err": 0.048645,
@@ -327,25 +346,6 @@
         0.28313,
         0.935583,
         0.322864
-      ]
-    },
-    {
-      "rank": 15,
-      "name": "grok42",
-      "avg_pct": 0.293103,
-      "lower_err": 0.002389,
-      "upper_err": 0.04023,
-      "n_bench": 5,
-      "cost": 7.8,
-      "rel_cost": 0.052,
-      "tier": 3,
-      "is_open": false,
-      "raw_scores": [
-        0.333333,
-        0.293103,
-        0.077922,
-        0.498251,
-        0.290714
       ]
     },
     {
