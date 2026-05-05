@@ -8,11 +8,11 @@ Usage:  python rank_models.py [general|coding|agentic|stem]
 """
 
 import argparse
-import ast
 import datetime
 import json
 import math
 import os
+import tomllib
 import subprocess
 import sys
 from typing import Any
@@ -34,7 +34,7 @@ def get_y_upper_limit(max_score: float) -> int:
     Returns:
         Upper y-axis limit as an integer, capped at 100
     """
-    upper = (int(max_score) // 10 + 1) * 10
+    upper = math.ceil(max_score / 10) * 10
     return min(upper, 100)
 
 
@@ -88,11 +88,7 @@ _NATURE_RC: dict[str, object] = {
 
 
 def _supports_color(no_color_flag: bool) -> bool:
-    return (
-        not no_color_flag
-        and not os.environ.get("NO_COLOR")
-        and sys.stdout.isatty()
-    )
+    return not no_color_flag and not os.environ.get("NO_COLOR") and sys.stdout.isatty()
 
 
 def _c(text: str, code: str, enabled: bool) -> str:
@@ -138,7 +134,9 @@ def categorize_tiers(
     df_data = []
     if debug:
         print("\n📋 MODEL DATA (converted to percentage scale):")
-        print(f"   {'Model':<30} {'Score':<12} {'-err':<12} {'+err':<12} {'Source':<15}")
+        print(
+            f"   {'Model':<30} {'Score':<12} {'-err':<12} {'+err':<12} {'Source':<15}"
+        )
         print(f"   {'-' * 30} {'-' * 12} {'-' * 12} {'-' * 12} {'-' * 15}")
 
     for model, avg, lower_err, upper_err, n, cost in results:
@@ -344,7 +342,9 @@ def create_plot(
     plot_df = df.dropna(subset=["Cost (USD per 1M)"])
 
     # Normalize cost so best-ranked model (lowest avg score) = 1.0
-    best_cost = float(plot_df.loc[plot_df["Average Score"].idxmin(), "Cost (USD per 1M)"])
+    best_cost = float(
+        plot_df.loc[plot_df["Average Score"].idxmin(), "Cost (USD per 1M)"]
+    )
     plot_df = plot_df.copy()  # avoid pandas SettingWithCopyWarning
     plot_df["Cost (USD per 1M)"] = plot_df["Cost (USD per 1M)"] / best_cost
 
@@ -375,7 +375,10 @@ def create_plot(
                 ax.errorbar(
                     closed_data["Cost (USD per 1M)"].to_numpy(),
                     closed_data["Average Score"].to_numpy(),
-                    yerr=[closed_data["Lower"].to_numpy(), closed_data["Upper"].to_numpy()],
+                    yerr=[
+                        closed_data["Lower"].to_numpy(),
+                        closed_data["Upper"].to_numpy(),
+                    ],
                     fmt="o",
                     color=color,
                     ecolor=color,
@@ -423,17 +426,33 @@ def create_plot(
         ax.set_xlabel("Cost relative to best model (log scale)")
         ax.grid(True, linestyle="--", linewidth=0.6, alpha=0.5)
 
-        leg1 = ax.legend(loc="center right", bbox_to_anchor=(1, 0.5), title="Performance tier")
+        leg1 = ax.legend(
+            loc="center right", bbox_to_anchor=(1, 0.5), title="Performance tier"
+        )
         ax.add_artist(leg1)
 
         legend_elements = [
             Line2D(
-                [0], [0], marker="o", color="w", markerfacecolor="#666666",
-                markersize=9, label="Proprietary", markeredgecolor="white", markeredgewidth=0.8,
+                [0],
+                [0],
+                marker="o",
+                color="w",
+                markerfacecolor="#666666",
+                markersize=9,
+                label="Proprietary",
+                markeredgecolor="white",
+                markeredgewidth=0.8,
             ),
             Line2D(
-                [0], [0], marker="D", color="w", markerfacecolor="#666666",
-                markersize=8, label="Open-weight", markeredgecolor="white", markeredgewidth=0.8,
+                [0],
+                [0],
+                marker="D",
+                color="w",
+                markerfacecolor="#666666",
+                markersize=8,
+                label="Open-weight",
+                markeredgecolor="white",
+                markeredgewidth=0.8,
             ),
             Line2D([], [], linestyle="none", label="† few benchmarks (n=2)"),
             Line2D([], [], linestyle="none", label="‡ very few benchmarks (n=1)"),
@@ -446,11 +465,9 @@ def create_plot(
                 lambda x, _: f"{x:g}" if x >= 1 else f"{x:.2g}"
             )
         )
-        ax.invert_yaxis()
-
         max_score = max(avg for _, avg, _, _, _, _ in results) * 100
         upper_limit = get_y_upper_limit(max_score)
-        ax.set_ylim(top=0, bottom=upper_limit)
+        ax.set_ylim(upper_limit, 0)
 
         if quadrants:
             import numpy as np
@@ -463,16 +480,62 @@ def create_plot(
             ax.axvline(x_mid, color="#aaaaaa", linewidth=0.8, linestyle="--", zorder=0)
 
             # Light background shading per quadrant
-            ax.fill_between([x_lo, x_mid], [0, 0], [y_mid, y_mid], color="#a8d8a8", alpha=0.25, zorder=0)
-            ax.fill_between([x_mid, x_hi], [0, 0], [y_mid, y_mid], color="#a8c8e8", alpha=0.25, zorder=0)
-            ax.fill_between([x_lo, x_mid], [y_mid, y_mid], [upper_limit, upper_limit], color="#f8e8a0", alpha=0.25, zorder=0)
-            ax.fill_between([x_mid, x_hi], [y_mid, y_mid], [upper_limit, upper_limit], color="#f8b8b8", alpha=0.25, zorder=0)
+            ax.fill_between(
+                [x_lo, x_mid],
+                [0, 0],
+                [y_mid, y_mid],
+                color="#a8d8a8",
+                alpha=0.25,
+                zorder=0,
+            )
+            ax.fill_between(
+                [x_mid, x_hi],
+                [0, 0],
+                [y_mid, y_mid],
+                color="#a8c8e8",
+                alpha=0.25,
+                zorder=0,
+            )
+            ax.fill_between(
+                [x_lo, x_mid],
+                [y_mid, y_mid],
+                [upper_limit, upper_limit],
+                color="#f8e8a0",
+                alpha=0.25,
+                zorder=0,
+            )
+            ax.fill_between(
+                [x_mid, x_hi],
+                [y_mid, y_mid],
+                [upper_limit, upper_limit],
+                color="#f8b8b8",
+                alpha=0.25,
+                zorder=0,
+            )
 
             label_kw = dict(fontsize=13, color="#888888", alpha=0.7, style="italic")
-            ax.text(x_lo * 1.05, y_mid * 0.05, "Best value", ha="left", va="top", **label_kw)
-            ax.text(x_hi * 0.95, y_mid * 0.05, "Premium", ha="right", va="top", **label_kw)
-            ax.text(x_lo * 1.05, upper_limit * 0.97, "Budget", ha="left", va="bottom", **label_kw)
-            ax.text(x_hi * 0.95, upper_limit * 0.97, "Avoid", ha="right", va="bottom", **label_kw)
+            ax.text(
+                x_lo * 1.05, y_mid * 0.05, "Best value", ha="left", va="top", **label_kw
+            )
+            ax.text(
+                x_hi * 0.95, y_mid * 0.05, "Premium", ha="right", va="top", **label_kw
+            )
+            ax.text(
+                x_lo * 1.05,
+                upper_limit * 0.97,
+                "Budget",
+                ha="left",
+                va="bottom",
+                **label_kw,
+            )
+            ax.text(
+                x_hi * 0.95,
+                upper_limit * 0.97,
+                "Avoid",
+                ha="right",
+                va="bottom",
+                **label_kw,
+            )
 
         fig.savefig(output_filename)
         plt.close(fig)
@@ -509,6 +572,7 @@ def create_ranking_plot(
         sys.exit(1)
 
     import random
+
     random.seed(42)
 
     valid_lowers = [le for _, _, le, _, _, _ in results if le is not None]
@@ -537,7 +601,9 @@ def create_ranking_plot(
             if i % 2 == 0:
                 ax.axhspan(i - 0.5, i + 0.5, facecolor="#f5f5f5", alpha=1.0, zorder=0)
 
-        for i, (model, avg, lower_err, upper_err, n_bench, cost) in enumerate(sorted_results):
+        for i, (model, avg, lower_err, upper_err, n_bench, cost) in enumerate(
+            sorted_results
+        ):
             eff_lower = lower_err if lower_err is not None else avg_lower
             eff_upper = upper_err if upper_err is not None else avg_upper
             tier = tier_mapping.get(model, 1)
@@ -609,14 +675,21 @@ def create_ranking_plot(
         # Tier legend (top right)
         tier_legend = [
             Line2D(
-                [0], [0], marker="o", color="w",
+                [0],
+                [0],
+                marker="o",
+                color="w",
                 markerfacecolor=colors[tier_num - 1],
-                markersize=9, label=f"Tier {tier_num}",
-                markeredgecolor="white", markeredgewidth=0.6,
+                markersize=9,
+                label=f"Tier {tier_num}",
+                markeredgecolor="white",
+                markeredgewidth=0.6,
             )
             for tier_num in sorted(set(tier_mapping.values()))
         ]
-        leg1 = ax.legend(handles=tier_legend, loc="upper right", title="Performance tier")
+        leg1 = ax.legend(
+            handles=tier_legend, loc="upper right", title="Performance tier"
+        )
         ax.add_artist(leg1)
 
         # Marker-type legend: placed just below tier legend
@@ -626,12 +699,26 @@ def create_ranking_plot(
 
         marker_legend = [
             Line2D(
-                [0], [0], marker="o", color="w", markerfacecolor="#666666",
-                markersize=9, label="Proprietary", markeredgecolor="white", markeredgewidth=0.6,
+                [0],
+                [0],
+                marker="o",
+                color="w",
+                markerfacecolor="#666666",
+                markersize=9,
+                label="Proprietary",
+                markeredgecolor="white",
+                markeredgewidth=0.6,
             ),
             Line2D(
-                [0], [0], marker="D", color="w", markerfacecolor="#666666",
-                markersize=8, label="Open-weight", markeredgecolor="white", markeredgewidth=0.6,
+                [0],
+                [0],
+                marker="D",
+                color="w",
+                markerfacecolor="#666666",
+                markersize=8,
+                label="Open-weight",
+                markeredgecolor="white",
+                markeredgewidth=0.6,
             ),
             Line2D([], [], linestyle="none", label="† few benchmarks (n=2)"),
             Line2D([], [], linestyle="none", label="‡ very few benchmarks (n=1)"),
@@ -649,55 +736,74 @@ def create_ranking_plot(
     print(f"Ranking plot saved to: {output_filename}")
 
 
-def _extract_raw_dicts(filepath: str) -> list[tuple[str, dict[str, Any]]]:
-    """Extract top-level `name = {...}` dict literals from a Python data file.
+def _load_benchmarks_toml(filepath: str) -> list[tuple[str, dict[str, Any]]]:
+    """Load benchmarks from a TOML file.
 
-    Returns (variable_name, parsed_dict) pairs in source order.
+    Returns (benchmark_name, benchmark_dict) pairs in file order.
+    Each dict contains 'categories', 'min_score' or 'known_totals', and 'scores'.
     """
-    with open(filepath, "r") as f:
-        tree = ast.parse(f.read(), filename=filepath)
-
-    results: list[tuple[str, dict[str, Any]]] = []
-    for node in tree.body:
-        if not isinstance(node, ast.Assign) or len(node.targets) != 1:
-            continue
-        target = node.targets[0]
-        if not isinstance(target, ast.Name):
-            continue
-        try:
-            value = ast.literal_eval(node.value)
-        except (ValueError, SyntaxError) as exc:
-            print(
-                f"Warning: skipping unparseable assignment '{target.id}' in {filepath} – {exc}",
-                file=sys.stderr,
-            )
-            continue
-        if isinstance(value, dict):
-            results.append((target.id, value))
-    return results
+    with open(filepath, "rb") as f:
+        data: dict[str, Any] = tomllib.load(f)
+    return list(data.items())
 
 
-def load_data(category: str) -> tuple[list[dict[str, Any]], dict[str, float], dict[str, bool], str, list[str]]:
+def _load_models_toml(filepath: str) -> dict[str, dict[str, Any]]:
+    """Load model metadata from a TOML file.
+
+    Returns a dict mapping model name to its metadata dict.
+    """
+    with open(filepath, "rb") as f:
+        return tomllib.load(f)
+
+
+def load_data(
+    category: str,
+) -> tuple[list[dict[str, Any]], dict[str, float], dict[str, bool], str, list[str]]:
     """Load benchmarks for a category and model metadata from centralized data files.
 
-    Returns (benchmarks, cost_dict, open_dict, title) — same shape consumed by main().
+    Returns (benchmarks, cost_dict, open_dict, title, benchmark_names).
     """
     data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
-    benchmarks_file = os.path.join(data_dir, "benchmarks.txt")
-    models_file = os.path.join(data_dir, "models.txt")
+    benchmarks_file = os.path.join(data_dir, "benchmarks.toml")
+    models_file = os.path.join(data_dir, "models.toml")
 
     for path in (benchmarks_file, models_file):
         if not os.path.exists(path):
             sys.exit(f"Error: Required data file '{path}' not found.")
 
-    raw_benchmarks = _extract_raw_dicts(benchmarks_file)
-    raw_models = _extract_raw_dicts(models_file)
+    raw_benchmarks = _load_benchmarks_toml(benchmarks_file)
+    models_dict = _load_models_toml(models_file)
 
-    if not raw_models:
-        sys.exit("Error: No model metadata found in data/models.txt.")
-    models_dict: dict[str, dict[str, Any]] = {
-        k: v for k, v in raw_models[0][1].items() if isinstance(v, dict)
-    }
+    # Schema validation
+    valid_cats = set(CATEGORIES.keys())
+    for name, b in raw_benchmarks:
+        cats = b.get("categories")
+        if not isinstance(cats, list) or not cats:
+            sys.exit(f"Error: benchmark '{name}' missing or empty 'categories' list.")
+        bad_cats = set(cats) - valid_cats
+        if bad_cats:
+            sys.exit(
+                f"Error: benchmark '{name}' has unknown categories: {bad_cats}. "
+                f"Valid: {valid_cats}"
+            )
+        if "min_score" not in b and "known_totals" not in b:
+            sys.exit(
+                f"Error: benchmark '{name}' must have either 'min_score' or 'known_totals'."
+            )
+        if not isinstance(b.get("scores"), dict):
+            sys.exit(f"Error: benchmark '{name}' is missing 'scores' table.")
+
+    # Warn about model names in benchmarks.toml not present in models.toml
+    all_benchmark_models: set[str] = set()
+    for _, b in raw_benchmarks:
+        all_benchmark_models.update(b.get("scores", {}).keys())
+    orphans = all_benchmark_models - set(models_dict.keys())
+    if orphans:
+        print(
+            f"Warning: {len(orphans)} model name(s) in benchmarks.toml not found in models.toml "
+            f"(they will have no cost/open data): {', '.join(sorted(orphans))}",
+            file=sys.stderr,
+        )
 
     # Filter to the requested category and flatten each benchmark to the legacy schema
     benchmarks: list[dict[str, Any]] = []
@@ -741,7 +847,14 @@ def load_data(category: str) -> tuple[list[dict[str, Any]], dict[str, float], di
 
 def _compute_raw(
     category: str,
-) -> tuple[list[tuple[Any, ...]], dict[str, list[float]], dict[str, float], dict[str, bool], str, list[str]]:
+) -> tuple[
+    list[tuple[Any, ...]],
+    dict[str, list[float]],
+    dict[str, float],
+    dict[str, bool],
+    str,
+    list[str],
+]:
     """Load data and compute ranked results. Returns raw objects for table/plot rendering or JSON export."""
     benchmarks, cost_dict, open_dict, title, benchmark_names = load_data(category)
 
@@ -751,7 +864,8 @@ def _compute_raw(
         min_score = bench.get("min_score")
         if min_score is not None:
             observed = [
-                v for k, v in bench.items()
+                v
+                for k, v in bench.items()
                 if k not in ("known_totals", "min_score") and v is not None
             ]
             if not observed:
@@ -787,7 +901,11 @@ def _compute_raw(
 
         sorted_scores = sorted(scores)
         mid = n // 2
-        median = sorted_scores[mid] if n % 2 == 1 else (sorted_scores[mid - 1] + sorted_scores[mid]) / 2
+        median = (
+            sorted_scores[mid]
+            if n % 2 == 1
+            else (sorted_scores[mid - 1] + sorted_scores[mid]) / 2
+        )
 
         penalty = 0.25 if n == 1 else (0.10 if n == 2 else 0.0)
         avg = min(median + penalty, 1.0)
@@ -819,9 +937,13 @@ def compute_rankings(category: str) -> dict[str, Any]:
     try:
         import pandas as pd  # noqa: F401
     except ImportError:
-        sys.exit("Error: --export-json requires pandas. Install with: pip install pandas")
+        sys.exit(
+            "Error: --export-json requires pandas. Install with: pip install pandas"
+        )
 
-    results, model_scores, cost_dict, open_dict, title, benchmark_names = _compute_raw(category)
+    results, model_scores, cost_dict, open_dict, title, benchmark_names = _compute_raw(
+        category
+    )
     tier_mapping = categorize_tiers(results, k=1.0, debug=False)
 
     costs_with_values = [r[5] for r in results if r[5] is not None]
@@ -829,25 +951,31 @@ def compute_rankings(category: str) -> dict[str, Any]:
 
     models_out: list[dict[str, Any]] = []
     for idx, (model, avg, lower_err, upper_err, n, cost) in enumerate(results, 1):
-        rel_cost = cost / best_cost if (cost is not None and best_cost is not None) else None
-        models_out.append({
-            "rank": idx,
-            "name": model,
-            "avg_pct": round(avg, 6),
-            "lower_err": round(lower_err, 6) if lower_err is not None else None,
-            "upper_err": round(upper_err, 6) if upper_err is not None else None,
-            "n_bench": n,
-            "cost": cost,
-            "rel_cost": round(rel_cost, 6) if rel_cost is not None else None,
-            "tier": tier_mapping.get(model, 0),
-            "is_open": model in open_dict,
-            "raw_scores": [round(s, 6) for s in model_scores.get(model, [])],
-        })
+        rel_cost = (
+            cost / best_cost if (cost is not None and best_cost is not None) else None
+        )
+        models_out.append(
+            {
+                "rank": idx,
+                "name": model,
+                "avg_pct": round(avg, 6),
+                "lower_err": round(lower_err, 6) if lower_err is not None else None,
+                "upper_err": round(upper_err, 6) if upper_err is not None else None,
+                "n_bench": n,
+                "cost": cost,
+                "rel_cost": round(rel_cost, 6) if rel_cost is not None else None,
+                "tier": tier_mapping.get(model, 0),
+                "is_open": model in open_dict,
+                "raw_scores": [round(s, 6) for s in model_scores.get(model, [])],
+            }
+        )
 
     return {
         "category": category,
         "title": title,
-        "generated_at": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_at": datetime.datetime.now(datetime.timezone.utc).strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        ),
         "n_benchmarks": len(benchmark_names),
         "benchmark_names": benchmark_names,
         "palette": _NATURE_COLORS,
@@ -864,8 +992,8 @@ def build_data_changelog() -> list[dict[str, str]]:
         "--date=short",
         "--pretty=format:%ad%x09%s",
         "--",
-        "data/benchmarks.txt",
-        "data/models.txt",
+        "data/benchmarks.toml",
+        "data/models.toml",
     ]
 
     try:
@@ -955,14 +1083,24 @@ def main():
         print(f"Valid categories: {', '.join(CATEGORIES)}", file=sys.stderr)
         sys.exit(1)
 
-    results, model_scores, cost_dict, open_dict, category, _bnames = _compute_raw(category)
+    results, model_scores, cost_dict, open_dict, category, _bnames = _compute_raw(
+        category
+    )
 
     # ── Normalize costs relative to best-ranked model with cost data ─────
     costs_with_values = [r[5] for r in results if r[5] is not None]
     best_cost_table = costs_with_values[0] if costs_with_values else None
 
     # ── Pretty-print ASCII table ─────────────────────────────────────────
-    col = {"rank": 6, "model": 24, "avg": 10, "lower": 7, "upper": 7, "nb": 14, "cost": 10}
+    col = {
+        "rank": 6,
+        "model": 24,
+        "avg": 10,
+        "lower": 7,
+        "upper": 7,
+        "nb": 14,
+        "cost": 10,
+    }
     total_w = sum(col.values()) + 2 * len(col) + 1
     sep = "+" + "-" * (total_w - 2) + "+"
 
@@ -998,7 +1136,11 @@ def main():
         avg_s = f"{avg:.3f}"
         lower_s = f"{lower_err:.3f}" if lower_err is not None else "N/A"
         upper_s = f"{upper_err:.3f}" if upper_err is not None else "N/A"
-        cost_val = cost / best_cost_table if (cost is not None and best_cost_table is not None) else None
+        cost_val = (
+            cost / best_cost_table
+            if (cost is not None and best_cost_table is not None)
+            else None
+        )
         cost_s = f"{cost_val:.3f}" if cost_val is not None else "N/A"
 
         model_disp = model + ("*" if model in open_dict else "")
@@ -1017,7 +1159,9 @@ def main():
             model_p = _c(model_p, f"38;5;{_OKABE_ITO_256[tier - 1]}", color)
 
         if cost_val is not None:
-            cost_code = "32" if cost_val <= 2.0 else ("33" if cost_val <= 10.0 else "31")
+            cost_code = (
+                "32" if cost_val <= 2.0 else ("33" if cost_val <= 10.0 else "31")
+            )
             cost_p = _c(cost_p, cost_code, color)
 
         print(_row(rank_p, model_p, avg_p, lower_p, upper_p, nb_p, cost_p))
@@ -1045,15 +1189,32 @@ def main():
             sys.exit(1)
 
         stem = category
-        figures_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "figures")
+        figures_dir = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "figures"
+        )
         os.makedirs(figures_dir, exist_ok=True)
         open_models = set(open_dict.keys()) if open_dict else set()
 
         plot_filename = os.path.join(figures_dir, f"{stem}.png")
-        create_plot(plottable_results, plot_filename, open_models, debug=args.debug, category=category, quadrants=args.quadrants, model_scores=model_scores)
+        create_plot(
+            plottable_results,
+            plot_filename,
+            open_models,
+            debug=args.debug,
+            category=category,
+            quadrants=args.quadrants,
+            model_scores=model_scores,
+        )
 
         ranking_plot_filename = os.path.join(figures_dir, f"{stem}_ranking.png")
-        create_ranking_plot(results, ranking_plot_filename, open_models, debug=args.debug, category=category, model_scores=model_scores)
+        create_ranking_plot(
+            results,
+            ranking_plot_filename,
+            open_models,
+            debug=args.debug,
+            category=category,
+            model_scores=model_scores,
+        )
     elif args.debug:
         # Run tiering with debug output even without plot
         # Filter results to only include models with cost data for consistency

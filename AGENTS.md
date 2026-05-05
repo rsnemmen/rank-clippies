@@ -203,7 +203,7 @@ except ImportError as exc:
 
 - **ASCII Table:** Fixed-width columns with `str.ljust()`/`rjust()`
 - **Percentages:** 3 decimal places (0.XXX format)
-- **Plots:** 150 DPI PNG, log scale X-axis (cost normalized to best model = 1), inverted Y-axis
+- **Plots:** 300 DPI PNG, log scale X-axis (cost normalized to best model = 1), inverted Y-axis
 - **Legend:** Show tiers when plotting enabled
 - **Quadrants (`-q`):** Divides the scatter plot into four regions using the geometric mean of cost (X) and median score (Y) as midpoints; regions are shaded and labelled "Best value" (low cost, high perf), "Premium" (high cost, high perf), "Budget" (low cost, low perf), "Avoid" (high cost, low perf)
 - **Debug Output:** Use emojis and clear separators for readability
@@ -212,7 +212,7 @@ except ImportError as exc:
 
 When implementing debug functionality:
 - Use conditional printing based on a `debug: bool` parameter
-- The `z_score` parameter controls confidence level (1.0 = 68% CI, 1.96 = 95% CI)
+- The `k` parameter controls the tier overlap multiplier (1.0 = one-sigma-equivalent interval)
 - Structure output with clear headers and separators
 - Include all intermediate calculation steps
 - Show before/after states for transformations

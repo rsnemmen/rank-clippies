@@ -1,0 +1,122 @@
+# Model metadata: cost = USD per 1M tokens (input + output combined), open = true if open-weight
+# Sorted alphabetically by model name
+
+[deepseek-flash4]
+cost = 0.4
+open = true
+
+[deepseek32]
+cost = 0.8
+open = true
+
+[deepseek4]
+cost = 5.1
+open = true
+
+[gemini-flash-lite31]
+cost = 2.0
+open = false
+
+[gemini-flash3]
+cost = 3.4
+open = false
+
+[gemini-pro31]
+cost = 16.0
+open = false
+
+[gemma4-31]
+cost = 0.7
+open = true
+
+[glm51]
+cost = 6.7
+open = true
+
+[gpt-codex53]
+cost = 15.75
+open = false
+
+[gpt-mini54]
+cost = 5.4
+open = false
+
+[gpt-oss-120b]
+cost = 1.4
+open = true
+
+[gpt-oss-20b]
+cost = 0.5
+open = true
+
+[gpt-pro55]
+cost = 216.1
+open = false
+
+[gpt54]
+cost = 18.0
+open = false
+
+[gpt55]
+cost = 35.0
+open = false
+
+[grok-fast41]
+cost = 0.8
+open = false
+
+[grok-multi-agent42]
+cost = 291.5
+open = false
+
+[grok43]
+cost = 3.75
+open = false
+
+[haiku45]
+cost = 6
+open = false
+
+[kimi26]
+cost = 4.1
+open = true
+
+[minimax27]
+cost = 1.7
+open = true
+
+[muse]
+cost = 29.2
+open = false
+
+[mythos]
+cost = 150
+open = false
+
+[nemotron-super3]
+cost = 1.4
+open = true
+
+[opus47]
+cost = 30.0
+open = false
+
+[qwen35]
+cost = 2.9
+open = true
+
+[qwen36-27b]
+cost = 0.7
+open = true
+
+[qwen36-max]
+cost = 18.9
+open = true
+
+[qwen36-plus]
+cost = 4.0
+open = true
+
+[sonnet46]
+cost = 18
+open = false
