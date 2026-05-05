@@ -33,6 +33,10 @@ open = true
 cost = 6.7
 open = true
 
+[gpt-chat53]
+cost = 15.75
+open = false
+
 [gpt-codex53]
 cost = 15.75
 open = false

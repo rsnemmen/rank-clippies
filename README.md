@@ -115,45 +115,42 @@ make validate
 
 ## Input format for data files
 
-Model data lives in two centralized files under `data/`, both containing Python dict literals parsed with `ast.literal_eval`. Full-line `#` comments are stripped before parsing.
+Model data lives in two centralized TOML files under `data/`, parsed with Python's
+standard-library `tomllib`.
 
-### `data/benchmarks.txt`
+### `data/benchmarks.toml`
 
-One dict per benchmark, alphabetical order. Each dict has:
+One TOML table per benchmark. Each benchmark has:
 
-- `"categories"`: **required** list of one or more category tags (`"general"`, `"coding"`, `"agentic"`, `"stem"`). Benchmarks without this field are ignored.
-- Either `"min_score"` (score-based) or `"known_totals"` (rank-based) — see below.
-- `"scores"`: nested dict mapping model name → score or rank (`None` = model not evaluated).
+- `categories`: **required** list of one or more category tags (`"general"`, `"coding"`, `"agentic"`, `"stem"`).
+- Either `min_score` (score-based) or `known_totals` (rank-based).
+- A nested `[benchmark_name.scores]` table mapping model name to score or rank.
 
 **Score-based** — model scores are numeric, higher = better. `min_score` sets the floor for percentile normalization.
 
-```python
-aa_agentic = {
-    "categories": ["coding", "agentic"],
-    "min_score": 5,
-    "scores": {
-        "gemini-flash3": 50,
-        "gpt55": 74,
-        "opus47": 70,
-        "sonnet46": 63,
-        # ...
-    },
-}
+```toml
+[artificial_analysis_agentic]
+categories = ["coding", "agentic"]
+min_score = 5
+
+[artificial_analysis_agentic.scores]
+gemini-flash3 = 50
+gpt55 = 74
+opus47 = 70
+sonnet46 = 63
 ```
 
 **Rank-based** — models are mapped to integer ranks (lower = better). `known_totals` is the total number of models evaluated on that leaderboard.
 
-```python
-arena_coding = {
-    "categories": ["coding"],
-    "known_totals": 347,
-    "scores": {
-        "deepseek4": 34,
-        "gemini-flash3": 19,
-        "gpt55": None,   # not evaluated on this benchmark
-        # ...
-    },
-}
+```toml
+[livebench_coding]
+categories = ["coding"]
+known_totals = 347
+
+[livebench_coding.scores]
+deepseek4 = 34
+gemini-flash3 = 19
+# Omit models that were not evaluated on this benchmark.
 ```
 
 The included benchmarks are manually refreshed periodically; see commit history for the last update. Sources include:
@@ -166,25 +163,26 @@ https://artificialanalysis.ai
 https://gorilla.cs.berkeley.edu/leaderboard.html#leaderboard  
 https://www.swebench.com
 
-### `data/models.txt`
+### `data/models.toml`
 
-A single `models = {...}` dict, alphabetical by model name. Each entry holds USD cost and model type:
+One TOML table per model, alphabetical by model name. Each entry holds USD cost and model type:
 
-```python
-models = {
-    "deepseek4":   {"cost": 149,  "open": True},
-    "gemini-pro31":{"cost": 467,  "open": False},
-    "glm5":        {"cost": None, "open": True},
-    # ...
-}
+```toml
+[deepseek4]
+cost = 5.1
+open = true
+
+[gemini-pro31]
+cost = 16.0
+open = false
 ```
 
 | Field | Description |
 |-------|-------------|
-| `cost` | USD per 1M tokens (input + output combined). `None` = pricing unknown → shows `N/A` in Rel. Cost column. |
-| `open` | `True` = open-weight model (drawn as a **diamond** in scatter plots). `False` = proprietary (drawn as a **circle**). |
+| `cost` | USD per 1M tokens (input + output combined). Missing pricing shows `N/A` in Rel. Cost column. |
+| `open` | `true` = open-weight model (drawn as a **diamond** in scatter plots). `false` = proprietary (drawn as a **circle**). |
 
-Models absent from `models.txt` show `N/A` in the Rel. Cost column.
+Models absent from `models.toml` show `N/A` in the Rel. Cost column.
 
 
 ## Methodology
@@ -293,23 +291,27 @@ This means if a model's best-case performance (score minus its lower IQR distanc
 
 ## Extending the data
 
-To add a new benchmark, append a new dict to `data/benchmarks.txt` (above any existing entry alphabetically):
+To add a new benchmark, append a new TOML table to `data/benchmarks.toml`:
 
-```python
-new_bench = {
-    "categories": ["general"],
-    "known_totals": 40,
-    "scores": {"opus47": 2, "sonnet46": 5, "gpt55": 1},
-}
+```toml
+[new_bench]
+categories = ["general"]
+known_totals = 40
+
+[new_bench.scores]
+gpt55 = 1
+opus47 = 2
+sonnet46 = 5
 ```
 
-Use `"min_score"` instead of `"known_totals"` for score-based benchmarks. `None` scores mean the model was not evaluated.
+Use `min_score` instead of `known_totals` for score-based benchmarks. Omit models that were not evaluated.
 
-To add a new model, insert its key into `data/models.txt` and into each relevant benchmark's `"scores"` dict:
+To add a new model, insert its key into `data/models.toml` and into each relevant benchmark's scores table:
 
-```python
-# in data/models.txt
-"new-model": {"cost": 300, "open": False},
+```toml
+[new-model]
+cost = 300
+open = false
 ```
 
 

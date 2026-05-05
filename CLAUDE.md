@@ -23,50 +23,74 @@ mypy rank_models.py --strict
 # Lint / format
 ruff check rank_models.py --fix
 ruff format rank_models.py
-```
 
-No tests exist yet; if added, place them in `tests/` and run with `pytest tests/ -v`.
+# Tests / validation
+python -m pytest tests/ -v
+make validate   # ruff + mypy --strict + pytest + JSON export smoke test
+```
 
 ## Architecture
 
 Everything lives in `rank_models.py` (stdlib-only for core; pandas/matplotlib/numpy imported lazily inside plotting functions):
 
-- `load_data(category)` — loads `data/benchmarks.txt` + `data/models.txt`, filters by category tag, returns `(benchmarks, cost_dict, open_dict, title)`
-- `_extract_raw_dicts(filepath)` — brace-depth parser that extracts top-level dict literals from a file
-- `main()` — computes percentile scores, applies sparse-data penalty, prints ASCII table, optionally calls plotting functions
+- `_load_benchmarks_toml(filepath)` / `_load_models_toml(filepath)` — load TOML data via `tomllib`
+- `load_data(category)` — loads `data/benchmarks.toml` + `data/models.toml`, validates benchmark schema, filters by category tag, and returns `(benchmarks, cost_dict, open_dict, title, benchmark_names)`
+- `_compute_raw(category)` — computes percentile scores, applies sparse-data penalties, and returns ranked tuples plus raw model scores
+- `compute_rankings(category)` — builds the JSON-serializable shape consumed by the static website
+- `main()` — handles CLI parsing, ASCII table output, optional plotting, and `--export-json`
 - `categorize_tiers()` — groups models into tiers via "Indistinguishable from Best" (asymmetric Q1–Q3 interval overlap); requires pandas
 - `create_plot()` — scatter plot (performance vs. cost, log-scale X); cost is normalized so the best-ranked model = 1.0; saves `<basename>.png`; optional `-q`/`--quadrants` flag shades and labels four regions (Best value / Premium / Budget / Avoid) using geometric-mean cost and median score as midpoints
 - `create_ranking_plot()` — horizontal ranking chart; saves `<basename>_ranking.png`
 
+## Project Structure
+
+```
+.
+├── rank_models.py          # CLI, ranking logic, plots, and JSON export
+├── data/
+│   ├── benchmarks.toml     # Benchmark definitions and scores
+│   └── models.toml         # Model cost and open-weight metadata
+├── docs/
+│   ├── app.js              # Static website logic
+│   ├── data/               # Generated JSON consumed by the website
+│   └── index.html
+├── figures/                # Generated PNG plots (ignored)
+└── tests/
+    └── test_rank_models.py
+```
+
 ## Data File Format
 
-Two centralized files in `data/`, both containing Python dict literals parsed with `ast.literal_eval`:
+Two centralized TOML files in `data/`, parsed with standard-library `tomllib`:
 
-**`data/benchmarks.txt`** — one dict per benchmark, alphabetical order:
-```python
-benchmark_name = {
-    "categories": ["general", "stem"],   # one or more category tags
-    "min_score": 13.2,                   # score-based: floor value
-    # OR "known_totals": 347,            # rank-based: total models evaluated
-    "scores": {"model_a": 94.2, "model_b": None, ...},  # alphabetical by model
-}
+**`data/benchmarks.toml`** — one table per benchmark:
+```toml
+[benchmark_name]
+categories = ["general", "stem"]  # one or more category tags
+min_score = 13.2                  # score-based: floor value
+# OR known_totals = 347           # rank-based: total models evaluated
+
+[benchmark_name.scores]
+model_a = 94.2
+# Omit models that were not evaluated on this benchmark.
 ```
 - Score-based (`min_score`): percentile derived from score range; higher = better
 - Rank-based (`known_totals`): percentile = rank / total; lower rank number = better
-- `None` scores mean the model was not evaluated on that benchmark
+- Omitted scores mean the model was not evaluated on that benchmark
 - Valid category tags: `general`, `coding`, `agentic`, `stem` (defined in `CATEGORIES` in `rank_models.py`)
 
-**`data/models.txt`** — single `models` dict, alphabetical by model name:
-```python
-models = {
-    "model_name": {"cost": 510, "open": False},  # cost = USD per 1M tokens (input + output)
-    "open_model":  {"cost": 23,  "open": True},  # open-weight: gets diamond marker in plots
-}
-```
-- `cost: None` — model is tracked but pricing is unknown
-- `open: True` — model gets a diamond marker in scatter plots; `False` = circle
+**`data/models.toml`** — one table per model, alphabetical by model name:
+```toml
+[model_name]
+cost = 510    # USD per 1M tokens (input + output)
+open = false  # open-weight models get diamond markers in plots
 
-Full-line `#` comments are stripped before parsing.
+[open_model]
+cost = 23
+open = true
+```
+- Missing `cost` means pricing is unknown
+- `open = true` gets a diamond marker in scatter plots; `false` = circle
 
 ## Code Style
 

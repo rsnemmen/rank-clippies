@@ -1,8 +1,8 @@
-[aa_agentic]
+[artificial_analysis_agentic]
 categories = ["coding", "agentic"]
 min_score = 5
 
-[aa_agentic.scores]
+[artificial_analysis_agentic.scores]
 deepseek-flash4 = 61
 deepseek32 = 53
 deepseek4 = 67
@@ -31,11 +31,11 @@ qwen36-plus = 62
 sonnet46 = 63
 
 # +stem because this benchmark includes scicode
-[aa_coding]
+[artificial_analysis_coding]
 categories = ["coding", "stem"]
 min_score = 1
 
-[aa_coding.scores]
+[artificial_analysis_coding.scores]
 deepseek-flash4 = 39
 deepseek32 = 37
 deepseek4 = 47
@@ -63,11 +63,11 @@ qwen36-max = 45
 qwen36-plus = 43
 sonnet46 = 51
 
-[aa_intelligence]
+[artificial_analysis_intelligence]
 categories = ["general"]
 min_score = 5
 
-[aa_intelligence.scores]
+[artificial_analysis_intelligence.scores]
 deepseek-flash4 = 47
 deepseek32 = 42
 deepseek4 = 52
@@ -172,6 +172,7 @@ gemini-flash3 = 1474
 gemini-pro31 = 1493
 gemma4-31 = 1451
 glm51 = 1471
+gpt-chat53 = 1448
 gpt-mini54 = 1456
 gpt-oss-120b = 1353
 gpt54 = 1477
@@ -247,6 +248,7 @@ gemini-flash3 = 83.2
 gemini-pro31 = 94.3
 gemma4-31 = 84.3
 glm51 = 86.8
+gpt-chat53 = 88.1
 gpt-mini54 = 88
 gpt-oss-120b = 80.9
 gpt-oss-20b = 71
@@ -403,6 +405,7 @@ gemini-flash3 = 72.4
 gemini-pro31 = 79.93
 gemma4-31 = 61.62
 glm51 = 70.18
+gpt-chat53 = 59.99
 gpt-codex53 = 72.76
 gpt-mini54 = 67.5
 gpt-oss-120b = 46.1

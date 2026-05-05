@@ -5,7 +5,7 @@ Python tool for computing unified model rankings from benchmark leaderboards usi
 
 **Repository:** https://github.com/rsnemmen/rank-clippies
 
-**Core:** Single-file script with stdlib-only dependencies  
+**Core:** Single-file script with stdlib-only dependencies, reading TOML data via `tomllib`  
 **Optional:** Plotting features require pandas, matplotlib, numpy
 
 ## Methodology
@@ -72,13 +72,16 @@ ruff check rank_models.py --fix                    # auto-fix issues
 # Formatting
 ruff format rank_models.py                         # format code
 
-# Testing (when added)
+# Testing
 python -m pytest tests/ -v                         # all tests
 python -m pytest tests/test_file.py -v             # single test file
 python -m pytest tests/test_file.py::test_function -v  # single test
+
+# Full validation
+make validate                                      # ruff + mypy --strict + pytest + JSON export smoke test
 ```
 
-**Note:** No tests exist yet. When adding, use pytest in `tests/` directory.
+Tests live in `tests/` and cover ranking math, sparse-data penalties, TOML loader errors, and website JSON export shape.
 
 ## CLI Usage
 
@@ -98,7 +101,7 @@ python rank_models.py -h                          # Show help
 - Python 3.10+ (uses `dict[str, ...]` and `|` union syntax)
 
 ### Imports
-- **Core:** stdlib imports only (argparse, ast, math, os, sys, typing)
+- **Core:** stdlib imports only (argparse, datetime, json, math, os, subprocess, sys, tomllib, typing)
 - **Optional plotting:** pandas, matplotlib, numpy imported inside functions
 - Sort alphabetically within groups
 - One blank line between groups
@@ -176,21 +179,25 @@ except ImportError as exc:
 .
 ├── rank_models.py          # Main script (executable)
 ├── data/
-│   ├── benchmarks.txt      # All benchmarks with category tags (single source of truth)
-│   ├── models.txt          # All model metadata: cost and open-weight flag
-│   └── rank_convert.nb     # Wolfram Mathematica notebook for data conversion
-├── figures/                # Generated PNG plots
+│   ├── benchmarks.toml     # All benchmarks with category tags (single source of truth)
+│   └── models.toml         # All model metadata: cost and open-weight flag
+├── docs/
+│   ├── app.js              # Static website logic
+│   ├── data/               # Generated JSON consumed by the website
+│   └── index.html
+├── figures/                # Generated PNG plots (ignored)
 ├── README.md               # User documentation
 ├── AGENTS.md               # This file
 ├── LICENSE                 # MIT license
-└── tests/                  # Tests (to be added)
+└── tests/
+    └── test_rank_models.py # Ranking, loader, and JSON export tests
 ```
 
 ## Adding Features
 
 1. Keep stdlib-only for core functionality
 2. Optional features can use pandas/matplotlib/numpy (import inside functions)
-3. Maintain backward compatibility with existing data format
+3. Maintain backward compatibility with the existing TOML data format
 4. Update README.md for CLI changes
 5. Add type hints to all new code
 6. Follow existing ASCII table formatting
