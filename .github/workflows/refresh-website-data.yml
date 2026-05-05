@@ -7,6 +7,7 @@ on:
     paths:
       - "data/**"
       - "rank_models.py"
+      - "tests/**"
       - "Makefile"
   workflow_dispatch:
 
@@ -32,10 +33,13 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install export dependency
+      - name: Install validation and export dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pandas
+          python -m pip install mypy pandas pytest ruff
+
+      - name: Run validation
+        run: make validate
 
       - name: Refresh website JSON
         run: make refresh-ranking-data

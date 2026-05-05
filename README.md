@@ -66,8 +66,6 @@ If you want to mirror those PNGs into another directory, set `WEBSITE_PLOTS_DIR`
 make refresh-plots WEBSITE_PLOTS_DIR=/path/to/site/assets
 ```
 
-`./plots.sh` remains available as a thin wrapper around the Makefile target.
-
 For more detailed information about the ranking procedure and for debugging:
 
 ```
@@ -112,8 +110,8 @@ make validate
 
 - `make refresh-plots` regenerates all plot PNGs for the four categories.
 - `make refresh-ranking-data` rewrites website JSON under `docs/data/`.
-- `make test` runs `pytest tests/ -v` when a `tests/` directory exists.
-- `make validate` runs `ruff`, `make test`, and a temporary-directory JSON export smoke test.
+- `make test` runs `pytest tests/ -v`.
+- `make validate` runs `ruff`, `mypy --strict`, `make test`, and a temporary-directory JSON export smoke test.
 
 ## Input format for data files
 

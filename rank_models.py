@@ -24,6 +24,9 @@ CATEGORIES: dict[str, str] = {
     "stem": "Math and STEM expert reasoning",
 }
 
+_BENCHMARK_META_KEYS = {"known_totals", "min_score", "__name"}
+RankingResult = tuple[str, float, float | None, float | None, int, float | None]
+
 
 def get_y_upper_limit(max_score: float) -> int:
     """Calculate upper y-axis limit by rounding up to next multiple of 10, capped at 100.
@@ -96,7 +99,7 @@ def _c(text: str, code: str, enabled: bool) -> str:
 
 
 def categorize_tiers(
-    results: list[tuple], k: float = 1.0, debug: bool = False
+    results: list[RankingResult], k: float = 1.0, debug: bool = False
 ) -> dict[str, int]:
     """Categorize models into tiers based on IQR-based overlap with tier leaders.
 
@@ -111,7 +114,7 @@ def categorize_tiers(
     Returns:
         Dictionary mapping model names to tier numbers (1, 2, 3, ...)
     """
-    import pandas as pd
+    import pandas as pd  # type: ignore[import-untyped]
 
     # Calculate fallback averages for models without enough data (n < 3)
     valid_lowers = [le for _, _, le, _, _, _ in results if le is not None]
@@ -282,7 +285,7 @@ def categorize_tiers(
 
 
 def create_plot(
-    results: list[tuple],
+    results: list[RankingResult],
     output_filename: str,
     open_models: set[str] | None = None,
     debug: bool = False,
@@ -354,8 +357,6 @@ def create_plot(
         max_tier = int(plot_df["Tier"].max())
         colors = [_NATURE_COLORS[i % len(_NATURE_COLORS)] for i in range(max_tier)]
 
-        eb_kw = dict(elinewidth=0.9, capsize=2, capthick=0.9)
-
         for tier_num in sorted(plot_df["Tier"].unique()):
             tier_data = plot_df[plot_df["Tier"] == tier_num]
             color = colors[tier_num - 1]
@@ -387,7 +388,9 @@ def create_plot(
                     markeredgecolor="white",
                     markeredgewidth=0.8,
                     label=f"Tier {tier_num}",
-                    **eb_kw,
+                    elinewidth=0.9,
+                    capsize=2,
+                    capthick=0.9,
                 )
 
             if len(open_data) > 0:
@@ -404,7 +407,9 @@ def create_plot(
                     markeredgecolor="white",
                     markeredgewidth=0.8,
                     label=label,
-                    **eb_kw,
+                    elinewidth=0.9,
+                    capsize=2,
+                    capthick=0.9,
                 )
 
         # Annotate points
@@ -513,7 +518,12 @@ def create_plot(
                 zorder=0,
             )
 
-            label_kw = dict(fontsize=13, color="#888888", alpha=0.7, style="italic")
+            label_kw: dict[str, Any] = {
+                "fontsize": 13,
+                "color": "#888888",
+                "alpha": 0.7,
+                "style": "italic",
+            }
             ax.text(
                 x_lo * 1.05, y_mid * 0.05, "Best value", ha="left", va="top", **label_kw
             )
@@ -544,7 +554,7 @@ def create_plot(
 
 
 def create_ranking_plot(
-    results: list[tuple],
+    results: list[RankingResult],
     output_filename: str,
     open_models: set[str] | None = None,
     debug: bool = False,
@@ -742,8 +752,11 @@ def _load_benchmarks_toml(filepath: str) -> list[tuple[str, dict[str, Any]]]:
     Returns (benchmark_name, benchmark_dict) pairs in file order.
     Each dict contains 'categories', 'min_score' or 'known_totals', and 'scores'.
     """
-    with open(filepath, "rb") as f:
-        data: dict[str, Any] = tomllib.load(f)
+    try:
+        with open(filepath, "rb") as f:
+            data: dict[str, Any] = tomllib.load(f)
+    except tomllib.TOMLDecodeError as exc:
+        sys.exit(f"Error: Failed to parse TOML file '{filepath}': {exc}")
     return list(data.items())
 
 
@@ -820,6 +833,7 @@ def load_data(
             flat["min_score"] = b["min_score"]
         if "known_totals" in b:
             flat["known_totals"] = b["known_totals"]
+        flat["__name"] = name
         benchmarks.append(flat)
         benchmark_names.append(name)
 
@@ -848,7 +862,7 @@ def load_data(
 def _compute_raw(
     category: str,
 ) -> tuple[
-    list[tuple[Any, ...]],
+    list[RankingResult],
     dict[str, list[float]],
     dict[str, float],
     dict[str, bool],
@@ -861,21 +875,26 @@ def _compute_raw(
     model_scores: dict[str, list[float]] = {}
 
     for bench in benchmarks:
+        benchmark_name = str(bench.get("__name", "unnamed benchmark"))
         min_score = bench.get("min_score")
         if min_score is not None:
             observed = [
                 v
                 for k, v in bench.items()
-                if k not in ("known_totals", "min_score") and v is not None
+                if k not in _BENCHMARK_META_KEYS and v is not None
             ]
             if not observed:
                 continue
             max_score = max(observed)
             score_range = max_score - min_score
             if score_range == 0:
+                print(
+                    f"Warning: benchmark '{benchmark_name}' skipped because score range is zero.",
+                    file=sys.stderr,
+                )
                 continue
             for model, score in bench.items():
-                if model in ("known_totals", "min_score"):
+                if model in _BENCHMARK_META_KEYS:
                     continue
                 if score is None:
                     continue
@@ -886,14 +905,14 @@ def _compute_raw(
             if not total:
                 continue
             for model, rank in bench.items():
-                if model == "known_totals":
+                if model in _BENCHMARK_META_KEYS:
                     continue
                 if rank is None:
                     continue
                 pct = rank / total
                 model_scores.setdefault(model, []).append(pct)
 
-    results = []
+    results: list[RankingResult] = []
     for model, scores in model_scores.items():
         n = len(scores)
         if n == 0:
@@ -1017,7 +1036,7 @@ def build_data_changelog() -> list[dict[str, str]]:
     return entries
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Compute a unified model ranking from multiple benchmark leaderboards."
     )

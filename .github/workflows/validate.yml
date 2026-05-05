@@ -5,8 +5,8 @@ on:
     paths:
       - "data/**"
       - "rank_models.py"
+      - "tests/**"
       - "Makefile"
-      - "plots.sh"
       - ".github/workflows/**"
   push:
     branches:
@@ -14,8 +14,8 @@ on:
     paths:
       - "data/**"
       - "rank_models.py"
+      - "tests/**"
       - "Makefile"
-      - "plots.sh"
       - ".github/workflows/**"
   workflow_dispatch:
 
@@ -38,13 +38,7 @@ jobs:
       - name: Install validation dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pandas ruff
+          python -m pip install mypy pandas pytest ruff
 
-      - name: Run lint
-        run: make lint
-
-      - name: Run tests
-        run: make test
-
-      - name: Smoke-test website data export
-        run: make check-ranking-data
+      - name: Run validation
+        run: make validate

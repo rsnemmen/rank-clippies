@@ -6,16 +6,17 @@ DOCS_DATA_DIR ?= docs/data
 WEBSITE_PLOTS_DIR ?=
 CATEGORIES := general coding agentic stem
 
-.PHONY: help refresh-plots refresh-ranking-data check-ranking-data test lint validate
+.PHONY: help refresh-plots refresh-ranking-data check-ranking-data test lint type-check validate
 
 help:
 	@echo "Available targets:"
 	@echo "  refresh-plots         Generate plots for all categories"
 	@echo "  refresh-ranking-data  Regenerate docs/data JSON for the website"
 	@echo "  check-ranking-data    Smoke-test JSON export in a temporary directory"
-	@echo "  test                  Run pytest if tests/ exists"
+	@echo "  test                  Run pytest"
 	@echo "  lint                  Run ruff on rank_models.py"
-	@echo "  validate              Run lint, tests, and JSON export smoke test"
+	@echo "  type-check            Run mypy on rank_models.py"
+	@echo "  validate              Run lint, type-check, tests, and JSON export smoke test"
 	@echo
 	@echo "Optional variables:"
 	@echo "  PYTHON=<python>                 Python executable to use"
@@ -44,13 +45,12 @@ check-ranking-data:
 	$(PYTHON) $(RANK_SCRIPT) --export-json "$$tmp_dir" >/dev/null
 
 test:
-	@if [[ -d tests ]]; then \
-		$(PYTHON) -m pytest tests/ -v; \
-	else \
-		echo "No tests/ directory found; nothing to run."; \
-	fi
+	$(PYTHON) -m pytest tests/ -v
 
 lint:
 	ruff check $(RANK_SCRIPT)
 
-validate: lint test check-ranking-data
+type-check:
+	mypy $(RANK_SCRIPT) --strict
+
+validate: lint type-check test check-ranking-data
