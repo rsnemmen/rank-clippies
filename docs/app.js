@@ -113,6 +113,7 @@ function getFilters() {
   return {
     hideOpen: document.getElementById("hideOpen").checked,
     hideSparse: document.getElementById("hideSparse").checked,
+    showLabels: document.getElementById("showLabels").checked,
     showQuadrants: document.getElementById("showQuadrants").checked,
   };
 }
@@ -199,7 +200,7 @@ function buildScatterTraces(models, palette) {
   return traces;
 }
 
-function buildScatterLayout(models, palette, showQuadrants, title) {
+function buildScatterLayout(models, palette, showQuadrants, showLabels, title) {
   const plottable = models.filter(m => m.rel_cost != null);
   const scores = plottable.map(m => m.avg_pct * 100);
   const costs = plottable.map(m => m.rel_cost);
@@ -278,6 +279,29 @@ function buildScatterLayout(models, palette, showQuadrants, title) {
       { x: leftLabelX, y: upper - 2, xref: "x", yref: "y", text: "Budget", showarrow: false, font: { size: 12, color: "#888888" }, yanchor: "bottom" },
       { x: rightLabelX, y: upper - 2, xref: "x", yref: "y", text: "Avoid", showarrow: false, font: { size: 12, color: "#888888" }, xanchor: "right", yanchor: "bottom" },
     ];
+  }
+
+  if (showLabels) {
+    const labelAnnotations = plottable.map(m => {
+      const suffix = m.n_bench === 1 ? "‡" : m.n_bench === 2 ? "†" : "";
+      return {
+        x: m.rel_cost,
+        y: m.avg_pct * 100,
+        xref: "x",
+        yref: "y",
+        text: `${m.name}${suffix}`,
+        showarrow: true,
+        arrowhead: 0,
+        arrowwidth: 0.5,
+        arrowcolor: "#999999",
+        ax: 18,
+        ay: -14,
+        font: { size: 9, color: "#444444" },
+        standoff: 2,
+        captureevents: false,
+      };
+    });
+    layout.annotations = [...layout.annotations, ...labelAnnotations];
   }
 
   return layout;
@@ -449,7 +473,7 @@ function renderCharts(data) {
   const { palette, title } = data;
 
   const scatterTraces = buildScatterTraces(models, palette);
-  const scatterLayout = buildScatterLayout(models, palette, filters.showQuadrants, title);
+  const scatterLayout = buildScatterLayout(models, palette, filters.showQuadrants, filters.showLabels, title);
   Plotly.react("scatter-chart", scatterTraces, scatterLayout, PLOTLY_CONFIG);
 
   const { traces: rankTraces, sorted, n } = buildRankingTraces(models, palette);
@@ -479,7 +503,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".tab").forEach(tab => {
     tab.addEventListener("click", () => switchCategory(tab.dataset.cat));
   });
-  ["hideOpen", "hideSparse", "showQuadrants"].forEach(id => {
+  ["hideOpen", "hideSparse", "showLabels", "showQuadrants"].forEach(id => {
     document.getElementById(id).addEventListener("change", () => {
       if (currentData) renderCharts(currentData);
     });
