@@ -37,12 +37,16 @@ open = true
 cost = 15.75
 open = false
 
+[gpt-chat55]
+cost = 35
+open = false
+
 [gpt-codex53]
 cost = 15.75
 open = false
 
 [gpt-mini54]
-cost = 5.4
+cost = 5.25
 open = false
 
 [gpt-oss-120b]
@@ -54,11 +58,11 @@ cost = 0.5
 open = true
 
 [gpt-pro55]
-cost = 216.1
+cost = 210
 open = false
 
 [gpt54]
-cost = 18.0
+cost = 17.50
 open = false
 
 [gpt55]
