@@ -285,7 +285,7 @@ function buildScatterLayout(models, palette, showQuadrants, showLabels, title) {
     const labelAnnotations = plottable.map(m => {
       const suffix = m.n_bench === 1 ? "‡" : m.n_bench === 2 ? "†" : "";
       return {
-        x: m.rel_cost,
+        x: Math.log10(m.rel_cost),
         y: m.avg_pct * 100,
         xref: "x",
         yref: "y",
