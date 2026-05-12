@@ -232,7 +232,6 @@ min_score = 0
 deepseek-flash4 = 7.1
 deepseek32 = 2.9
 deepseek4 = 12.9
-gemini-flash-lite31 = None
 gemini-flash3 = 8.6
 gemini-pro31 = 17.7
 gemma4-31 = 1.4
@@ -243,7 +242,6 @@ gpt-oss-120b = 1.1
 gpt-oss-20b = 1.4
 gpt54 = 23.4
 gpt55 = 27.1
-grok-fast41 = None
 grok43 = 8
 haiku45 = 0
 kimi26 = 8
@@ -252,9 +250,7 @@ muse = 11.3
 nemotron-super3 = 3.1
 opus47 = 12
 qwen35 = 1.7
-qwen36-27b = None
 qwen36-max = 3.7
-qwen36-plus = None
 sonnet46 = 3.1
 
 # https://epoch.ai/benchmarks?view=graph&tab=eci
