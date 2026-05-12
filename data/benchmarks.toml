@@ -63,8 +63,10 @@ qwen36-max = 45
 qwen36-plus = 43
 sonnet46 = 51
 
+# includes STEM benchmarks: SciCode, Humanity's Last Exam, GPQA Diamond, CritPt
+# (among many others)
 [artificial_analysis_intelligence]
-categories = ["general"]
+categories = ["general" , "stem"]
 min_score = 5
 
 [artificial_analysis_intelligence.scores]
@@ -220,6 +222,40 @@ muse = 86.4
 mythos = 93.2
 opus47 = 91
 sonnet46 = 77.4
+
+# https://artificialanalysis.ai/evaluations/critpt
+[CritPt]
+categories = ["stem"]
+min_score = 0
+
+[CritPt.scores]
+deepseek-flash4 = 7.1
+deepseek32 = 2.9
+deepseek4 = 12.9
+gemini-flash-lite31 = None
+gemini-flash3 = 8.6
+gemini-pro31 = 17.7
+gemma4-31 = 1.4
+glm51 = 4.6
+gpt-codex53 = 16.9
+gpt-mini54 = 10
+gpt-oss-120b = 1.1
+gpt-oss-20b = 1.4
+gpt54 = 23.4
+gpt55 = 27.1
+grok-fast41 = None
+grok43 = 8
+haiku45 = 0
+kimi26 = 8
+minimax27 = 0.6
+muse = 11.3
+nemotron-super3 = 3.1
+opus47 = 12
+qwen35 = 1.7
+qwen36-27b = None
+qwen36-max = 3.7
+qwen36-plus = None
+sonnet46 = 3.1
 
 # https://epoch.ai/benchmarks?view=graph&tab=eci
 [frontiermath4]
