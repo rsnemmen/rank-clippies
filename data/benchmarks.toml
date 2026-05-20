@@ -8,6 +8,7 @@ deepseek32 = 53
 deepseek4 = 67
 gemini-flash-lite31 = 26
 gemini-flash3 = 50
+gemini-flash35 = 70
 gemini-pro31 = 59
 gemma4-31 = 41
 glm51 = 67
@@ -41,6 +42,7 @@ deepseek32 = 37
 deepseek4 = 47
 gemini-flash-lite31 = 30
 gemini-flash3 = 43
+gemini-flash35 = 45
 gemini-pro31 = 56
 gemma4-31 = 39
 glm51 = 43.4
@@ -75,6 +77,7 @@ deepseek32 = 42
 deepseek4 = 52
 gemini-flash-lite31 = 34
 gemini-flash3 = 46
+gemini-flash35 = 55
 gemini-pro31 = 57
 gemma4-31 = 39
 glm51 = 51.4
@@ -119,10 +122,11 @@ min_score = 0
 [ARC_AGI_2.scores]
 deepseek32 = 4
 gemini-flash3 = 33.6
+gemini-flash35 = 72.1
 gemini-pro31 = 77.1
 gpt-mini54 = 13.2
 gpt54 = 67.5
-gpt55 = 83.3
+gpt55 = 84.6
 gpt-pro55 = 84.6
 haiku45 = 4
 opus47 = 75.8
@@ -139,6 +143,7 @@ deepseek32 = 1475
 deepseek4 = 1501
 gemini-flash-lite31 = 1461
 gemini-flash3 = 1509
+gemini-flash35 = 1507
 gemini-pro31 = 1529
 gemma4-31 = 1498
 glm51 = 1524
@@ -172,6 +177,7 @@ deepseek32 = 1424
 deepseek4 = 1463
 gemini-flash-lite31 = 1439
 gemini-flash3 = 1474
+gemini-flash35 = 1480
 gemini-pro31 = 1492
 gemma4-31 = 1451
 glm51 = 1471
@@ -212,7 +218,6 @@ min_score = 31.6
 
 [charxiv.scores]
 gemini-flash-lite31 = 73.2
-gemini-flash3 = 80.3
 gpt-chat53 = 75
 gpt-chat55 = 81.6
 grok-fast41 = 31.6
@@ -222,6 +227,21 @@ muse = 86.4
 mythos = 93.2
 opus47 = 91
 sonnet46 = 77.4
+
+# without tools
+[charxiv_notools]
+categories = ["general", "stem"]
+min_score = 72.4
+
+[charxiv_notools.scores]
+gemini-flash3 = 80.3
+gemini-flash35 = 84.2
+gemini-pro31 = 83.3
+gpt55 = 84.1
+mythos = 86.1
+opus47 = 82.1
+sonnet46 = 72.4
+
 
 # https://artificialanalysis.ai/evaluations/critpt
 [CritPt]
@@ -322,7 +342,8 @@ min_score = 2.72
 deepseek-flash4 = 34.8
 deepseek32 = 25.1
 deepseek4 = 38
-gemini-flash3 = 12.1
+gemini-flash3 = 33.7
+gemini-flash35 = 40.2
 gemini-pro31 = 44.4
 gemma4-31 = 19.5
 glm51 = 28
@@ -486,6 +507,7 @@ deepseek32 = 50.2
 deepseek4 = 75.7
 gemini-flash-lite31 = 19.7
 gemini-flash3 = 88.4
+gemini-flash35 = 95.2
 gemini-pro31 = 98.4
 gemma4-31 = 79.5
 glm51 = 84.3
@@ -509,13 +531,30 @@ categories = ["general", "agentic"]
 min_score = 3
 
 [osworld.scores]
+gemini-flash35 = 78.4
+gemini-flash3 = 65.1
+gemini-pro31 = 76.2
 gpt54 = 75
 gpt55 = 78.7
 haiku45 = 50.7
 kimi26 = 73.1
 mythos = 79.6
-opus47 = 78
+opus47 = 78.7
 sonnet46 = 72.5
+
+# https://programbench.com
+# "almost" metric
+[ProgramBench]
+categories = ["coding", "agentic"]
+min_score = 0
+
+[ProgramBench.scores]
+gemini-flash3 = 0
+gemini-pro31 = 0
+gpt55 = 13.5
+gpt54 = 0
+opus47 = 4.5
+sonnet46 = 1
 
 [simpleBench]
 categories = ["general"]
@@ -542,7 +581,8 @@ deepseek-flash4 = 52.6
 deepseek32 = 15.56
 deepseek4 = 55.4
 gemini-flash-lite31 = 41
-gemini-flash3 = 34.63
+gemini-flash3 = 49.6
+gemini-flash35 = 55.1
 gemini-pro31 = 54.2
 gemma4-31 = 35.7
 glm51 = 58.4
@@ -596,11 +636,11 @@ muse = 24.2
 sonnet46 = 31.2
 
 # v2
-[terminal_bench]
+[terminal_bench2]
 categories = ["coding", "agentic"]
 min_score = 3.1
 
-[terminal_bench.scores]
+[terminal_bench2.scores]
 deepseek-flash4 = 56.9
 deepseek4 = 67.9
 gemini-pro31 = 68.5
@@ -621,6 +661,20 @@ qwen35 = 52.5
 qwen36-27b = 59.3
 qwen36-max = 65.4
 sonnet46 = 51
+
+# v2.1
+[terminal_bench21]
+categories = ["coding", "agentic"]
+min_score = 58
+
+[terminal_bench21.scores]
+gemini-flash3 = 58
+gemini-flash35 = 76.2
+gemini-pro31 = 70.3
+glm51 = 58.7
+gpt55 = 83.4
+opus47 = 69.7
+
 
 # USA Math Olympiad
 [usamo2026]

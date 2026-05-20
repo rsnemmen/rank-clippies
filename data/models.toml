@@ -21,6 +21,10 @@ open = false
 cost = 3.4
 open = false
 
+[gemini-flash35]
+cost = 3.4
+open = false
+
 [gemini-pro31]
 cost = 16.0
 open = false
