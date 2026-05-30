@@ -25,9 +25,11 @@ kimi26 = 66
 minimax27 = 61
 nemotron-super3 = 40
 opus47 = 70
+opus48 = 77.8
 qwen35 = 56
 qwen36-27b = 63
 qwen36-max = 65
+qwen37-max = 66.6
 qwen36-plus = 62
 sonnet46 = 63
 
@@ -59,9 +61,11 @@ kimi26 = 47
 minimax27 = 42
 nemotron-super3 = 31
 opus47 = 53
+opus48 = 56.7
 qwen35 = 41
 qwen36-27b = 37
 qwen36-max = 45
+qwen37-max = 50.1
 qwen36-plus = 43
 sonnet46 = 51
 
@@ -94,9 +98,11 @@ kimi26 = 54
 minimax27 = 50
 muse = 52
 opus47 = 57
+opus48 = 61.4
 qwen35 = 45
 qwen36-27b = 46
 qwen36-max = 52
+qwen37-max = 56.6
 qwen36-plus = 50
 sonnet46 = 52
 
@@ -164,6 +170,7 @@ opus47 = 1573
 qwen35 = 1488
 qwen36-max = 1507
 qwen36-plus = 1506
+qwen37-max = 1525
 sonnet46 = 1521
 
 # General leaderboard (Chatbot Arena — overall)
@@ -198,6 +205,7 @@ opus47 = 1503
 qwen35 = 1447
 qwen36-max = 1463
 qwen36-plus = 1447
+qwen37-max = 1475
 sonnet46 = 1463
 
 # https://www.anthropic.com/research/Evaluating-Claude-For-Bioinformatics-With-BioMysteryBench
@@ -253,6 +261,7 @@ deepseek-flash4 = 7.1
 deepseek32 = 2.9
 deepseek4 = 12.9
 gemini-flash3 = 8.6
+gemini-flash35 = 13.1
 gemini-pro31 = 17.7
 gemma4-31 = 1.4
 glm51 = 4.6
@@ -271,6 +280,7 @@ nemotron-super3 = 3.1
 opus47 = 12
 qwen35 = 1.7
 qwen36-max = 3.7
+qwen37-max = 11.4
 sonnet46 = 3.1
 
 # https://epoch.ai/benchmarks?view=graph&tab=eci
@@ -320,6 +330,7 @@ opus47 = 94.2
 qwen35 = 89.3
 qwen36-27b = 87.8
 qwen36-plus = 88.2
+qwen37-max = 92.4
 sonnet46 = 87.4
 
 [GraphWalks_BFS_1M]
@@ -360,8 +371,10 @@ minimax27 = 28.1
 muse = 42.8
 mythos = 56.8
 opus47 = 46.9
+opus48 = 49.8
 qwen35 = 28.7
 qwen36-27b = 24
+qwen37-max = 41.4
 sonnet46 = 33.2
 
 # LiveBench — coding subscore
@@ -375,6 +388,7 @@ deepseek32 = 75.69
 deepseek4 = 69.99
 gemini-flash-lite31 = 68.52
 gemini-flash3 = 78.57
+gemini-flash35 = 78.18
 gemini-pro31 = 76.45
 gemma4-31 = 60.33
 glm51 = 75.37
@@ -389,7 +403,9 @@ haiku45 = 72.81
 kimi26 = 78.57
 minimax27 = 54.9
 opus47 = 83.18
+opus48 = 79.98
 qwen36-plus = 78.18
+qwen37-max = 74.22
 sonnet46 = 79.98
 
 # LiveBench — agentic coding + IF subscore
@@ -403,6 +419,7 @@ deepseek32 = 44.09
 deepseek4 = 59.51
 gemini-flash-lite31 = 50.98
 gemini-flash3 = 57.43
+gemini-flash35 = 63.63
 gemini-pro31 = 72.05
 gemma4-31 = 53.79
 glm51 = 61.73
@@ -417,7 +434,9 @@ haiku45 = 45.72
 kimi26 = 61.35
 minimax27 = 55.56
 opus47 = 59.67
+opus48 = 63.82
 qwen36-plus = 56.67
+qwen37-max = 62.85
 sonnet46 = 61.61
 
 # LiveBench — math/stem (math + data analysis subscore)
@@ -431,6 +450,7 @@ deepseek-flash4 = 73.84
 deepseek4 = 82.61
 gemini-flash-lite31 = 64.23
 gemini-flash3 = 79.47
+gemini-flash35 = 76.55
 gemini-pro31 = 84.79
 gemma4-31 = 66.35
 glm51 = 74.06
@@ -446,7 +466,9 @@ haiku45 = 68.41
 kimi26 = 74.71
 minimax27 = 68.44
 opus47 = 85.68
+opus48 = 81.33
 qwen36-plus = 76.82
+qwen37-max = 78.52
 sonnet46 = 82.47
 
 # LiveBench — overall score
@@ -460,6 +482,7 @@ deepseek32 = 62.2
 deepseek4 = 73.58
 gemini-flash-lite31 = 61.68
 gemini-flash3 = 72.4
+gemini-flash35 = 75.02
 gemini-pro31 = 79.93
 gemma4-31 = 61.62
 glm51 = 70.18
@@ -475,7 +498,9 @@ haiku45 = 61.32
 kimi26 = 72.17
 minimax27 = 63.49
 opus47 = 76.91
+opus48 = 77.22
 qwen36-plus = 70.85
+qwen37-max = 74.29
 sonnet46 = 75.47
 
 [MMMLU]
@@ -521,9 +546,11 @@ haiku45 = 26
 kimi26 = 91.4
 minimax27 = 35.2
 opus47 = 90.9
+opus48 = 94.1
 qwen35 = 69.2
 qwen36-max = 82.2
 qwen36-plus = 71.3
+qwen37-max = 89.8
 sonnet46 = 85.7
 
 [osworld]
@@ -540,6 +567,7 @@ haiku45 = 50.7
 kimi26 = 73.1
 mythos = 79.6
 opus47 = 78.7
+opus48 = 83.4
 sonnet46 = 72.5
 
 # https://programbench.com
@@ -597,8 +625,10 @@ minimax27 = 56.2
 muse = 55
 mythos = 77.8
 opus47 = 64.3
+opus48 = 69.2
 qwen36-27b = 53.5
 qwen36-max = 57.3
+qwen37-max = 60.6
 sonnet46 = 57.2
 
 [swebench_verified]
@@ -619,6 +649,7 @@ nemotron-super3 = 60.47
 opus47 = 87.6
 qwen35 = 76.4
 qwen36-27b = 77.2
+qwen37-max = 80.4
 sonnet46 = 79.6
 
 # https://labs.scale.com/leaderboard/sweatlas-qna
@@ -660,6 +691,7 @@ opus47 = 69.4
 qwen35 = 52.5
 qwen36-27b = 59.3
 qwen36-max = 65.4
+qwen37-max = 69.7
 sonnet46 = 51
 
 # v2.1
@@ -674,7 +706,7 @@ gemini-pro31 = 70.3
 glm51 = 58.7
 gpt55 = 83.4
 opus47 = 69.7
-
+opus48 = 74.6
 
 # USA Math Olympiad
 [usamo2026]

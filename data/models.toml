@@ -113,6 +113,10 @@ open = true
 cost = 30.0
 open = false
 
+[opus48]
+cost = 30.0
+open = false
+
 [qwen35]
 cost = 2.9
 open = true
@@ -123,6 +127,10 @@ open = true
 
 [qwen36-max]
 cost = 18.9
+open = true
+
+[qwen37-max]
+cost = 10
 open = true
 
 [qwen36-plus]
