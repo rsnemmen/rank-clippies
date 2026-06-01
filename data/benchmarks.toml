@@ -6,10 +6,8 @@ min_score = 5
 
 [artificial_analysis_agentic.scores]
 deepseek-flash4 = 61
-deepseek32 = 53
 deepseek4 = 67
 gemini-flash-lite31 = 26
-gemini-flash3 = 50
 gemini-flash35 = 70
 gemini-pro31 = 59
 gemma4-31 = 41
@@ -42,10 +40,8 @@ min_score = 1
 
 [artificial_analysis_coding.scores]
 deepseek-flash4 = 39
-deepseek32 = 37
 deepseek4 = 47
 gemini-flash-lite31 = 30
-gemini-flash3 = 43
 gemini-flash35 = 45
 gemini-pro31 = 56
 gemma4-31 = 39
@@ -79,10 +75,8 @@ min_score = 5
 
 [artificial_analysis_intelligence.scores]
 deepseek-flash4 = 47
-deepseek32 = 42
 deepseek4 = 52
 gemini-flash-lite31 = 34
-gemini-flash3 = 46
 gemini-flash35 = 55
 gemini-pro31 = 57
 gemma4-31 = 39
@@ -128,8 +122,6 @@ categories = ["general", "agentic"]
 min_score = 0
 
 [ARC_AGI_2.scores]
-deepseek32 = 4
-gemini-flash3 = 33.6
 gemini-flash35 = 72.1
 gemini-pro31 = 77.1
 gpt-mini54 = 13.2
@@ -147,10 +139,8 @@ min_score = 880
 
 [arena_coding.scores]
 deepseek-flash4 = 1480
-deepseek32 = 1475
 deepseek4 = 1501
 gemini-flash-lite31 = 1461
-gemini-flash3 = 1509
 gemini-flash35 = 1507
 gemini-pro31 = 1529
 gemma4-31 = 1498
@@ -182,15 +172,12 @@ min_score = 952
 
 [arena_general.scores]
 deepseek-flash4 = 1439
-deepseek32 = 1424
 deepseek4 = 1463
 gemini-flash-lite31 = 1439
-gemini-flash3 = 1474
 gemini-flash35 = 1480
 gemini-pro31 = 1492
 gemma4-31 = 1451
 glm51 = 1471
-gpt-chat53 = 1449
 gpt-chat55 = 1473
 gpt-mini54 = 1456
 gpt-oss-120b = 1353
@@ -228,7 +215,6 @@ min_score = 31.6
 
 [charxiv.scores]
 gemini-flash-lite31 = 73.2
-gpt-chat53 = 75
 gpt-chat55 = 81.6
 grok-fast41 = 31.6
 haiku45 = 61.7
@@ -244,7 +230,6 @@ categories = ["general", "stem"]
 min_score = 72.4
 
 [charxiv_notools.scores]
-gemini-flash3 = 80.3
 gemini-flash35 = 84.2
 gemini-pro31 = 83.3
 gpt55 = 84.1
@@ -260,9 +245,7 @@ min_score = 0
 
 [CritPt.scores]
 deepseek-flash4 = 7.1
-deepseek32 = 2.9
 deepseek4 = 12.9
-gemini-flash3 = 8.6
 gemini-flash35 = 13.1
 gemini-pro31 = 17.7
 gemma4-31 = 1.4
@@ -292,7 +275,6 @@ min_score = 5
 
 [DeepSWE.scores]
 deepseek4 = 8
-gemini-flash3 = 5
 gemini-flash35 = 28
 gemini-pro31 = 10
 glm51 = 18
@@ -310,8 +292,6 @@ categories = ["stem", "general"]
 min_score = 0
 
 [frontiermath4.scores]
-deepseek32 = 2.1
-gemini-flash3 = 4.2
 gemini-flash35 = 14.6
 gemini-pro31 = 16.7
 glm51 = 2.1
@@ -330,14 +310,11 @@ min_score = 13.2
 
 [GPQA_diamond.scores]
 deepseek-flash4 = 88.1
-deepseek32 = 83.4
 deepseek4 = 90.1
-gemini-flash3 = 83.2
 gemini-flash35 = 92.8
 gemini-pro31 = 94.3
 gemma4-31 = 84.3
 glm51 = 86.8
-gpt-chat53 = 61.4
 gpt-mini54 = 88
 gpt-oss-120b = 80.9
 gpt-oss-20b = 71
@@ -375,9 +352,7 @@ min_score = 2.72
 
 [HLE.scores]
 deepseek-flash4 = 34.8
-deepseek32 = 25.1
 deepseek4 = 38
-gemini-flash3 = 33.7
 gemini-flash35 = 40.2
 gemini-pro31 = 44.4
 gemma4-31 = 19.5
@@ -408,10 +383,8 @@ min_score = 48.88
 
 [LiveBench_coding.scores]
 deepseek-flash4 = 69.23
-deepseek32 = 75.69
 deepseek4 = 69.99
 gemini-flash-lite31 = 68.52
-gemini-flash3 = 78.57
 gemini-flash35 = 78.18
 gemini-pro31 = 76.45
 gemma4-31 = 60.33
@@ -439,10 +412,8 @@ min_score = 7.76
 
 [LiveBench_agents.scores]
 deepseek-flash4 = 56.57
-deepseek32 = 44.09
 deepseek4 = 59.51
 gemini-flash-lite31 = 50.98
-gemini-flash3 = 57.43
 gemini-flash35 = 63.63
 gemini-pro31 = 72.05
 gemma4-31 = 53.79
@@ -469,16 +440,13 @@ categories = ["stem"]
 min_score = 28.83
 
 [LiveBench_stem.scores]
-deepseek32 = 67.52
 deepseek-flash4 = 73.84
 deepseek4 = 82.61
 gemini-flash-lite31 = 64.23
-gemini-flash3 = 79.47
 gemini-flash35 = 76.55
 gemini-pro31 = 84.79
 gemma4-31 = 66.35
 glm51 = 74.06
-gpt-chat53 = 60.21
 gpt-codex53 = 75.26
 gpt-mini54 = 74.75
 gpt-oss-120b = 53.84
@@ -502,15 +470,12 @@ min_score = 32.74
 
 [LiveBench_general.scores]
 deepseek-flash4 = 67.25
-deepseek32 = 62.2
 deepseek4 = 73.58
 gemini-flash-lite31 = 61.68
-gemini-flash3 = 72.4
 gemini-flash35 = 75.02
 gemini-pro31 = 79.93
 gemma4-31 = 61.62
 glm51 = 70.18
-gpt-chat53 = 59.99
 gpt-codex53 = 72.76
 gpt-mini54 = 67.5
 gpt-oss-120b = 46.1
@@ -532,9 +497,7 @@ categories = ["general"]
 min_score = 44.3
 
 [MMMLU.scores]
-deepseek32 = 76.9
 gemini-flash-lite31 = 88.9
-gemini-flash3 = 91.8
 gemini-pro31 = 92.6
 gemma4-31 = 88.4
 gpt-oss-120b = 83.8
@@ -552,10 +515,8 @@ min_score = 15.3
 
 [nyt_connections.scores]
 deepseek-flash4 = 53.2
-deepseek32 = 50.2
 deepseek4 = 75.7
 gemini-flash-lite31 = 19.7
-gemini-flash3 = 88.4
 gemini-flash35 = 95.2
 gemini-pro31 = 98.4
 gemma4-31 = 79.5
@@ -583,7 +544,6 @@ min_score = 3
 
 [osworld.scores]
 gemini-flash35 = 78.4
-gemini-flash3 = 65.1
 gemini-pro31 = 76.2
 gpt54 = 75
 gpt55 = 78.7
@@ -602,7 +562,6 @@ categories = ["coding", "agentic"]
 min_score = 0
 
 [ProgramBench.scores]
-gemini-flash3 = 0
 gemini-pro31 = 0
 gpt55 = 13.5
 gpt54 = 0
@@ -615,8 +574,6 @@ categories = ["general"]
 min_score = 10.7
 
 [simpleBench.scores]
-deepseek32 = 52.6
-gemini-flash3 = 61.1
 gemini-flash35 = 76.7
 gemini-pro31 = 79.6
 glm51 = 53.2
@@ -635,10 +592,8 @@ min_score = 1.51
 
 [swebench_pro_public.scores]
 deepseek-flash4 = 52.6
-deepseek32 = 15.56
 deepseek4 = 55.4
 gemini-flash-lite31 = 41
-gemini-flash3 = 49.6
 gemini-flash35 = 55.1
 gemini-pro31 = 54.2
 gemma4-31 = 35.7
@@ -667,9 +622,7 @@ min_score = 52
 
 [swebench_verified.scores]
 deepseek-flash4 = 79
-deepseek32 = 70
 deepseek4 = 80.6
-gemini-flash3 = 75.8
 gemini-pro31 = 80.6
 gemma4-31 = 52
 haiku45 = 66.6
@@ -688,7 +641,6 @@ categories = ["coding"]
 min_score = 8.2
 
 [sweatlas_codebase_qna.scores]
-gemini-flash3 = 8.2
 gemini-pro31 = 13.5
 gpt-codex53 = 32.6
 gpt54 = 40.8
@@ -730,7 +682,6 @@ categories = ["coding", "agentic"]
 min_score = 58
 
 [terminal_bench21.scores]
-gemini-flash3 = 58
 gemini-flash35 = 76.2
 gemini-pro31 = 70.3
 glm51 = 58.7
