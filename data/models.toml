@@ -97,6 +97,10 @@ open = true
 cost = 1.7
 open = true
 
+[minimax3]
+cost = 3
+open = true
+
 [muse]
 cost = 29.2
 open = false
@@ -126,7 +130,7 @@ cost = 0.7
 open = true
 
 [qwen36-max]
-cost = 18.9
+cost = 9.1
 open = true
 
 [qwen37-max]

@@ -1,3 +1,5 @@
+# Categories: coding, agentic, stem, general
+
 [artificial_analysis_agentic]
 categories = ["coding", "agentic"]
 min_score = 5
@@ -283,6 +285,25 @@ qwen36-max = 3.7
 qwen37-max = 11.4
 sonnet46 = 3.1
 
+# https://deepswe.datacurve.ai
+[DeepSWE]
+categories = ["coding"]
+min_score = 5
+
+[DeepSWE.scores]
+deepseek4 = 8
+gemini-flash3 = 5
+gemini-flash35 = 28
+gemini-pro31 = 10
+glm51 = 18
+gpt-mini54 = 24
+gpt54 = 56
+gpt55 = 70
+kimi26 = 24
+opus47 = 54
+opus48 = 58
+sonnet46 = 32
+
 # https://epoch.ai/benchmarks?view=graph&tab=eci
 [frontiermath4]
 categories = ["stem", "general"]
@@ -291,6 +312,7 @@ min_score = 0
 [frontiermath4.scores]
 deepseek32 = 2.1
 gemini-flash3 = 4.2
+gemini-flash35 = 14.6
 gemini-pro31 = 16.7
 glm51 = 2.1
 gpt-mini54 = 2.1
@@ -311,6 +333,7 @@ deepseek-flash4 = 88.1
 deepseek32 = 83.4
 deepseek4 = 90.1
 gemini-flash3 = 83.2
+gemini-flash35 = 92.8
 gemini-pro31 = 94.3
 gemma4-31 = 84.3
 glm51 = 86.8
@@ -342,6 +365,7 @@ gpt54 = 21.4
 gpt55 = 45.4
 mythos = 80
 opus47 = 61.5
+opus48 = 68.1
 sonnet46 = 73.8
 
 # Scale's Humanity's Last Exam (without tools)
@@ -565,6 +589,7 @@ gpt54 = 75
 gpt55 = 78.7
 haiku45 = 50.7
 kimi26 = 73.1
+minimax3 = 70
 mythos = 79.6
 opus47 = 78.7
 opus48 = 83.4
@@ -581,6 +606,7 @@ gemini-flash3 = 0
 gemini-pro31 = 0
 gpt55 = 13.5
 gpt54 = 0
+haiku45 = 0
 opus47 = 4.5
 sonnet46 = 1
 
@@ -591,6 +617,7 @@ min_score = 10.7
 [simpleBench.scores]
 deepseek32 = 52.6
 gemini-flash3 = 61.1
+gemini-flash35 = 76.7
 gemini-pro31 = 79.6
 glm51 = 53.2
 gpt-oss-120b = 22.1
@@ -598,6 +625,8 @@ gpt-pro55 = 76.9
 gpt55 = 69
 grok-fast41 = 56
 opus47 = 61.7
+opus48 = 64.8
+qwen37-max = 70.4
 sonnet46 = 67.6
 
 [swebench_pro_public]
@@ -622,6 +651,7 @@ gpt55 = 58.6
 haiku45 = 39.5
 kimi26 = 58.6
 minimax27 = 56.2
+minimax3 = 59
 muse = 55
 mythos = 77.8
 opus47 = 64.3
@@ -705,6 +735,7 @@ gemini-flash35 = 76.2
 gemini-pro31 = 70.3
 glm51 = 58.7
 gpt55 = 83.4
+minimax3 = 66
 opus47 = 69.7
 opus48 = 74.6
 
@@ -720,5 +751,6 @@ glm51 = 35.12
 gpt54 = 95.2
 gpt55 = 98.21
 kimi26 = 51.19
+opus48 = 96.7
 mythos = 97.6
 qwen35 = 36.31
