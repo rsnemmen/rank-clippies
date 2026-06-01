@@ -451,7 +451,7 @@ def create_plot(
                     logo_cache[company] = plt.imread(str(logo_path))
                 arr = logo_cache[company]
                 h, w = arr.shape[:2]
-                zoom = marker_px / max(h, w) * 0.65
+                zoom = marker_px / max(h, w) * 0.325
                 imagebox = OffsetImage(arr, zoom=zoom)
                 ab = AnnotationBbox(
                     imagebox,
