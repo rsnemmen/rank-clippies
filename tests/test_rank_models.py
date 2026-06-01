@@ -17,8 +17,8 @@ def _patch_data(monkeypatch: pytest.MonkeyPatch, benchmarks: list[dict[str, obje
 
     def fake_load_data(
         category: str,
-    ) -> tuple[list[dict[str, object]], dict[str, float], dict[str, bool], str, list[str]]:
-        return benchmarks, costs, open_models, "Synthetic", [
+    ) -> tuple[list[dict[str, object]], dict[str, float], dict[str, bool], dict[str, str], str, list[str]]:
+        return benchmarks, costs, open_models, {}, "Synthetic", [
             str(b.get("__name", f"bench-{i}")) for i, b in enumerate(benchmarks, 1)
         ]
 
@@ -208,5 +208,6 @@ def test_compute_rankings_export_shape(monkeypatch: pytest.MonkeyPatch) -> None:
         "rel_cost",
         "tier",
         "is_open",
+        "company",
         "raw_scores",
     } <= model.keys()

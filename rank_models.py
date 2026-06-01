@@ -12,6 +12,7 @@ import datetime
 import json
 import math
 import os
+from pathlib import Path
 import tomllib
 import subprocess
 import sys
@@ -26,6 +27,9 @@ CATEGORIES: dict[str, str] = {
 
 _BENCHMARK_META_KEYS = {"known_totals", "min_score", "__name"}
 RankingResult = tuple[str, float, float | None, float | None, int, float | None]
+
+# Directory containing company logo PNGs (docs/ is the GitHub Pages web root)
+_LOGO_DIR = Path(__file__).parent / "docs" / "assets" / "logos"
 
 
 def get_y_upper_limit(max_score: float) -> int:
@@ -292,6 +296,7 @@ def create_plot(
     category: str | None = None,
     quadrants: bool = False,
     model_scores: dict[str, list[float]] | None = None,
+    companies: dict[str, str] | None = None,
 ) -> None:
     """Create a scatter plot of model performance vs. cost and save to PNG.
 
@@ -308,6 +313,7 @@ def create_plot(
         import pandas as pd
         import matplotlib.pyplot as plt
         from matplotlib.lines import Line2D
+        from matplotlib.offsetbox import AnnotationBbox, OffsetImage
     except ImportError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         print("Plotting requires pandas and matplotlib. Install with:", file=sys.stderr)
@@ -424,6 +430,38 @@ def create_plot(
                 fontsize=7,
                 color="#444444",
             )
+
+        # Overlay company logos centered on each marker
+        if companies:
+            logo_cache: dict[str, Any] = {}
+            fig_dpi = fig.get_dpi()
+            # Reference marker size in points (use the smaller diamond size for safety)
+            marker_pts = 8.0
+            marker_px = marker_pts * fig_dpi / 72.0
+
+            for _, row in plot_df.iterrows():
+                model_name = str(row["Model Name"])
+                company = companies.get(model_name)
+                if not company:
+                    continue
+                logo_path = _LOGO_DIR / f"{company}.png"
+                if not logo_path.exists():
+                    continue
+                if company not in logo_cache:
+                    logo_cache[company] = plt.imread(str(logo_path))
+                arr = logo_cache[company]
+                h, w = arr.shape[:2]
+                zoom = marker_px / max(h, w) * 0.65
+                imagebox = OffsetImage(arr, zoom=zoom)
+                ab = AnnotationBbox(
+                    imagebox,
+                    (float(row["Cost (USD per 1M)"]), float(row["Average Score"])),
+                    frameon=False,
+                    pad=0,
+                    box_alignment=(0.5, 0.5),
+                    zorder=5,
+                )
+                ax.add_artist(ab)
 
         base_title = "LLM Model Performance vs. Cost"
         ax.set_title(f"{base_title}\n{category}" if category else base_title, pad=12)
@@ -771,10 +809,19 @@ def _load_models_toml(filepath: str) -> dict[str, dict[str, Any]]:
 
 def load_data(
     category: str,
-) -> tuple[list[dict[str, Any]], dict[str, float], dict[str, bool], str, list[str]]:
+) -> tuple[
+    list[dict[str, Any]],
+    dict[str, float],
+    dict[str, bool],
+    dict[str, str],
+    str,
+    list[str],
+]:
     """Load benchmarks for a category and model metadata from centralized data files.
 
-    Returns (benchmarks, cost_dict, open_dict, title, benchmark_names).
+    Returns (benchmarks, cost_dict, open_dict, company_dict, title, benchmark_names).
+    company_dict maps model name to logo slug (e.g. "google", "anthropic"); models without a
+    company field are omitted.
     """
     data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
     benchmarks_file = os.path.join(data_dir, "benchmarks.toml")
@@ -854,9 +901,12 @@ def load_data(
     open_dict: dict[str, bool] = {
         m: True for m, v in models_dict.items() if v.get("open")
     }
+    company_dict: dict[str, str] = {
+        m: str(v["company"]) for m, v in models_dict.items() if v.get("company")
+    }
     title = CATEGORIES[category]
 
-    return benchmarks, cost_dict, open_dict, title, benchmark_names
+    return benchmarks, cost_dict, open_dict, company_dict, title, benchmark_names
 
 
 def _compute_raw(
@@ -866,11 +916,14 @@ def _compute_raw(
     dict[str, list[float]],
     dict[str, float],
     dict[str, bool],
+    dict[str, str],
     str,
     list[str],
 ]:
     """Load data and compute ranked results. Returns raw objects for table/plot rendering or JSON export."""
-    benchmarks, cost_dict, open_dict, title, benchmark_names = load_data(category)
+    benchmarks, cost_dict, open_dict, company_dict, title, benchmark_names = load_data(
+        category
+    )
 
     model_scores: dict[str, list[float]] = {}
 
@@ -948,7 +1001,15 @@ def _compute_raw(
         results.append((model, avg, lower_err, upper_err, n, cost))
 
     results.sort(key=lambda r: r[1])
-    return results, model_scores, cost_dict, open_dict, title, benchmark_names
+    return (
+        results,
+        model_scores,
+        cost_dict,
+        open_dict,
+        company_dict,
+        title,
+        benchmark_names,
+    )
 
 
 def compute_rankings(category: str) -> dict[str, Any]:
@@ -960,9 +1021,15 @@ def compute_rankings(category: str) -> dict[str, Any]:
             "Error: --export-json requires pandas. Install with: pip install pandas"
         )
 
-    results, model_scores, cost_dict, open_dict, title, benchmark_names = _compute_raw(
-        category
-    )
+    (
+        results,
+        model_scores,
+        cost_dict,
+        open_dict,
+        company_dict,
+        title,
+        benchmark_names,
+    ) = _compute_raw(category)
     tier_mapping = categorize_tiers(results, k=1.0, debug=False)
 
     costs_with_values = [r[5] for r in results if r[5] is not None]
@@ -985,6 +1052,7 @@ def compute_rankings(category: str) -> dict[str, Any]:
                 "rel_cost": round(rel_cost, 6) if rel_cost is not None else None,
                 "tier": tier_mapping.get(model, 0),
                 "is_open": model in open_dict,
+                "company": company_dict.get(model),
                 "raw_scores": [round(s, 6) for s in model_scores.get(model, [])],
             }
         )
@@ -1102,8 +1170,8 @@ def main() -> None:
         print(f"Valid categories: {', '.join(CATEGORIES)}", file=sys.stderr)
         sys.exit(1)
 
-    results, model_scores, cost_dict, open_dict, category, _bnames = _compute_raw(
-        category
+    results, model_scores, cost_dict, open_dict, company_dict, category, _bnames = (
+        _compute_raw(category)
     )
 
     # ── Normalize costs relative to best-ranked model with cost data ─────
@@ -1223,6 +1291,7 @@ def main() -> None:
             category=category,
             quadrants=args.quadrants,
             model_scores=model_scores,
+            companies=company_dict,
         )
 
         ranking_plot_filename = os.path.join(figures_dir, f"{stem}_ranking.png")

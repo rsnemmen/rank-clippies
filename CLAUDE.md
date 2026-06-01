@@ -34,7 +34,7 @@ make validate   # ruff + mypy --strict + pytest + JSON export smoke test
 Everything lives in `rank_models.py` (stdlib-only for core; pandas/matplotlib/numpy imported lazily inside plotting functions):
 
 - `_load_benchmarks_toml(filepath)` / `_load_models_toml(filepath)` — load TOML data via `tomllib`
-- `load_data(category)` — loads `data/benchmarks.toml` + `data/models.toml`, validates benchmark schema, filters by category tag, and returns `(benchmarks, cost_dict, open_dict, title, benchmark_names)`
+- `load_data(category)` — loads `data/benchmarks.toml` + `data/models.toml`, validates benchmark schema, filters by category tag, and returns `(benchmarks, cost_dict, open_dict, company_dict, title, benchmark_names)`
 - `_compute_raw(category)` — computes percentile scores, applies sparse-data penalties, and returns ranked tuples plus raw model scores
 - `compute_rankings(category)` — builds the JSON-serializable shape consumed by the static website
 - `main()` — handles CLI parsing, ASCII table output, optional plotting, and `--export-json`
@@ -49,12 +49,15 @@ Everything lives in `rank_models.py` (stdlib-only for core; pandas/matplotlib/nu
 ├── rank_models.py          # CLI, ranking logic, plots, and JSON export
 ├── data/
 │   ├── benchmarks.toml     # Benchmark definitions and scores
-│   └── models.toml         # Model cost and open-weight metadata
+│   └── models.toml         # Model cost, open-weight, and company metadata
 ├── docs/
 │   ├── app.js              # Static website logic
+│   ├── assets/logos/       # Company logo PNGs (white monochrome, transparent bg)
 │   ├── data/               # Generated JSON consumed by the website
 │   └── index.html
 ├── figures/                # Generated PNG plots (ignored)
+├── scripts/
+│   └── fetch_logos.py      # One-time helper to download/rasterize logos (needs cairosvg)
 └── tests/
     └── test_rank_models.py
 ```
@@ -82,15 +85,22 @@ model_a = 94.2
 **`data/models.toml`** — one table per model, alphabetical by model name:
 ```toml
 [model_name]
-cost = 510    # USD per 1M tokens (input + output)
-open = false  # open-weight models get diamond markers in plots
+cost = 510        # USD per 1M tokens (input + output)
+open = false      # open-weight models get diamond markers in plots
+company = "openai"  # logo slug → docs/assets/logos/<company>.png
 
 [open_model]
 cost = 23
 open = true
+company = "google"
 ```
 - Missing `cost` means pricing is unknown
 - `open = true` gets a diamond marker in scatter plots; `false` = circle
+- `company` is an optional logo slug (lowercase); omit for unknown/anonymous vendors.
+  Company logos are white monochrome transparent PNGs in `docs/assets/logos/`. Run
+  `python scripts/fetch_logos.py` (requires `pip install cairosvg`) to regenerate logos when
+  adding a new company; commit the resulting PNGs. The `company` value flows into the
+  website JSON and is used by `create_plot()` to overlay logos on scatter-plot markers.
 
 ## Code Style
 

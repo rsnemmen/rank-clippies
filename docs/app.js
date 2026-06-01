@@ -304,6 +304,26 @@ function buildScatterLayout(models, palette, showQuadrants, showLabels, title) {
     layout.annotations = [...layout.annotations, ...labelAnnotations];
   }
 
+  // Company logos centered on each data point (pixel-sized for consistent visual appearance)
+  const LOGO_SIZE_PX = 14;
+  layout.images = plottable
+    .filter(m => m.company)
+    .map(m => ({
+      source: `assets/logos/${m.company}.png`,
+      xref: "x",
+      yref: "y",
+      x: m.rel_cost,
+      y: m.avg_pct * 100,
+      xanchor: "center",
+      yanchor: "middle",
+      sizex: LOGO_SIZE_PX,
+      sizey: LOGO_SIZE_PX,
+      xsizemode: "pixel",
+      ysizemode: "pixel",
+      sizing: "contain",
+      layer: "above",
+    }));
+
   return layout;
 }
 
