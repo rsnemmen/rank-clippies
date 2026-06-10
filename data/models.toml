@@ -127,11 +127,6 @@ cost = 1.4
 open = true
 company = "nvidia"
 
-[opus47]
-cost = 30.0
-open = false
-company = "anthropic"
-
 [opus48]
 cost = 30.0
 open = false
@@ -144,11 +139,6 @@ company = "qwen"
 
 [qwen36-27b]
 cost = 0.7
-open = true
-company = "qwen"
-
-[qwen36-max]
-cost = 9.1
 open = true
 company = "qwen"
 
