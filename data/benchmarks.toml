@@ -648,6 +648,22 @@ minimax27 = 10.3
 muse = 24.2
 sonnet46 = 31.2
 
+# https://www.swe-marathon.org
+[SWE_Marathon]
+categories = ["coding", "agentic"]
+min_score = 0
+
+[SWE_Marathon.scores]
+deepseek4 = 4
+gemini-flash35 = 7
+gemini-pro31 = 2
+glm51 = 1
+gpt55 = 12
+kimi26 = 0
+minimax27 = 0
+opus47 = 16
+opus48 = 26
+
 # v2
 [terminal_bench2]
 categories = ["coding", "agentic"]
