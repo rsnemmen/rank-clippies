@@ -7,6 +7,7 @@ min_score = 5
 [artificial_analysis_agentic.scores]
 deepseek-flash4 = 61
 deepseek4 = 67
+fable5 = 80.6
 gemini-flash-lite31 = 26
 gemini-flash35 = 70
 gemini-pro31 = 59
@@ -41,6 +42,7 @@ min_score = 1
 [artificial_analysis_coding.scores]
 deepseek-flash4 = 39
 deepseek4 = 47
+fable5 = 62
 gemini-flash-lite31 = 30
 gemini-flash35 = 45
 gemini-pro31 = 56
@@ -76,6 +78,7 @@ min_score = 5
 [artificial_analysis_intelligence.scores]
 deepseek-flash4 = 47
 deepseek4 = 52
+fable5 = 64.9
 gemini-flash-lite31 = 34
 gemini-flash35 = 55
 gemini-pro31 = 57
@@ -112,7 +115,6 @@ min_score = 27.7
 gpt-codex53 = 44.3
 gpt54 = 52.7
 gpt55 = 71.8
-mythos = 68.8
 opus47 = 48.7
 sonnet46 = 27.8
 
@@ -198,14 +200,16 @@ qwen37-max = 1475
 sonnet46 = 1463
 
 # https://www.anthropic.com/research/Evaluating-Claude-For-Bioinformatics-With-BioMysteryBench
+# human solved
 [BioMysteryBench]
 categories = ["stem"]
 min_score = 36.8
 
 [BioMysteryBench.scores]
+fable5 = 83.9
 haiku45 = 36.8
-mythos = 82.6
 opus47 = 78.9
+opus48 = 80.4
 sonnet46 = 71.8
 
 # https://github.com/wenqiglantz/charxiv — chart reasoning (with tools)
@@ -220,7 +224,6 @@ grok-fast41 = 31.6
 haiku45 = 61.7
 kimi26 = 80.4
 muse = 86.4
-mythos = 93.2
 opus47 = 91
 sonnet46 = 77.4
 
@@ -233,7 +236,6 @@ min_score = 72.4
 gemini-flash35 = 84.2
 gemini-pro31 = 83.3
 gpt55 = 84.1
-mythos = 86.1
 opus47 = 82.1
 sonnet46 = 72.4
 
@@ -246,6 +248,7 @@ min_score = 0
 [CritPt.scores]
 deepseek-flash4 = 7.1
 deepseek4 = 12.9
+fable5 = 28.6
 gemini-flash35 = 13.1
 gemini-pro31 = 17.7
 gemma4-31 = 1.4
@@ -325,7 +328,6 @@ haiku45 = 71.2
 kimi26 = 90.5
 minimax27 = 87.4
 muse = 89.5
-mythos = 94.6
 opus47 = 94.2
 qwen35 = 89.3
 qwen36-27b = 87.8
@@ -340,7 +342,6 @@ min_score = 2.9
 [GraphWalks_BFS_1M.scores]
 gpt54 = 21.4
 gpt55 = 45.4
-mythos = 80
 opus47 = 61.5
 opus48 = 68.1
 sonnet46 = 73.8
@@ -353,6 +354,7 @@ min_score = 2.72
 [HLE.scores]
 deepseek-flash4 = 34.8
 deepseek4 = 38
+fable5 = 59
 gemini-flash35 = 40.2
 gemini-pro31 = 44.4
 gemma4-31 = 19.5
@@ -368,7 +370,6 @@ grok43 = 35
 haiku45 = 9.7
 minimax27 = 28.1
 muse = 42.8
-mythos = 56.8
 opus47 = 46.9
 opus48 = 49.8
 qwen35 = 28.7
@@ -384,6 +385,7 @@ min_score = 48.88
 [LiveBench_coding.scores]
 deepseek-flash4 = 69.23
 deepseek4 = 69.99
+fable5 = 78.57
 gemini-flash-lite31 = 68.52
 gemini-flash35 = 78.18
 gemini-pro31 = 76.45
@@ -413,6 +415,7 @@ min_score = 7.76
 [LiveBench_agents.scores]
 deepseek-flash4 = 56.57
 deepseek4 = 59.51
+fable5 = 59.97
 gemini-flash-lite31 = 50.98
 gemini-flash35 = 63.63
 gemini-pro31 = 72.05
@@ -442,6 +445,7 @@ min_score = 28.83
 [LiveBench_stem.scores]
 deepseek-flash4 = 73.84
 deepseek4 = 82.61
+fable5 = 86.97
 gemini-flash-lite31 = 64.23
 gemini-flash35 = 76.55
 gemini-pro31 = 84.79
@@ -471,6 +475,7 @@ min_score = 32.74
 [LiveBench_general.scores]
 deepseek-flash4 = 67.25
 deepseek4 = 73.58
+fable5 = 78.31
 gemini-flash-lite31 = 61.68
 gemini-flash35 = 75.02
 gemini-pro31 = 79.93
@@ -502,7 +507,6 @@ gemini-pro31 = 92.6
 gemma4-31 = 88.4
 gpt-oss-120b = 83.8
 haiku45 = 83
-mythos = 92.7
 opus47 = 91.5
 qwen35 = 88.5
 qwen36-plus = 89.5
@@ -543,6 +547,7 @@ categories = ["general", "agentic"]
 min_score = 3
 
 [osworld.scores]
+fable5 = 85
 gemini-flash35 = 78.4
 gemini-pro31 = 76.2
 gpt54 = 75
@@ -550,7 +555,6 @@ gpt55 = 78.7
 haiku45 = 50.7
 kimi26 = 73.1
 minimax3 = 70
-mythos = 79.6
 opus47 = 78.7
 opus48 = 83.4
 sonnet46 = 72.5
@@ -593,6 +597,7 @@ min_score = 1.51
 [swebench_pro_public.scores]
 deepseek-flash4 = 52.6
 deepseek4 = 55.4
+fable5 = 80.3
 gemini-flash-lite31 = 41
 gemini-flash35 = 55.1
 gemini-pro31 = 54.2
@@ -608,7 +613,6 @@ kimi26 = 58.6
 minimax27 = 56.2
 minimax3 = 59
 muse = 55
-mythos = 77.8
 opus47 = 64.3
 opus48 = 69.2
 qwen36-27b = 53.5
@@ -627,7 +631,6 @@ gemini-pro31 = 80.6
 gemma4-31 = 52
 haiku45 = 66.6
 kimi26 = 80.2
-mythos = 93.9
 nemotron-super3 = 60.47
 opus47 = 87.6
 qwen35 = 76.4
@@ -683,7 +686,6 @@ gpt55 = 82.7
 haiku45 = 35.5
 kimi26 = 66.7
 minimax27 = 57
-mythos = 82
 nemotron-super3 = 31
 opus47 = 69.4
 qwen35 = 52.5
@@ -698,6 +700,7 @@ categories = ["coding", "agentic"]
 min_score = 58
 
 [terminal_bench21.scores]
+fable5 = 88
 gemini-flash35 = 76.2
 gemini-pro31 = 70.3
 glm51 = 58.7
@@ -719,5 +722,4 @@ gpt54 = 95.2
 gpt55 = 98.21
 kimi26 = 51.19
 opus48 = 96.7
-mythos = 97.6
 qwen35 = 36.31
