@@ -72,11 +72,6 @@ cost = 210
 open = false
 company = "openai"
 
-[gpt54]
-cost = 17.50
-open = false
-company = "openai"
-
 [gpt55]
 cost = 35.0
 open = false
