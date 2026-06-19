@@ -37,8 +37,8 @@ cost = 0.7
 open = true
 company = "google"
 
-[glm51]
-cost = 6.7
+[glm52]
+cost = 5.8
 open = true
 company = "zhipu"
 
@@ -49,11 +49,6 @@ company = "openai"
 
 [gpt-codex53]
 cost = 15.75
-open = false
-company = "openai"
-
-[gpt-mini54]
-cost = 5.25
 open = false
 company = "openai"
 

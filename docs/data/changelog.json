@@ -1,60 +1,72 @@
 {
   "entries": [
     {
-      "date": "2026-05-04",
-      "message": "added grok 4.3"
+      "date": "2026-06-10",
+      "message": "remove gpt54 from benchmark data"
     },
     {
-      "date": "2026-05-03",
-      "message": "added ARC-AGI-2 benchmarjs"
+      "date": "2026-06-10",
+      "message": "added arena ranking for fable"
     },
     {
-      "date": "2026-05-02",
-      "message": "removed old cost data"
+      "date": "2026-06-10",
+      "message": "added minimax 3 to further benchmarks"
     },
     {
-      "date": "2026-05-02",
-      "message": "switch arena benchmarks to Elo scores, add BioMysteryBench"
+      "date": "2026-06-09",
+      "message": "remove mythos, qwen36-max, and opus47 from benchmark data"
     },
     {
-      "date": "2026-05-01",
-      "message": "added AISI CTF advanced where gpt 5.5 beats mythos"
+      "date": "2026-06-09",
+      "message": "added Fable 5"
     },
     {
-      "date": "2026-05-01",
-      "message": "switch cost metric from Poe credits/1k tokens to USD/1M tokens"
+      "date": "2026-06-09",
+      "message": "added SWE Marathon benchmark"
     },
     {
-      "date": "2026-04-29",
-      "message": "fixed category for livebench agents"
+      "date": "2026-06-01",
+      "message": "add company logos to scatter plot markers"
     },
     {
-      "date": "2026-04-29",
-      "message": "added agentic and stem livebench benchmarks"
+      "date": "2026-06-01",
+      "message": "removed gemini-flash3, deepseek32, gpt-chat53"
     },
     {
-      "date": "2026-04-28",
-      "message": "updated benchmarks"
+      "date": "2026-06-01",
+      "message": "added minimax m3, new benchmark DeepSWE"
     },
     {
-      "date": "2026-04-28",
-      "message": "added frontiermath benchmakr"
+      "date": "2026-05-30",
+      "message": "new: opus 4.8, qwen 3.7 max"
     },
     {
-      "date": "2026-04-27",
-      "message": "added graphwalks 1m benchmark"
+      "date": "2026-05-19",
+      "message": "fixed gemini flash 3.5 cost"
     },
     {
-      "date": "2026-04-27",
-      "message": "prints also which benchmarks were used"
+      "date": "2026-05-19",
+      "message": "gemini flash 3.5"
     },
     {
-      "date": "2026-04-27",
-      "message": "added charxiv to stem as well"
+      "date": "2026-05-12",
+      "message": "removed None entries"
     },
     {
-      "date": "2026-04-27",
-      "message": "centralize benchmark and model data into two files"
+      "date": "2026-05-12",
+      "message": "added CritPt for physics-reasoning"
+    },
+    {
+      "date": "2026-05-11",
+      "message": "Update benchmark scores and model costs"
+    },
+    {
+      "date": "2026-05-05",
+      "message": "Document TOML data sources"
+    },
+    {
+      "date": "2026-05-05",
+      "message": "Migrate data files to TOML, add validators, fix correctness bugs"
     }
   ]
 }
