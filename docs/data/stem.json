@@ -1,7 +1,7 @@
 {
   "category": "stem",
   "title": "Math and STEM expert reasoning",
-  "generated_at": "2026-07-03T15:12:24Z",
+  "generated_at": "2026-07-03T15:16:46Z",
   "n_benchmarks": 11,
   "benchmark_names": [
     "artificial_analysis_coding",
@@ -433,25 +433,6 @@
     },
     {
       "rank": 20,
-      "name": "gemini-flash-lite31",
-      "avg_pct": 0.462289,
-      "lower_err": 0.095531,
-      "upper_err": 0.078579,
-      "n_bench": 4,
-      "cost": 2.0,
-      "rel_cost": 0.033333,
-      "tier": 3,
-      "is_open": false,
-      "company": "google",
-      "raw_scores": [
-        0.615894,
-        0.51586,
-        0.240876,
-        0.408719
-      ]
-    },
-    {
-      "rank": 21,
       "name": "gemma4-31",
       "avg_pct": 0.464538,
       "lower_err": 0.07646,
@@ -472,7 +453,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "name": "qwen35",
       "avg_pct": 0.502302,
       "lower_err": 0.136581,
@@ -493,7 +474,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 22,
       "name": "haiku45",
       "avg_pct": 0.520968,
       "lower_err": 0.098195,
@@ -516,7 +497,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "name": "gpt-pro55",
       "avg_pct": 0.532516,
       "lower_err": null,
@@ -532,7 +513,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "name": "grok-fast41",
       "avg_pct": 0.602649,
       "lower_err": 0.170262,
@@ -552,7 +533,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "name": "gpt-oss-120b",
       "avg_pct": 0.6057,
       "lower_err": 0.060719,
@@ -560,7 +541,7 @@
       "n_bench": 6,
       "cost": 1.4,
       "rel_cost": 0.023333,
-      "tier": 4,
+      "tier": 3,
       "is_open": true,
       "company": "openai",
       "raw_scores": [
@@ -573,7 +554,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "name": "gpt-oss-20b",
       "avg_pct": 0.761589,
       "lower_err": 0.078785,

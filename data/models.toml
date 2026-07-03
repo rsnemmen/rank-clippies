@@ -17,11 +17,6 @@ cost = 60
 open = false
 company = "anthropic"
 
-[gemini-flash-lite31]
-cost = 2.0
-open = false
-company = "google"
-
 [gemini-flash35]
 cost = 10.50
 open = false

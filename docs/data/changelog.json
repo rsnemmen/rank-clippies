@@ -2,6 +2,10 @@
   "entries": [
     {
       "date": "2026-07-03",
+      "message": "removed minimax 2.7, all nemotron models"
+    },
+    {
+      "date": "2026-07-03",
       "message": "added GPT 5.6 (incomplete sampling), Sonnet 5"
     },
     {

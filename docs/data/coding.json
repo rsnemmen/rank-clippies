@@ -1,7 +1,7 @@
 {
   "category": "coding",
   "title": "Coding and agentic coding",
-  "generated_at": "2026-07-03T15:12:24Z",
+  "generated_at": "2026-07-03T15:16:46Z",
   "n_benchmarks": 14,
   "benchmark_names": [
     "artificial_analysis_agentic",
@@ -480,27 +480,6 @@
     },
     {
       "rank": 22,
-      "name": "gemini-flash-lite31",
-      "avg_pct": 0.457569,
-      "lower_err": 0.107683,
-      "upper_err": 0.12905,
-      "n_bench": 6,
-      "cost": 2.0,
-      "rel_cost": 0.033333,
-      "tier": 3,
-      "is_open": false,
-      "company": "google",
-      "raw_scores": [
-        0.615894,
-        0.153061,
-        1.0,
-        0.416345,
-        0.327734,
-        0.498794
-      ]
-    },
-    {
-      "rank": 23,
       "name": "gpt56terra",
       "avg_pct": 0.474189,
       "lower_err": null,
@@ -516,7 +495,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "name": "grok-fast41",
       "avg_pct": 0.493301,
       "lower_err": 0.168529,
@@ -535,7 +514,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "name": "haiku45",
       "avg_pct": 0.503671,
       "lower_err": 0.124295,
@@ -558,7 +537,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "name": "gpt56luna",
       "avg_pct": 0.527286,
       "lower_err": null,
@@ -574,7 +553,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "name": "gemma4-31",
       "avg_pct": 0.566062,
       "lower_err": 0.175705,
@@ -596,7 +575,7 @@
       ]
     },
     {
-      "rank": 28,
+      "rank": 27,
       "name": "gemini-pro31",
       "avg_pct": 0.615686,
       "lower_err": 0.5137,
@@ -624,7 +603,7 @@
       ]
     },
     {
-      "rank": 29,
+      "rank": 28,
       "name": "gpt-oss-120b",
       "avg_pct": 0.646219,
       "lower_err": 0.038981,
@@ -645,7 +624,7 @@
       ]
     },
     {
-      "rank": 30,
+      "rank": 29,
       "name": "gpt-oss-20b",
       "avg_pct": 0.761589,
       "lower_err": 0.237209,
@@ -663,7 +642,7 @@
       ]
     },
     {
-      "rank": 31,
+      "rank": 30,
       "name": "kimi27",
       "avg_pct": 0.85,
       "lower_err": null,

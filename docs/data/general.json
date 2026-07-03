@@ -1,7 +1,7 @@
 {
   "category": "general",
   "title": "General intelligence",
-  "generated_at": "2026-07-03T15:12:24Z",
+  "generated_at": "2026-07-03T15:16:46Z",
   "n_benchmarks": 14,
   "benchmark_names": [
     "artificial_analysis_intelligence",
@@ -507,27 +507,6 @@
     },
     {
       "rank": 23,
-      "name": "gemini-flash-lite31",
-      "avg_pct": 0.318791,
-      "lower_err": 0.163142,
-      "upper_err": 0.16728,
-      "n_bench": 6,
-      "cost": 2.0,
-      "rel_cost": 0.033333,
-      "tier": 2,
-      "is_open": false,
-      "company": "google",
-      "raw_scores": [
-        0.51586,
-        0.12724,
-        0.240876,
-        0.396706,
-        0.076605,
-        0.947052
-      ]
-    },
-    {
-      "rank": 24,
       "name": "qwen35",
       "avg_pct": 0.33222,
       "lower_err": 0.233326,
@@ -549,7 +528,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "name": "grok-fast41",
       "avg_pct": 0.431728,
       "lower_err": 0.179954,
@@ -571,7 +550,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "name": "haiku45",
       "avg_pct": 0.434511,
       "lower_err": 0.119833,
@@ -596,7 +575,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "name": "gpt-oss-120b",
       "avg_pct": 0.625483,
       "lower_err": 0.368913,
@@ -619,7 +598,7 @@
       ]
     },
     {
-      "rank": 28,
+      "rank": 27,
       "name": "gpt-oss-20b",
       "avg_pct": 0.682805,
       "lower_err": 0.197753,

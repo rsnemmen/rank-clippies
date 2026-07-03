@@ -1,7 +1,7 @@
 {
   "category": "agentic",
   "title": "Agentic and computer use",
-  "generated_at": "2026-07-03T15:12:24Z",
+  "generated_at": "2026-07-03T15:16:46Z",
   "n_benchmarks": 10,
   "benchmark_names": [
     "artificial_analysis_agentic",
@@ -435,23 +435,6 @@
     },
     {
       "rank": 22,
-      "name": "gemini-flash-lite31",
-      "avg_pct": 0.513264,
-      "lower_err": null,
-      "upper_err": null,
-      "n_bench": 2,
-      "cost": 2.0,
-      "rel_cost": 0.033333,
-      "tier": 3,
-      "is_open": false,
-      "company": "google",
-      "raw_scores": [
-        0.327734,
-        0.498794
-      ]
-    },
-    {
-      "rank": 23,
       "name": "haiku45",
       "avg_pct": 0.517832,
       "lower_err": 0.063931,
@@ -473,7 +456,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "name": "gpt56luna",
       "avg_pct": 0.527286,
       "lower_err": null,
@@ -489,7 +472,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "name": "muse",
       "avg_pct": 0.571107,
       "lower_err": null,
@@ -505,7 +488,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "name": "gemma4-31",
       "avg_pct": 0.659501,
       "lower_err": 0.163949,
@@ -524,7 +507,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "name": "gpt-oss-120b",
       "avg_pct": 0.776471,
       "lower_err": 0.088266,
@@ -542,7 +525,7 @@
       ]
     },
     {
-      "rank": 28,
+      "rank": 27,
       "name": "grok-fast41",
       "avg_pct": 0.905001,
       "lower_err": null,
@@ -558,7 +541,7 @@
       ]
     },
     {
-      "rank": 29,
+      "rank": 28,
       "name": "gpt-oss-20b",
       "avg_pct": 1.0,
       "lower_err": null,
