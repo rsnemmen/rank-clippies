@@ -2,34 +2,27 @@
 
 [artificial_analysis_agentic]
 categories = ["coding", "agentic"]
-min_score = 5
+min_score = 1.8
 
 [artificial_analysis_agentic.scores]
-deepseek-flash4 = 61
-deepseek4 = 67
-fable5 = 80.6
-gemini-flash-lite31 = 26
-gemini-flash35 = 70
-gemini-pro31 = 59
-gemma4-31 = 41
+deepseek-flash4 = 31.1
+deepseek4 = 36.4
+fable5 = 52.8
+gemini-flash35 = 37.4
+gemini-pro31 = 21.4
+gemma4-31 = 14.4
 glm52 = 43.1
-gpt-codex53 = 57
-gpt-oss-120b = 38
-gpt-oss-20b = 28
-gpt55 = 74
-grok-fast41 = 49
-grok43 = 66
-haiku45 = 40
-kimi26 = 66
-minimax27 = 61
-minimax3 = 68.6
-nemotron-super3 = 40
-opus48 = 77.8
-qwen35 = 56
-qwen36-27b = 63
-qwen37-max = 66.6
-qwen36-plus = 62
-sonnet46 = 63
+gpt-oss-120b = 13.2
+gpt-oss-20b = 3.1
+gpt55 = 44.9
+grok43 = 24.1
+haiku45 = 16.4
+kimi26 = 30.3
+minimax3 = 35.4
+opus48 = 47.2
+qwen35 = 19.8
+qwen37-max = 30.6
+sonnet5 = 46.7
 
 # +stem because this benchmark includes scicode
 [artificial_analysis_coding]
@@ -62,6 +55,7 @@ qwen36-27b = 37
 qwen37-max = 50.1
 qwen36-plus = 43
 sonnet46 = 51
+sonnet5 = 71.5
 
 # includes STEM benchmarks: SciCode, Humanity's Last Exam, GPQA Diamond, CritPt
 # (among many others)
@@ -95,6 +89,7 @@ qwen36-27b = 46
 qwen37-max = 56.6
 qwen36-plus = 50
 sonnet46 = 52
+sonnet5 = 53
 
 # AISI advanced CTF / expert
 # https://www.aisi.gov.uk/blog/our-evaluation-of-openais-gpt-5-5-cyber-capabilities
@@ -214,11 +209,13 @@ categories = ["general", "stem"]
 min_score = 72.4
 
 [charxiv_notools.scores]
+fable5 = 93.5
 gemini-flash35 = 84.2
 gemini-pro31 = 83.3
 gpt55 = 84.1
-sonnet46 = 72.4
-
+opus48 = 89.9
+sonnet46 = 77.4
+sonnet5 = 88.3
 
 # https://artificialanalysis.ai/evaluations/critpt
 [CritPt]
@@ -343,7 +340,8 @@ opus48 = 49.8
 qwen35 = 28.7
 qwen36-27b = 24
 qwen37-max = 41.4
-sonnet46 = 33.2
+sonnet46 = 34.6
+sonnet5 = 43.2
 
 # LiveBench — coding subscore
 [LiveBench_coding]
@@ -371,6 +369,7 @@ opus48 = 79.98
 qwen36-plus = 78.18
 qwen37-max = 74.22
 sonnet46 = 79.98
+sonnet5 = 78.57
 
 # LiveBench — agentic coding + IF subscore
 [LiveBench_agents]
@@ -398,6 +397,7 @@ opus48 = 63.82
 qwen36-plus = 56.67
 qwen37-max = 62.85
 sonnet46 = 61.61
+sonnet5 = 62.2
 
 # LiveBench — math/stem (math + data analysis subscore)
 [LiveBench_stem]
@@ -425,6 +425,7 @@ opus48 = 81.33
 qwen36-plus = 76.82
 qwen37-max = 78.52
 sonnet46 = 82.47
+sonnet5 = 81.04
 
 # LiveBench — overall score
 [LiveBench_general]
@@ -452,6 +453,7 @@ opus48 = 77.22
 qwen36-plus = 70.85
 qwen37-max = 74.29
 sonnet46 = 75.47
+sonnet5 = 75.82
 
 [MMMLU]
 categories = ["general"]
@@ -506,6 +508,7 @@ kimi26 = 73.1
 minimax3 = 70
 opus48 = 83.4
 sonnet46 = 72.5
+sonnet5 = 81.2
 
 # https://programbench.com
 # "almost" metric
@@ -559,7 +562,8 @@ muse = 55
 opus48 = 69.2
 qwen36-27b = 53.5
 qwen37-max = 60.6
-sonnet46 = 57.2
+sonnet46 = 58.1
+sonnet5 = 63.2
 
 [swebench_verified]
 categories = ["coding", "agentic"]
@@ -615,8 +619,13 @@ gemini-flash35 = 76.2
 gemini-pro31 = 70.7
 glm52 = 82.7
 gpt55 = 83.4
+gpt56sol = 91.9
+gpt56terra = 84.3
+gpt56luna = 82.5
 minimax3 = 66
 opus48 = 78.9
+sonnet46 = 67
+sonnet5 = 80.4
 
 # USA Math Olympiad
 [usamo2026]

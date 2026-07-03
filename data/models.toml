@@ -72,6 +72,21 @@ cost = 35.0
 open = false
 company = "openai"
 
+[gpt56sol]
+cost = 60
+open = false
+company = "openai"
+
+[gpt56terra]
+cost = 35.0
+open = false
+company = "openai"
+
+[gpt56luna]
+cost = 18.0
+open = false
+company = "openai"
+
 [grok-fast41]
 cost = 0.8
 open = false
@@ -94,6 +109,11 @@ company = "anthropic"
 
 [kimi26]
 cost = 4.1
+open = true
+company = "moonshot"
+
+[kimi27]
+cost = 4.19
 open = true
 company = "moonshot"
 
@@ -143,6 +163,11 @@ open = true
 company = "qwen"
 
 [sonnet46]
+cost = 18
+open = false
+company = "anthropic"
+
+[sonnet5]
 cost = 18
 open = false
 company = "anthropic"
