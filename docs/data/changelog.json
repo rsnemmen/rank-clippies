@@ -1,6 +1,14 @@
 {
   "entries": [
     {
+      "date": "2026-07-03",
+      "message": "added GPT 5.6 (incomplete sampling), Sonnet 5"
+    },
+    {
+      "date": "2026-06-19",
+      "message": "removed gpt-mini54, glm51; added glm52"
+    },
+    {
       "date": "2026-06-10",
       "message": "remove gpt54 from benchmark data"
     },

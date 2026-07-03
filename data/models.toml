@@ -117,11 +117,6 @@ cost = 4.19
 open = true
 company = "moonshot"
 
-[minimax27]
-cost = 1.7
-open = true
-company = "minimax"
-
 [minimax3]
 cost = 3
 open = true
@@ -131,11 +126,6 @@ company = "minimax"
 cost = 29.2
 open = false
 company = "meta"
-
-[nemotron-super3]
-cost = 1.4
-open = true
-company = "nvidia"
 
 [opus48]
 cost = 30.0
