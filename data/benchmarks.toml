@@ -15,7 +15,11 @@ glm52 = 43.1
 gpt-oss-120b = 13.2
 gpt-oss-20b = 3.1
 gpt55 = 44.9
+gpt56sol = 54
+gpt56terra = 47.4
+gpt56luna = 45.6
 grok43 = 24.1
+grok45 = 45.7
 haiku45 = 16.4
 kimi26 = 30.3
 minimax3 = 35.4
@@ -41,8 +45,12 @@ gpt-codex53 = 53
 gpt-oss-120b = 29
 gpt-oss-20b = 19
 gpt55 = 74.9
+gpt56sol = 77.4
+gpt56terra = 76.7
+gpt56luna = 71.4
 grok-fast41 = 31
 grok43 = 42.2
+grok45 = 72.4
 haiku45 = 33
 kimi26 = 47.1
 minimax3 = 43.4
@@ -72,8 +80,12 @@ gpt-codex53 = 54
 gpt-oss-120b = 33
 gpt-oss-20b = 24
 gpt55 = 60
+gpt56sol = 59
+gpt56terra = 55
+gpt56luna = 51
 grok-fast41 = 39
 grok43 = 53
+grok45 = 54
 haiku45 = 37
 kimi26 = 54
 minimax3 = 54.7
@@ -99,6 +111,19 @@ gpt55 = 71.8
 sonnet46 = 27.8
 
 # https://arcprize.org/leaderboard
+[ARC_AGI_3]
+categories = ["general", "agentic"]
+min_score = 0
+
+[ARC_AGI_3.scores]
+gemini-pro31 = 0.42
+gpt55 = 0.43
+gpt56sol = 7.78
+gpt56terra = 0.8
+gpt56luna = 0.18
+opus48 = 1.5
+
+# https://arcprize.org/leaderboard
 [ARC_AGI_2]
 categories = ["general", "agentic"]
 min_score = 0
@@ -111,34 +136,33 @@ gpt-pro55 = 84.6
 haiku45 = 4
 sonnet46 = 60.4
 
-# Coding leaderboard (Chatbot Arena — coding subset)
+# Code Arena | WebDev
 [arena_coding]
 categories = ["coding"]
-min_score = 880
+min_score = 1092
 
 [arena_coding.scores]
-deepseek-flash4 = 1480
-deepseek4 = 1501
-fable5 = 1566
-gemini-flash35 = 1507
-gemini-pro31 = 1525
-gemma4-31 = 1498
-glm52 = 1526
-gpt-chat55 = 1512
-gpt-oss-120b = 1390
-gpt-oss-20b = 1369
-gpt55 = 1520
-grok-fast41 = 1465
-grok-multi-agent42 = 1521
-grok43 = 1495
-haiku45 = 1478
-kimi26 = 1516
-muse = 1526
-opus48 = 1550
-qwen35 = 1488
-qwen36-plus = 1506
-qwen37-max = 1525
+deepseek4 = 1457
+fable5 = 1650
+gemini-flash35 = 1501
+gemini-pro31 = 1444
+gemma4-31 = 1370
+glm52 = 1580
+gpt55 = 1502
+gpt-codex53 = 1407
+grok-fast41 = 1151
+grok-multi-agent42 = 1383
+grok45 = 1572
+grok43 = 1362
+haiku45 = 1327
+kimi26 = 1514
+minimax3 = 1496
+opus48 = 1560
+qwen35 = 1396
+qwen36-plus = 1459
+qwen37-max = 1521
 sonnet46 = 1521
+sonnet5 = 1544
 
 # General leaderboard (Chatbot Arena — overall)
 [arena_general]
@@ -223,8 +247,12 @@ glm52 = 20.9
 gpt-codex53 = 16.9
 gpt-oss-120b = 1.1
 gpt-oss-20b = 1.4
+gpt56sol = 32.3
+gpt56terra = 30
+gpt56luna = 20.6
 gpt55 = 27.1
 grok43 = 8
+grok45 = 15.4
 haiku45 = 0
 kimi26 = 8
 minimax3 = 3.7
@@ -240,11 +268,14 @@ min_score = 5
 
 [DeepSWE.scores]
 deepseek4 = 8
-fable5 = 70
+fable5 = 69.7
 gemini-flash35 = 37
 gemini-pro31 = 12
 glm52 = 46.2
 gpt55 = 67
+gpt56sol = 72.7
+gpt56terra = 69.6
+gpt56luna = 67.2
 kimi27 = 31
 opus48 = 59
 sonnet46 = 30
@@ -269,6 +300,7 @@ min_score = 13.2
 [GPQA_diamond.scores]
 deepseek-flash4 = 88.1
 deepseek4 = 90.1
+fable5 = 92.6
 gemini-flash35 = 92.8
 gemini-pro31 = 94.3
 gemma4-31 = 84.3
@@ -276,6 +308,9 @@ glm52 = 91.2
 gpt-oss-120b = 80.9
 gpt-oss-20b = 71
 gpt55 = 93.6
+gpt56sol = 94.6
+gpt56terra = 92.9
+gpt56luna = 92.3
 grok43 = 90.1
 haiku45 = 71.2
 kimi26 = 90.5
@@ -295,8 +330,23 @@ min_score = 2.9
 [GraphWalks_BFS_1M.scores]
 fable5 = 80
 gpt55 = 45.4
+gpt56sol = 77.1
+gpt56terra = 71.2
+gpt56luna = 51.2
 opus48 = 68.1
 sonnet46 = 73.8
+
+[health_bench_pro]
+categories = ["stem"]
+min_score = 53
+
+[health_bench_pro.scores]
+fable5 = 60.9
+gpt55 = 49.5
+gpt56sol = 60.5
+gpt56terra = 57.7
+gpt56luna = 55.7
+opus48 = 53
 
 # Scale's Humanity's Last Exam (without tools)
 [HLE]
@@ -330,106 +380,122 @@ sonnet5 = 43.2
 # LiveBench — coding subscore
 [LiveBench_coding]
 categories = ["coding"]
-min_score = 48.88
+min_score = 60.33
 
 [LiveBench_coding.scores]
-deepseek-flash4 = 69.23
-deepseek4 = 69.99
-fable5 = 78.57
-gemini-flash35 = 78.18
-gemini-pro31 = 76.45
+deepseek-flash4 = 69.2
+deepseek4 = 70
+fable5 = 82.5
+gemini-flash35 = 78.2
+gemini-pro31 = 76.5
 gemma4-31 = 60.33
-glm52 = 79.65
-gpt-codex53 = 78.18
+glm52 = 79.7
+gpt-codex53 = 83.6
+gpt55 = 82.1
+gpt56sol = 83.9
+gpt56terra = 78.2
+gpt56luna = 82.9
 gpt-oss-120b = 60.21
-gpt55 = 82.53
+grok43 = 69.9
+grok45 = 68.6
 grok-fast41 = 69.61
-grok43 = 69.93
 haiku45 = 72.81
-kimi26 = 78.57
-opus48 = 79.98
-qwen36-plus = 78.18
-qwen37-max = 74.22
-sonnet46 = 79.98
-sonnet5 = 78.57
+kimi26 = 78.6
+kimi27 = 74
+minimax3 = 68.2
+opus48 = 79.3
+qwen36-plus = 78.2
+qwen37-max = 74.2
+sonnet46 = 79.3
+sonnet5 = 80.7
 
 # LiveBench — agentic coding + IF subscore
 [LiveBench_agents]
 categories = ["agentic", "coding"]
-min_score = 7.76
+min_score = 40.6
 
 [LiveBench_agents.scores]
-deepseek-flash4 = 56.57
-deepseek4 = 59.51
-fable5 = 59.97
-gemini-flash35 = 63.63
-gemini-pro31 = 72.05
-gemma4-31 = 53.79
-glm52 = 67.81
+deepseek-flash4 = 50.4
+deepseek4 = 52.5
+fable5 = 61.3
+gemini-flash35 = 62.3
+gemini-pro31 = 62.3
+glm52 = 57.1
 gpt-codex53 = 69
-gpt-oss-120b = 33.48
-gpt55 = 64.85
-grok-fast41 = 29.94
-grok43 = 56.38
+gpt55 = 61.4
+gpt56sol = 68.7
+gpt56terra = 66.3
+gpt56luna = 57
+grok43 = 40.6
+grok45 = 65.7
 haiku45 = 45.72
-kimi26 = 61.35
+kimi26 = 55.6
+kimi27 = 51
+minimax3 = 49.1
 opus48 = 63.82
-qwen36-plus = 56.67
-qwen37-max = 62.85
-sonnet46 = 61.61
-sonnet5 = 62.2
+qwen36-plus = 49.9
+qwen37-max = 58.8
+sonnet46 = 52.9
+sonnet5 = 57.5
 
 # LiveBench — math/stem (math + data analysis subscore)
 [LiveBench_stem]
 categories = ["stem"]
-min_score = 28.83
+min_score = 53.84
 
 [LiveBench_stem.scores]
 deepseek-flash4 = 73.84
 deepseek4 = 82.61
-fable5 = 86.97
+fable5 = 87.2
 gemini-flash35 = 76.55
 gemini-pro31 = 84.79
 gemma4-31 = 66.35
-glm52 = 81.76
-gpt-codex53 = 75.26
+glm52 = 81.8
+gpt-codex53 = 83.5
 gpt-oss-120b = 53.84
 gpt55 = 88.7
+gpt56sol = 82.4
+gpt56terra = 79.8
+gpt56luna = 82.6
 grok-fast41 = 67.98
 grok43 = 70.06
+grok45 = 81.9
 haiku45 = 68.41
 kimi26 = 74.71
-opus48 = 81.33
+minimax3 = 76.6
+opus48 = 86.8
 qwen36-plus = 76.82
 qwen37-max = 78.52
-sonnet46 = 82.47
-sonnet5 = 81.04
+sonnet46 = 82.6
+sonnet5 = 82.3
 
 # LiveBench — overall score
 [LiveBench_general]
 categories = ["general"]
-min_score = 32.74
+min_score = 62.3
 
 [LiveBench_general.scores]
-deepseek-flash4 = 67.25
-deepseek4 = 73.58
-fable5 = 78.31
-gemini-flash35 = 75.02
-gemini-pro31 = 79.93
-gemma4-31 = 61.62
-glm52 = 76.24
-gpt-codex53 = 72.76
-gpt-oss-120b = 46.1
-gpt55 = 80.71
-grok-fast41 = 60
-grok43 = 66.74
-haiku45 = 61.32
-kimi26 = 72.17
-opus48 = 77.22
-qwen36-plus = 70.85
-qwen37-max = 74.29
-sonnet46 = 75.47
-sonnet5 = 75.82
+deepseek-flash4 = 65.5
+deepseek4 = 71.6
+fable5 = 79.5
+gemini-flash35 = 74.6
+gemini-pro31 = 77.1
+glm52 = 73.2
+gpt-codex53 = 74
+gpt55 = 79.9
+gpt56sol = 82.4
+gpt56terra = 79.8
+gpt56luna = 74.3
+grok43 = 62.3
+grok45 = 76.3
+kimi26 = 70.5
+kimi27 = 68.4
+minimax3 = 67.3
+opus48 = 78.9
+qwen36-plus = 68.9
+qwen37-max = 73.1
+sonnet46 = 73
+sonnet5 = 74.8
 
 [MMMLU]
 categories = ["general"]
@@ -476,6 +542,9 @@ fable5 = 85
 gemini-flash35 = 78.4
 gemini-pro31 = 76.2
 gpt55 = 78.7
+gpt56sol = 62.6
+gpt56terra = 50.2
+gpt56luna = 45.6
 haiku45 = 50.7
 kimi26 = 73.1
 minimax3 = 70
@@ -506,10 +575,16 @@ gemini-pro31 = 79.6
 gpt-oss-120b = 22.1
 gpt-pro55 = 76.9
 gpt55 = 69
+gpt56sol = 71.7
+gpt56terra = 48.9
+gpt56luna = 46.8
 grok-fast41 = 56
+kimi27 = 57.9
+minimax3 = 45.8
 opus48 = 64.8
 qwen37-max = 70.4
 sonnet46 = 67.6
+sonnet5 = 60.6
 
 [swebench_pro_public]
 categories = ["coding", "agentic"]
@@ -526,6 +601,9 @@ glm52 = 62.1
 gpt-codex53 = 56.8
 gpt-oss-120b = 12
 gpt55 = 58.6
+gpt56sol = 64.6
+gpt56terra = 63.4
+gpt56luna = 62.7
 haiku45 = 39.5
 kimi26 = 58.6
 minimax3 = 59
@@ -588,8 +666,8 @@ gemini-pro31 = 70.7
 glm52 = 82.7
 gpt55 = 83.4
 gpt56sol = 91.9
-gpt56terra = 84.3
-gpt56luna = 82.5
+gpt56terra = 87.4
+gpt56luna = 84.7
 minimax3 = 66
 opus48 = 78.9
 sonnet46 = 67
