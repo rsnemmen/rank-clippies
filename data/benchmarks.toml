@@ -354,28 +354,35 @@ categories = ["general", "stem"]
 min_score = 2.72
 
 [HLE.scores]
-deepseek-flash4 = 34.8
-deepseek4 = 38
-fable5 = 59
-gemini-flash35 = 40.2
-gemini-pro31 = 44.4
-gemma4-31 = 19.5
+deepseek-flash4 = 32.1
+deepseek4 = 35.9
+fable5 = 53
+gemini-flash35 = 41
+gemini-pro31 = 44.6
+gemma4-31 = 22.7
 glm52 = 40.5
 gpt-oss-120b = 14.9
 gpt-oss-20b = 10.9
 gpt-pro55 = 43.1
-gpt55 = 41.4
+gpt55 = 44.3
+gpt56sol = 47.2
+gpt56terra = 41.8
+gpt56luna = 35.6
 grok-fast41 = 18.4
 grok43 = 35
+grok45 = 40.3
 haiku45 = 9.7
+kimi26 = 35.9
+kimi27 = 32.8
 minimax3 = 37.1
-muse = 42.8
-opus48 = 49.8
+muse = 39.9
+opus48 = 45.7
 qwen35 = 28.7
-qwen36-27b = 24
-qwen37-max = 41.4
+qwen36-27b = 21.6
+qwen36-plus = 25.7
+qwen37-max = 38.1
 sonnet46 = 34.6
-sonnet5 = 43.2
+sonnet5 = 39.6
 
 # LiveBench — coding subscore
 [LiveBench_coding]
@@ -518,11 +525,15 @@ min_score = 15.3
 [nyt_connections.scores]
 deepseek-flash4 = 53.2
 deepseek4 = 75.7
+fable5 = 95.1
 gemini-flash35 = 95.2
 gemini-pro31 = 98.4
 gemma4-31 = 79.5
 gpt-oss-120b = 38.7
 gpt55 = 97.5
+gpt56sol = 96.1
+gpt56terra = 84.7
+gpt56luna = 78.4
 grok-fast41 = 91.7
 grok-multi-agent42 = 93.4
 haiku45 = 26
@@ -532,6 +543,7 @@ qwen35 = 69.2
 qwen36-plus = 71.3
 qwen37-max = 89.8
 sonnet46 = 85.7
+sonnet5 = 82.8
 
 [osworld]
 categories = ["general", "agentic"]
@@ -680,8 +692,10 @@ min_score = 35.12
 
 [usamo2026.scores]
 deepseek4 = 60.71
+fable5 = 97.6
 gemini-pro31 = 74.4
 gpt55 = 98.21
 kimi26 = 51.19
+minimax3 = 85.7
 opus48 = 96.7
 qwen35 = 36.31
