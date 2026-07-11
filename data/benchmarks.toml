@@ -18,13 +18,11 @@ gpt55 = 44.9
 gpt56sol = 54
 gpt56terra = 47.4
 gpt56luna = 45.6
-grok43 = 24.1
 grok45 = 45.7
 haiku45 = 16.4
 kimi26 = 30.3
 minimax3 = 35.4
 opus48 = 47.2
-qwen35 = 19.8
 qwen37-max = 30.6
 sonnet5 = 46.7
 
@@ -48,18 +46,13 @@ gpt55 = 74.9
 gpt56sol = 77.4
 gpt56terra = 76.7
 gpt56luna = 71.4
-grok-fast41 = 31
-grok43 = 42.2
 grok45 = 72.4
 haiku45 = 33
 kimi26 = 47.1
 minimax3 = 43.4
 opus48 = 56.7
-qwen35 = 41.3
 qwen36-27b = 37
 qwen37-max = 50.1
-qwen36-plus = 43
-sonnet46 = 51
 sonnet5 = 71.5
 
 # includes STEM benchmarks: SciCode, Humanity's Last Exam, GPQA Diamond, CritPt
@@ -83,19 +76,14 @@ gpt55 = 60
 gpt56sol = 59
 gpt56terra = 55
 gpt56luna = 51
-grok-fast41 = 39
-grok43 = 53
 grok45 = 54
 haiku45 = 37
 kimi26 = 54
 minimax3 = 54.7
 muse = 52
 opus48 = 61.4
-qwen35 = 45
 qwen36-27b = 46
 qwen37-max = 56.6
-qwen36-plus = 50
-sonnet46 = 52
 sonnet5 = 53
 
 # AISI advanced CTF / expert
@@ -108,7 +96,6 @@ min_score = 27.7
 fable5 = 68
 gpt-codex53 = 44.3
 gpt55 = 71.8
-sonnet46 = 27.8
 
 # https://arcprize.org/leaderboard
 [ARC_AGI_3]
@@ -134,7 +121,6 @@ gemini-pro31 = 77.1
 gpt55 = 84.6
 gpt-pro55 = 84.6
 haiku45 = 4
-sonnet46 = 60.4
 
 # Code Arena | WebDev
 [arena_coding]
@@ -150,18 +136,13 @@ gemma4-31 = 1370
 glm52 = 1580
 gpt55 = 1502
 gpt-codex53 = 1407
-grok-fast41 = 1151
 grok-multi-agent42 = 1383
 grok45 = 1572
-grok43 = 1362
 haiku45 = 1327
 kimi26 = 1514
 minimax3 = 1496
 opus48 = 1560
-qwen35 = 1396
-qwen36-plus = 1459
 qwen37-max = 1521
-sonnet46 = 1521
 sonnet5 = 1544
 
 # General leaderboard (Chatbot Arena — overall)
@@ -180,17 +161,12 @@ glm52 = 1471
 gpt-oss-120b = 1353
 gpt55 = 1481
 gpt-chat55 = 1472
-grok-fast41 = 1432
 grok-multi-agent42 = 1474
-grok43 = 1456
 haiku45 = 1408
 kimi26 = 1405
 muse = 1487
 opus48 = 1486
-qwen35 = 1447
-qwen36-plus = 1447
 qwen37-max = 1475
-sonnet46 = 1463
 
 # https://www.anthropic.com/research/Evaluating-Claude-For-Bioinformatics-With-BioMysteryBench
 # human solved
@@ -202,7 +178,6 @@ min_score = 36.8
 fable5 = 83.9
 haiku45 = 36.8
 opus48 = 80.4
-sonnet46 = 71.8
 
 # https://github.com/wenqiglantz/charxiv — chart reasoning (with tools)
 [charxiv]
@@ -211,11 +186,9 @@ min_score = 31.6
 
 [charxiv.scores]
 gpt-chat55 = 81.6
-grok-fast41 = 31.6
 haiku45 = 61.7
 kimi26 = 80.4
 muse = 86.4
-sonnet46 = 77.4
 
 # without tools
 [charxiv_notools]
@@ -228,7 +201,6 @@ gemini-flash35 = 84.2
 gemini-pro31 = 83.3
 gpt55 = 84.1
 opus48 = 89.9
-sonnet46 = 77.4
 sonnet5 = 88.3
 
 # https://artificialanalysis.ai/evaluations/critpt
@@ -251,15 +223,12 @@ gpt56sol = 32.3
 gpt56terra = 30
 gpt56luna = 20.6
 gpt55 = 27.1
-grok43 = 8
 grok45 = 15.4
 haiku45 = 0
 kimi26 = 8
 minimax3 = 3.7
 muse = 11.3
-qwen35 = 1.7
 qwen37-max = 11.4
-sonnet46 = 3.1
 
 # https://deepswe.datacurve.ai
 [DeepSWE]
@@ -278,7 +247,6 @@ gpt56terra = 69.6
 gpt56luna = 67.2
 kimi27 = 31
 opus48 = 59
-sonnet46 = 30
 
 # https://cognition.ai/blog/frontier-code
 [FrontierCode]
@@ -291,7 +259,6 @@ gemini-pro31 = 4.7
 gpt55 = 6.3
 kimi26 = 3.8
 opus48 = 13.4
-sonnet46 = 3.5
 
 [GPQA_diamond]
 categories = ["general", "stem"]
@@ -311,17 +278,13 @@ gpt55 = 93.6
 gpt56sol = 94.6
 gpt56terra = 92.9
 gpt56luna = 92.3
-grok43 = 90.1
 haiku45 = 71.2
 kimi26 = 90.5
 minimax3 = 92.9
 muse = 89.5
 opus48 = 93.6
-qwen35 = 89.3
 qwen36-27b = 87.8
-qwen36-plus = 88.2
 qwen37-max = 92.4
-sonnet46 = 87.4
 
 [GraphWalks_BFS_1M]
 categories = ["general", "stem"]
@@ -334,7 +297,6 @@ gpt56sol = 77.1
 gpt56terra = 71.2
 gpt56luna = 51.2
 opus48 = 68.1
-sonnet46 = 73.8
 
 [health_bench_pro]
 categories = ["stem"]
@@ -368,8 +330,6 @@ gpt55 = 44.3
 gpt56sol = 47.2
 gpt56terra = 41.8
 gpt56luna = 35.6
-grok-fast41 = 18.4
-grok43 = 35
 grok45 = 40.3
 haiku45 = 9.7
 kimi26 = 35.9
@@ -377,11 +337,8 @@ kimi27 = 32.8
 minimax3 = 37.1
 muse = 39.9
 opus48 = 45.7
-qwen35 = 28.7
 qwen36-27b = 21.6
-qwen36-plus = 25.7
 qwen37-max = 38.1
-sonnet46 = 34.6
 sonnet5 = 39.6
 
 # LiveBench — coding subscore
@@ -403,17 +360,13 @@ gpt56sol = 83.9
 gpt56terra = 78.2
 gpt56luna = 82.9
 gpt-oss-120b = 60.21
-grok43 = 69.9
 grok45 = 68.6
-grok-fast41 = 69.61
 haiku45 = 72.81
 kimi26 = 78.6
 kimi27 = 74
 minimax3 = 68.2
 opus48 = 79.3
-qwen36-plus = 78.2
 qwen37-max = 74.2
-sonnet46 = 79.3
 sonnet5 = 80.7
 
 # LiveBench — agentic coding + IF subscore
@@ -433,16 +386,13 @@ gpt55 = 61.4
 gpt56sol = 68.7
 gpt56terra = 66.3
 gpt56luna = 57
-grok43 = 40.6
 grok45 = 65.7
 haiku45 = 45.72
 kimi26 = 55.6
 kimi27 = 51
 minimax3 = 49.1
 opus48 = 63.82
-qwen36-plus = 49.9
 qwen37-max = 58.8
-sonnet46 = 52.9
 sonnet5 = 57.5
 
 # LiveBench — math/stem (math + data analysis subscore)
@@ -464,16 +414,12 @@ gpt55 = 88.7
 gpt56sol = 82.4
 gpt56terra = 79.8
 gpt56luna = 82.6
-grok-fast41 = 67.98
-grok43 = 70.06
 grok45 = 81.9
 haiku45 = 68.41
 kimi26 = 74.71
 minimax3 = 76.6
 opus48 = 86.8
-qwen36-plus = 76.82
 qwen37-max = 78.52
-sonnet46 = 82.6
 sonnet5 = 82.3
 
 # LiveBench — overall score
@@ -493,15 +439,12 @@ gpt55 = 79.9
 gpt56sol = 82.4
 gpt56terra = 79.8
 gpt56luna = 74.3
-grok43 = 62.3
 grok45 = 76.3
 kimi26 = 70.5
 kimi27 = 68.4
 minimax3 = 67.3
 opus48 = 78.9
-qwen36-plus = 68.9
 qwen37-max = 73.1
-sonnet46 = 73
 sonnet5 = 74.8
 
 [MMMLU]
@@ -513,9 +456,6 @@ gemini-pro31 = 92.6
 gemma4-31 = 88.4
 gpt-oss-120b = 83.8
 haiku45 = 83
-qwen35 = 88.5
-qwen36-plus = 89.5
-sonnet46 = 89.3
 
 # https://github.com/lechmazur/nyt-connections
 [nyt_connections]
@@ -534,15 +474,11 @@ gpt55 = 97.5
 gpt56sol = 96.1
 gpt56terra = 84.7
 gpt56luna = 78.4
-grok-fast41 = 91.7
 grok-multi-agent42 = 93.4
 haiku45 = 26
 kimi26 = 91.4
 opus48 = 94.1
-qwen35 = 69.2
-qwen36-plus = 71.3
 qwen37-max = 89.8
-sonnet46 = 85.7
 sonnet5 = 82.8
 
 [osworld]
@@ -561,7 +497,6 @@ haiku45 = 50.7
 kimi26 = 73.1
 minimax3 = 70
 opus48 = 83.4
-sonnet46 = 72.5
 sonnet5 = 81.2
 
 # https://programbench.com
@@ -574,7 +509,6 @@ min_score = 0
 gemini-pro31 = 0
 gpt55 = 13.5
 haiku45 = 0
-sonnet46 = 1
 
 [simpleBench]
 categories = ["general"]
@@ -590,12 +524,10 @@ gpt55 = 69
 gpt56sol = 71.7
 gpt56terra = 48.9
 gpt56luna = 46.8
-grok-fast41 = 56
 kimi27 = 57.9
 minimax3 = 45.8
 opus48 = 64.8
 qwen37-max = 70.4
-sonnet46 = 67.6
 sonnet5 = 60.6
 
 [swebench_pro_public]
@@ -623,7 +555,6 @@ muse = 55
 opus48 = 69.2
 qwen36-27b = 53.5
 qwen37-max = 60.6
-sonnet46 = 58.1
 sonnet5 = 63.2
 
 [swebench_verified]
@@ -637,10 +568,8 @@ gemini-pro31 = 80.6
 gemma4-31 = 52
 haiku45 = 66.6
 kimi26 = 80.2
-qwen35 = 76.4
 qwen36-27b = 77.2
 qwen37-max = 80.4
-sonnet46 = 79.6
 
 # https://labs.scale.com/leaderboard/sweatlas-qna
 [sweatlas_codebase_qna]
@@ -651,7 +580,6 @@ min_score = 8.2
 gemini-pro31 = 13.5
 gpt-codex53 = 32.6
 muse = 24.2
-sonnet46 = 31.2
 
 # https://www.swe-marathon.org
 [SWE_Marathon]
@@ -682,7 +610,6 @@ gpt56terra = 87.4
 gpt56luna = 84.7
 minimax3 = 66
 opus48 = 78.9
-sonnet46 = 67
 sonnet5 = 80.4
 
 # USA Math Olympiad
@@ -698,4 +625,3 @@ gpt55 = 98.21
 kimi26 = 51.19
 minimax3 = 85.7
 opus48 = 96.7
-qwen35 = 36.31
