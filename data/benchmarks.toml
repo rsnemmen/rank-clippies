@@ -80,7 +80,6 @@ grok45 = 54
 haiku45 = 37
 kimi26 = 54
 minimax3 = 54.7
-muse = 52
 opus48 = 61.4
 qwen36-27b = 46
 qwen37-max = 56.6
@@ -164,7 +163,6 @@ gpt-chat55 = 1472
 grok-multi-agent42 = 1474
 haiku45 = 1408
 kimi26 = 1405
-muse = 1487
 opus48 = 1486
 qwen37-max = 1475
 
@@ -188,7 +186,6 @@ min_score = 31.6
 gpt-chat55 = 81.6
 haiku45 = 61.7
 kimi26 = 80.4
-muse = 86.4
 
 # without tools
 [charxiv_notools]
@@ -227,7 +224,6 @@ grok45 = 15.4
 haiku45 = 0
 kimi26 = 8
 minimax3 = 3.7
-muse = 11.3
 qwen37-max = 11.4
 
 # https://deepswe.datacurve.ai
@@ -281,7 +277,6 @@ gpt56luna = 92.3
 haiku45 = 71.2
 kimi26 = 90.5
 minimax3 = 92.9
-muse = 89.5
 opus48 = 93.6
 qwen36-27b = 87.8
 qwen37-max = 92.4
@@ -335,7 +330,6 @@ haiku45 = 9.7
 kimi26 = 35.9
 kimi27code = 32.8
 minimax3 = 37.1
-muse = 39.9
 opus48 = 45.7
 qwen36-27b = 21.6
 qwen37-max = 38.1
@@ -551,7 +545,6 @@ gpt56luna = 62.7
 haiku45 = 39.5
 kimi26 = 58.6
 minimax3 = 59
-muse = 55
 opus48 = 69.2
 qwen36-27b = 53.5
 qwen37-max = 60.6
@@ -579,7 +572,6 @@ min_score = 8.2
 [sweatlas_codebase_qna.scores]
 gemini-pro31 = 13.5
 gpt-codex53 = 32.6
-muse = 24.2
 
 # https://www.swe-marathon.org
 [SWE_Marathon]
