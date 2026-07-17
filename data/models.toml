@@ -97,6 +97,11 @@ cost = 6
 open = false
 company = "anthropic"
 
+[inkling]
+cost = 4.19
+open = true
+company = "thinking_machines"
+
 [kimi26]
 cost = 4.1
 open = true
@@ -107,15 +112,15 @@ cost = 4.19
 open = true
 company = "moonshot"
 
+[kimi-k3]
+cost = 18
+open = true
+company = "moonshot"
+
 [minimax3]
 cost = 3
 open = true
 company = "minimax"
-
-[muse-spark]
-cost = 29.2
-open = false
-company = "meta"
 
 [muse-spark-11]
 cost = 5.5
