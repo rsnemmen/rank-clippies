@@ -1,0 +1,104 @@
+# Historical benchmark archive. This file is intentionally not loaded by rank_models.py
+# and does not contribute to aggregate rankings or website exports.
+
+# Retired 2026-07-26: saturated frontier signal; retained for historical reference.
+[GPQA_diamond]
+categories = ["general", "stem"]
+min_score = 13.2
+
+[GPQA_diamond.scores]
+deepseek-flash4 = 88.1
+deepseek4 = 90.1
+fable5 = 92.6
+gemini-flash36 = 93
+gemini-pro31 = 94.3
+gemma4-31 = 84.3
+glm52 = 91.2
+gpt-oss-120b = 80.9
+gpt-oss-20b = 71
+gpt55 = 93.6
+gpt56sol = 94.6
+gpt56terra = 92.9
+gpt56luna = 92.3
+haiku45 = 71.2
+inkling = 87
+kimi26 = 90.5
+kimi-k3 = 93.5
+minimax3 = 92.9
+muse-spark-11 = 90
+opus48 = 93.6
+opus5 = 93
+qwen36-27b = 87.8
+qwen37-max = 92.4
+
+# Retired 2026-07-26: sparse and saturated multilingual MMLU variant.
+[MMMLU]
+categories = ["general"]
+min_score = 44.3
+
+[MMMLU.scores]
+gemini-pro31 = 92.6
+gemma4-31 = 88.4
+gpt-oss-120b = 83.8
+haiku45 = 83
+
+# Retired 2026-07-26: benchmark audit found substantial task-quality issues.
+[swebench_pro_public]
+categories = ["coding", "agentic"]
+min_score = 1.51
+
+[swebench_pro_public.scores]
+deepseek-flash4 = 52.6
+deepseek4 = 55.4
+fable5 = 80.3
+gemini-flash36 = 55.1
+gemini-pro31 = 54.2
+gemma4-31 = 35.7
+glm52 = 62.1
+gpt-codex53 = 56.8
+gpt-oss-120b = 12
+gpt55 = 58.6
+gpt56sol = 64.6
+gpt56terra = 63.4
+gpt56luna = 62.7
+haiku45 = 39.5
+inkling = 54.3
+kimi26 = 58.6
+minimax3 = 59
+muse-spark-11 = 61.5
+opus48 = 69.2
+qwen36-27b = 53.5
+qwen37-max = 60.6
+sonnet5 = 63.2
+
+# Retired 2026-07-26: contaminated and flawed at frontier capability levels.
+[swebench_verified]
+categories = ["coding", "agentic"]
+min_score = 52
+
+[swebench_verified.scores]
+deepseek-flash4 = 79
+deepseek4 = 80.6
+gemini-pro31 = 80.6
+gemma4-31 = 52
+haiku45 = 66.6
+inkling = 77.6
+kimi26 = 80.2
+qwen36-27b = 77.2
+qwen37-max = 80.4
+
+# Retired 2026-07-26: preserve the no-tool condition while ranking the more
+# commonly reported tool-assisted CharXiv result in benchmarks.toml.
+[charxiv_notools]
+categories = ["general", "stem"]
+min_score = 72.4
+
+[charxiv_notools.scores]
+gemini-flash36 = 84.2
+gemini-pro31 = 83.3
+gpt55 = 84.1
+gpt56sol = 84.6
+fable5 = 88.9
+inkling = 78.1
+kimi-k3 = 84.8
+opus48 = 80.5

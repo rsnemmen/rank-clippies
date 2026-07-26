@@ -115,8 +115,9 @@ make validate
 
 ## Input format for data files
 
-Model data lives in two centralized TOML files under `data/`, parsed with Python's
-standard-library `tomllib`.
+Active model data lives in two centralized TOML files under `data/`, parsed with Python's
+standard-library `tomllib`. `data/retired.toml` is a historical archive and is not loaded
+into rankings or website exports.
 
 ### `data/benchmarks.toml`
 

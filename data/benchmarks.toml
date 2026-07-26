@@ -124,7 +124,7 @@ opus5 = 30.2
 
 # https://arcprize.org/leaderboard
 [ARC_AGI_2]
-categories = ["general", "agentic"]
+categories = ["general"]
 min_score = 0
 
 [ARC_AGI_2.scores]
@@ -135,11 +135,11 @@ gpt-pro55 = 84.6
 haiku45 = 4
 
 # Code Arena | WebDev
-[arena_coding]
+[arena_webdev]
 categories = ["coding"]
 min_score = 1092
 
-[arena_coding.scores]
+[arena_webdev.scores]
 deepseek4 = 1457
 fable5 = 1634
 gemini-flash36 = 1537
@@ -218,21 +218,6 @@ muse-spark-11 = 88.4
 opus48 = 89.9
 sonnet5 = 88.3
 
-# without tools
-[charxiv_notools]
-categories = ["general", "stem"]
-min_score = 72.4
-
-[charxiv_notools.scores]
-gemini-flash36 = 84.2
-gemini-pro31 = 83.3
-gpt55 = 84.1
-gpt56sol = 84.6
-fable5 = 88.9
-inkling = 78.1
-kimi-k3 = 84.8
-opus48 = 80.5
-
 # https://artificialanalysis.ai/evaluations/critpt
 [CritPt]
 categories = ["stem"]
@@ -285,17 +270,17 @@ muse-spark-11 = 53.3
 opus48 = 59
 opus5 = 68.8
 
-# https://cognition.ai/blog/frontier-code
+# https://cognition.com/frontiercode
+# FrontierCode 1.1 Main, best published reasoning effort per model
 [FrontierCode]
 categories = ["coding"]
-min_score = 0.7
+min_score = 24.31
 
 [FrontierCode.scores]
-fable5 = 29.3
-gemini-pro31 = 4.7
-gpt55 = 6.3
-kimi26 = 3.8
-opus48 = 13.4
+fable5 = 53.48
+gpt55 = 42.96
+opus48 = 46.5
+sonnet5 = 42.73
 
 [GDPval-AA-v2]
 categories = ["general"]
@@ -324,37 +309,8 @@ opus5 = 1861
 qwen37-max = 1271
 sonnet5 = 1603
 
-[GPQA_diamond]
-categories = ["general", "stem"]
-min_score = 13.2
-
-[GPQA_diamond.scores]
-deepseek-flash4 = 88.1
-deepseek4 = 90.1
-fable5 = 92.6
-gemini-flash36 = 93
-gemini-pro31 = 94.3
-gemma4-31 = 84.3
-glm52 = 91.2
-gpt-oss-120b = 80.9
-gpt-oss-20b = 71
-gpt55 = 93.6
-gpt56sol = 94.6
-gpt56terra = 92.9
-gpt56luna = 92.3
-haiku45 = 71.2
-inkling = 87
-kimi26 = 90.5
-kimi-k3 = 93.5
-minimax3 = 92.9
-muse-spark-11 = 90
-opus48 = 93.6
-opus5 = 93
-qwen36-27b = 87.8
-qwen37-max = 92.4
-
 [GraphWalks_BFS_1M]
-categories = ["general", "stem"]
+categories = ["general"]
 min_score = 2.9
 
 [GraphWalks_BFS_1M.scores]
@@ -528,16 +484,6 @@ opus5 = 80.3
 qwen37-max = 73.1
 sonnet5 = 74.8
 
-[MMMLU]
-categories = ["general"]
-min_score = 44.3
-
-[MMMLU.scores]
-gemini-pro31 = 92.6
-gemma4-31 = 88.4
-gpt-oss-120b = 83.8
-haiku45 = 83
-
 # https://github.com/lechmazur/nyt-connections
 [nyt_connections]
 categories = ["general"]
@@ -566,7 +512,7 @@ sonnet5 = 82.8
 
 # 2.0
 [osworld]
-categories = ["general", "agentic"]
+categories = ["agentic"]
 min_score = 3
 
 [osworld.scores]
@@ -616,49 +562,6 @@ opus48 = 64.8
 opus5 = 80.6
 qwen37-max = 70.4
 sonnet5 = 60.6
-
-[swebench_pro_public]
-categories = ["coding", "agentic"]
-min_score = 1.51
-
-[swebench_pro_public.scores]
-deepseek-flash4 = 52.6
-deepseek4 = 55.4
-fable5 = 80.3
-gemini-flash36 = 55.1
-gemini-pro31 = 54.2
-gemma4-31 = 35.7
-glm52 = 62.1
-gpt-codex53 = 56.8
-gpt-oss-120b = 12
-gpt55 = 58.6
-gpt56sol = 64.6
-gpt56terra = 63.4
-gpt56luna = 62.7
-haiku45 = 39.5
-inkling = 54.3
-kimi26 = 58.6
-minimax3 = 59
-muse-spark-11 = 61.5
-opus48 = 69.2
-qwen36-27b = 53.5
-qwen37-max = 60.6
-sonnet5 = 63.2
-
-[swebench_verified]
-categories = ["coding", "agentic"]
-min_score = 52
-
-[swebench_verified.scores]
-deepseek-flash4 = 79
-deepseek4 = 80.6
-gemini-pro31 = 80.6
-gemma4-31 = 52
-haiku45 = 66.6
-inkling = 77.6
-kimi26 = 80.2
-qwen36-27b = 77.2
-qwen37-max = 80.4
 
 # https://labs.scale.com/leaderboard/sweatlas-qna
 [sweatlas_codebase_qna]

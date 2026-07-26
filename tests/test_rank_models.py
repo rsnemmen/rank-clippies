@@ -1,6 +1,41 @@
+from pathlib import Path
+import tomllib
+
 import pytest
 
 import rank_models
+
+
+def test_retired_benchmarks_are_excluded_from_active_data() -> None:
+    """Keep archived benchmark data out of aggregate rankings."""
+    data_dir = Path(rank_models.__file__).resolve().parent / "data"
+    with (data_dir / "benchmarks.toml").open("rb") as f:
+        active = tomllib.load(f)
+    with (data_dir / "retired.toml").open("rb") as f:
+        retired = tomllib.load(f)
+
+    archived_names = {
+        "GPQA_diamond",
+        "MMMLU",
+        "charxiv_notools",
+        "swebench_pro_public",
+        "swebench_verified",
+    }
+    assert archived_names <= retired.keys()
+    assert not (set(active) & set(retired))
+    assert "charxiv" in active
+    assert "arena_webdev" in active
+    assert "arena_coding" not in active
+    assert active["ARC_AGI_2"]["categories"] == ["general"]
+    assert active["osworld"]["categories"] == ["agentic"]
+    assert active["GraphWalks_BFS_1M"]["categories"] == ["general"]
+    assert active["FrontierCode"]["min_score"] == pytest.approx(24.31)
+    assert active["FrontierCode"]["scores"] == {
+        "fable5": 53.48,
+        "gpt55": 42.96,
+        "opus48": 46.5,
+        "sonnet5": 42.73,
+    }
 
 
 def _patch_data(monkeypatch: pytest.MonkeyPatch, benchmarks: list[dict[str, object]]) -> None:
