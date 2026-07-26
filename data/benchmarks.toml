@@ -297,6 +297,33 @@ gpt55 = 6.3
 kimi26 = 3.8
 opus48 = 13.4
 
+[GDPval-AA-v2]
+categories = ["general"]
+min_score = 718
+
+[GDPval-AA-v2.scores]
+deepseek-flash4 = 1189
+deepseek4 = 1306
+fable5 = 1747
+gemini-flash36 = 1423
+gemini-pro31 = 965
+gemma4-31 = 811
+glm52 = 1510
+gpt-oss-120b = 802
+gpt56sol = 1735
+gpt56terra = 1583
+gpt56luna = 1582
+grok45 = 1527
+haiku45 = 911
+inkling = 1237
+kimi-k3 = 1686
+minimax3 = 1391
+muse-spark-11 = 1375
+opus48 = 1593
+opus5 = 1861
+qwen37-max = 1271
+sonnet5 = 1603
+
 [GPQA_diamond]
 categories = ["general", "stem"]
 min_score = 13.2
