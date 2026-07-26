@@ -8,7 +8,7 @@ min_score = 1.8
 deepseek-flash4 = 31.1
 deepseek4 = 36.4
 fable5 = 52.8
-gemini-flash35 = 37.4
+gemini-flash36 = 38.7
 gemini-pro31 = 21.4
 gemma4-31 = 14.4
 glm52 = 43.1
@@ -26,6 +26,7 @@ kimi-k3 = 50.1
 minimax3 = 35.4
 muse-spark-11 = 37.5
 opus48 = 47.2
+opus5 = 55.3
 qwen37-max = 30.6
 sonnet5 = 46.7
 
@@ -38,7 +39,7 @@ min_score = 1
 deepseek-flash4 = 39
 deepseek4 = 47
 fable5 = 76.5
-gemini-flash35 = 45
+gemini-flash36 = 69.2
 gemini-pro31 = 68.8
 gemma4-31 = 39
 glm52 = 68.8
@@ -57,6 +58,7 @@ kimi26 = 47.1
 minimax3 = 43.4
 muse-spark-11 = 71.3
 opus48 = 56.7
+opus5 = 78
 qwen36-27b = 37
 qwen37-max = 50.1
 sonnet5 = 71.5
@@ -70,8 +72,8 @@ min_score = 5
 [artificial_analysis_intelligence.scores]
 deepseek-flash4 = 47
 deepseek4 = 52
-fable5 = 64.9
-gemini-flash35 = 55
+fable5 = 60
+gemini-flash36 = 50
 gemini-pro31 = 57
 gemma4-31 = 39
 glm52 = 51
@@ -89,7 +91,8 @@ kimi26 = 54
 kimi-k3 = 57
 minimax3 = 54.7
 muse-spark-11 = 51
-opus48 = 61.4
+opus48 = 56
+opus5 = 61
 qwen36-27b = 46
 qwen37-max = 56.6
 sonnet5 = 53
@@ -117,6 +120,7 @@ gpt56sol = 7.78
 gpt56terra = 0.8
 gpt56luna = 0.18
 opus48 = 1.5
+opus5 = 30.2
 
 # https://arcprize.org/leaderboard
 [ARC_AGI_2]
@@ -124,7 +128,7 @@ categories = ["general", "agentic"]
 min_score = 0
 
 [ARC_AGI_2.scores]
-gemini-flash35 = 72.1
+gemini-flash36 = 72.1
 gemini-pro31 = 77.1
 gpt55 = 84.6
 gpt-pro55 = 84.6
@@ -137,22 +141,23 @@ min_score = 1092
 
 [arena_coding.scores]
 deepseek4 = 1457
-fable5 = 1650
-gemini-flash35 = 1501
+fable5 = 1634
+gemini-flash36 = 1537
 gemini-pro31 = 1444
 gemma4-31 = 1370
 glm52 = 1580
-gpt55 = 1502
+gpt55 = 1507
 gpt-codex53 = 1407
+gpt56sol = 1630
 grok-multi-agent42 = 1383
-grok45 = 1572
+grok45 = 1557
 haiku45 = 1327
 inkling = 1434
 kimi26 = 1514
-kimi-k3 = 1679
+kimi-k3 = 1678
 minimax3 = 1496
 muse-spark-11 = 1536
-opus48 = 1560
+opus48 = 1565
 qwen37-max = 1521
 sonnet5 = 1544
 
@@ -164,20 +169,21 @@ min_score = 952
 [arena_general.scores]
 deepseek-flash4 = 1439
 deepseek4 = 1463
-fable5 = 1510
-gemini-flash35 = 1480
+fable5 = 1507
+gemini-flash36 = 1485
 gemini-pro31 = 1487
 gemma4-31 = 1451
 glm52 = 1471
 gpt-oss-120b = 1353
 gpt55 = 1481
 gpt-chat55 = 1472
+gpt56sol = 1485
 grok-multi-agent42 = 1474
 haiku45 = 1408
 inkling = 1441
 kimi26 = 1405
 kimi-k3 = 1486
-muse-spark-11 = 1490
+muse-spark-11 = 1495
 opus48 = 1486
 qwen37-max = 1475
 
@@ -188,9 +194,10 @@ categories = ["stem"]
 min_score = 36.8
 
 [BioMysteryBench.scores]
-fable5 = 83.9
+fable5 = 89
 haiku45 = 36.8
-opus48 = 80.4
+opus48 = 88.5
+opus5 = 90.1
 
 # https://github.com/wenqiglantz/charxiv — chart reasoning (with tools)
 [charxiv]
@@ -217,7 +224,7 @@ categories = ["general", "stem"]
 min_score = 72.4
 
 [charxiv_notools.scores]
-gemini-flash35 = 84.2
+gemini-flash36 = 84.2
 gemini-pro31 = 83.3
 gpt55 = 84.1
 gpt56sol = 84.6
@@ -235,7 +242,7 @@ min_score = 0
 deepseek-flash4 = 7.1
 deepseek4 = 12.9
 fable5 = 28.6
-gemini-flash35 = 13.1
+gemini-flash36 = 11
 gemini-pro31 = 17.7
 gemma4-31 = 1.4
 glm52 = 20.9
@@ -253,7 +260,9 @@ kimi26 = 8
 kimi-k3 = 23
 minimax3 = 3.7
 muse-spark-11 = 15
+opus5 = 29
 qwen37-max = 11.4
+sonnet5 = 17
 
 # https://deepswe.datacurve.ai
 [DeepSWE]
@@ -263,7 +272,7 @@ min_score = 5
 [DeepSWE.scores]
 deepseek4 = 8
 fable5 = 69.7
-gemini-flash35 = 37
+gemini-flash36 = 49
 gemini-pro31 = 12
 glm52 = 46.2
 gpt55 = 67
@@ -274,6 +283,7 @@ kimi27code = 31
 kimi-k3 = 67.5
 muse-spark-11 = 53.3
 opus48 = 59
+opus5 = 68.8
 
 # https://cognition.ai/blog/frontier-code
 [FrontierCode]
@@ -295,7 +305,7 @@ min_score = 13.2
 deepseek-flash4 = 88.1
 deepseek4 = 90.1
 fable5 = 92.6
-gemini-flash35 = 92.8
+gemini-flash36 = 93
 gemini-pro31 = 94.3
 gemma4-31 = 84.3
 glm52 = 91.2
@@ -312,6 +322,7 @@ kimi-k3 = 93.5
 minimax3 = 92.9
 muse-spark-11 = 90
 opus48 = 93.6
+opus5 = 93
 qwen36-27b = 87.8
 qwen37-max = 92.4
 
@@ -332,12 +343,13 @@ categories = ["stem"]
 min_score = 53
 
 [health_bench_pro.scores]
-fable5 = 60.9
+fable5 = 66
 gpt55 = 49.5
 gpt56sol = 60.5
 gpt56terra = 57.7
 gpt56luna = 55.7
-opus48 = 53
+opus48 = 57.4
+opus5 = 59.8
 
 # Scale's Humanity's Last Exam (without tools)
 [HLE]
@@ -347,8 +359,8 @@ min_score = 2.72
 [HLE.scores]
 deepseek-flash4 = 32.1
 deepseek4 = 35.9
-fable5 = 53
-gemini-flash35 = 41
+fable5 = 56.5
+gemini-flash36 = 38
 gemini-pro31 = 44.6
 gemma4-31 = 22.7
 glm52 = 40.5
@@ -368,6 +380,7 @@ kimi-k3 = 43.5
 minimax3 = 37.1
 muse-spark-11 = 52.2
 opus48 = 45.7
+opus5 = 56.3
 qwen36-27b = 21.6
 qwen37-max = 38.1
 sonnet5 = 39.6
@@ -381,7 +394,7 @@ min_score = 60.33
 deepseek-flash4 = 69.2
 deepseek4 = 70
 fable5 = 82.5
-gemini-flash35 = 78.2
+gemini-flash36 = 78.2
 gemini-pro31 = 76.5
 gemma4-31 = 60.33
 glm52 = 79.7
@@ -398,6 +411,7 @@ kimi-k3 = 81.4
 kimi27code = 74
 minimax3 = 68.2
 opus48 = 79.3
+opus5 = 83.2
 qwen37-max = 74.2
 sonnet5 = 80.7
 
@@ -410,7 +424,7 @@ min_score = 40.6
 deepseek-flash4 = 50.4
 deepseek4 = 52.5
 fable5 = 61.3
-gemini-flash35 = 62.3
+gemini-flash36 = 62.3
 gemini-pro31 = 62.3
 glm52 = 57.1
 gpt-codex53 = 69
@@ -425,6 +439,7 @@ kimi27code = 51
 kimi-k3 = 62.4
 minimax3 = 49.1
 opus48 = 63.82
+opus5 = 64.4
 qwen37-max = 58.8
 sonnet5 = 57.5
 
@@ -437,7 +452,7 @@ min_score = 53.84
 deepseek-flash4 = 73.84
 deepseek4 = 82.61
 fable5 = 87.2
-gemini-flash35 = 76.55
+gemini-flash36 = 74.7
 gemini-pro31 = 84.79
 gemma4-31 = 66.35
 glm52 = 81.8
@@ -454,6 +469,7 @@ kimi-k3 = 81.6
 minimax3 = 76.6
 muse-spark-11 = 79.8
 opus48 = 86.8
+opus5 = 86.3
 qwen37-max = 78.52
 sonnet5 = 82.3
 
@@ -466,7 +482,7 @@ min_score = 62.3
 deepseek-flash4 = 65.5
 deepseek4 = 71.6
 fable5 = 79.5
-gemini-flash35 = 74.6
+gemini-flash36 = 73.6
 gemini-pro31 = 77.1
 glm52 = 73.2
 gpt-codex53 = 74
@@ -481,6 +497,7 @@ kimi-k3 = 77.9
 minimax3 = 67.3
 muse-spark-11 = 76.2
 opus48 = 78.9
+opus5 = 80.3
 qwen37-max = 73.1
 sonnet5 = 74.8
 
@@ -503,7 +520,7 @@ min_score = 15.3
 deepseek-flash4 = 53.2
 deepseek4 = 75.7
 fable5 = 95.1
-gemini-flash35 = 95.2
+gemini-flash36 = 95.2
 gemini-pro31 = 98.4
 gemma4-31 = 79.5
 gpt-oss-120b = 38.7
@@ -516,27 +533,25 @@ haiku45 = 26
 kimi26 = 91.4
 muse-spark-11 = 89.6
 opus48 = 94.1
+opus5 = 94.3
 qwen37-max = 89.8
 sonnet5 = 82.8
 
+# 2.0
 [osworld]
 categories = ["general", "agentic"]
 min_score = 3
 
 [osworld.scores]
-fable5 = 85
-gemini-flash35 = 78.4
-gemini-pro31 = 76.2
-gpt55 = 78.7
+fable5 = 66.1
+gpt55 = 47.5
 gpt56sol = 62.6
 gpt56terra = 50.2
 gpt56luna = 45.6
 haiku45 = 50.7
-kimi26 = 73.1
 minimax3 = 70
-muse-spark-11 = 80.8
-opus48 = 83.4
-sonnet5 = 81.2
+opus48 = 55.7
+opus5 = 70.6
 
 # https://programbench.com
 # "almost" metric
@@ -546,8 +561,11 @@ min_score = 0
 
 [ProgramBench.scores]
 gemini-pro31 = 0
+glm52 = 8.5
 gpt55 = 13.5
 haiku45 = 0
+opus48 = 16.5
+sonnet5 = 1
 
 [simpleBench]
 categories = ["general"]
@@ -555,7 +573,7 @@ min_score = 10.7
 
 [simpleBench.scores]
 fable5 = 81.9
-gemini-flash35 = 76.7
+gemini-flash36 = 76.7
 gemini-pro31 = 79.6
 gpt-oss-120b = 22.1
 gpt-pro55 = 76.9
@@ -563,9 +581,12 @@ gpt55 = 69
 gpt56sol = 71.7
 gpt56terra = 48.9
 gpt56luna = 46.8
+inkling = 50
 kimi27code = 57.9
+kimi-k3 = 60.7
 minimax3 = 45.8
 opus48 = 64.8
+opus5 = 80.6
 qwen37-max = 70.4
 sonnet5 = 60.6
 
@@ -577,7 +598,7 @@ min_score = 1.51
 deepseek-flash4 = 52.6
 deepseek4 = 55.4
 fable5 = 80.3
-gemini-flash35 = 55.1
+gemini-flash36 = 55.1
 gemini-pro31 = 54.2
 gemma4-31 = 35.7
 glm52 = 62.1
@@ -628,7 +649,7 @@ min_score = 0
 
 [SWE_Marathon.scores]
 deepseek4 = 4
-gemini-flash35 = 7
+gemini-flash36 = 7
 gemini-pro31 = 2
 gpt55 = 12
 kimi26 = 0
@@ -641,7 +662,7 @@ min_score = 58
 
 [terminal_bench21.scores]
 fable5 = 88
-gemini-flash35 = 76.2
+gemini-flash36 = 78
 gemini-pro31 = 70.7
 glm52 = 82.7
 gpt55 = 83.4
@@ -653,6 +674,7 @@ kimi-k3 = 88.3
 minimax3 = 66
 muse-spark-11 = 80
 opus48 = 78.9
+opus5 = 89
 sonnet5 = 80.4
 
 # USA Math Olympiad

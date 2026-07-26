@@ -17,8 +17,8 @@ cost = 60
 open = false
 company = "anthropic"
 
-[gemini-flash35]
-cost = 10.50
+[gemini-flash36]
+cost = 9
 open = false
 company = "google"
 
@@ -128,6 +128,11 @@ open = false
 company = "meta"
 
 [opus48]
+cost = 30.0
+open = false
+company = "anthropic"
+
+[opus5]
 cost = 30.0
 open = false
 company = "anthropic"
