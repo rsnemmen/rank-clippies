@@ -57,11 +57,6 @@ cost = 0.5
 open = true
 company = "openai"
 
-[gpt-pro55]
-cost = 210
-open = false
-company = "openai"
-
 [gpt55]
 cost = 35.0
 open = false
@@ -81,11 +76,6 @@ company = "openai"
 cost = 7
 open = false
 company = "openai"
-
-[grok-multi-agent42]
-cost = 291.5
-open = false
-company = "xai"
 
 [grok45]
 cost = 8

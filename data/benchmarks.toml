@@ -131,7 +131,6 @@ min_score = 0
 gemini-flash36 = 72.1
 gemini-pro31 = 77.1
 gpt55 = 84.6
-gpt-pro55 = 84.6
 haiku45 = 4
 
 # Code Arena | WebDev
@@ -141,25 +140,25 @@ min_score = 1092
 
 [arena_webdev.scores]
 deepseek4 = 1457
-fable5 = 1634
+fable5 = 1629
 gemini-flash36 = 1537
 gemini-pro31 = 1444
 gemma4-31 = 1370
 glm52 = 1580
 gpt55 = 1507
 gpt-codex53 = 1407
-gpt56sol = 1630
-grok-multi-agent42 = 1383
-grok45 = 1557
+gpt56sol = 1623
+grok45 = 1550
 haiku45 = 1327
 inkling = 1434
 kimi26 = 1514
-kimi-k3 = 1678
+kimi-k3 = 1682
 minimax3 = 1496
 muse-spark-11 = 1536
 opus48 = 1565
+opus5 = 1725
 qwen37-max = 1521
-sonnet5 = 1544
+sonnet5 = 1545
 
 # General leaderboard (Chatbot Arena — overall)
 [arena_general]
@@ -178,13 +177,13 @@ gpt-oss-120b = 1353
 gpt55 = 1481
 gpt-chat55 = 1472
 gpt56sol = 1485
-grok-multi-agent42 = 1474
 haiku45 = 1408
 inkling = 1441
 kimi26 = 1405
 kimi-k3 = 1486
-muse-spark-11 = 1495
+muse-spark-11 = 1491
 opus48 = 1486
+opus5 = 1495
 qwen37-max = 1475
 
 # https://www.anthropic.com/research/Evaluating-Claude-For-Bioinformatics-With-BioMysteryBench
@@ -349,7 +348,6 @@ gemma4-31 = 22.7
 glm52 = 40.5
 gpt-oss-120b = 14.9
 gpt-oss-20b = 10.9
-gpt-pro55 = 43.1
 gpt55 = 44.3
 gpt56sol = 47.2
 gpt56terra = 41.8
@@ -400,7 +398,7 @@ sonnet5 = 80.7
 
 # LiveBench — agentic coding + IF subscore
 [LiveBench_agents]
-categories = ["agentic", "coding"]
+categories = ["agentic"]
 min_score = 40.6
 
 [LiveBench_agents.scores]
@@ -501,7 +499,6 @@ gpt55 = 97.5
 gpt56sol = 96.1
 gpt56terra = 84.7
 gpt56luna = 78.4
-grok-multi-agent42 = 93.4
 haiku45 = 26
 kimi26 = 91.4
 muse-spark-11 = 89.6
@@ -549,7 +546,6 @@ fable5 = 81.9
 gemini-flash36 = 76.7
 gemini-pro31 = 79.6
 gpt-oss-120b = 22.1
-gpt-pro55 = 76.9
 gpt55 = 69
 gpt56sol = 71.7
 gpt56terra = 48.9
