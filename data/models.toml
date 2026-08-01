@@ -68,12 +68,12 @@ open = false
 company = "openai"
 
 [gpt56terra]
-cost = 17.5
+cost = 14
 open = false
 company = "openai"
 
 [gpt56luna]
-cost = 7
+cost = 1.4
 open = false
 company = "openai"
 

@@ -80,6 +80,7 @@ glm52 = 51
 gpt-codex53 = 54
 gpt-oss-120b = 33
 gpt-oss-20b = 24
+gpt-chat55 = 34
 gpt55 = 60
 gpt56sol = 59
 gpt56terra = 55
@@ -116,22 +117,11 @@ min_score = 0
 [ARC_AGI_3.scores]
 gemini-pro31 = 0.42
 gpt55 = 0.43
-gpt56sol = 7.78
+gpt56sol = 38.3
 gpt56terra = 0.8
 gpt56luna = 0.18
 opus48 = 1.5
 opus5 = 30.2
-
-# https://arcprize.org/leaderboard
-[ARC_AGI_2]
-categories = ["general"]
-min_score = 0
-
-[ARC_AGI_2.scores]
-gemini-flash36 = 72.1
-gemini-pro31 = 77.1
-gpt55 = 84.6
-haiku45 = 4
 
 # Code Arena | WebDev
 [arena_webdev]
