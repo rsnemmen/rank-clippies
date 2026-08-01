@@ -57,11 +57,6 @@ cost = 0.5
 open = true
 company = "openai"
 
-[gpt55]
-cost = 35.0
-open = false
-company = "openai"
-
 [gpt56sol]
 cost = 35
 open = false
@@ -116,11 +111,6 @@ company = "minimax"
 cost = 5.5
 open = false
 company = "meta"
-
-[opus48]
-cost = 30.0
-open = false
-company = "anthropic"
 
 [opus5]
 cost = 30.0

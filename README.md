@@ -136,9 +136,9 @@ min_score = 5
 
 [artificial_analysis_agentic.scores]
 gemini-flash3 = 50
-gpt55 = 74
-opus47 = 70
-sonnet46 = 63
+gpt56sol = 74
+opus5 = 70
+sonnet5 = 63
 ```
 
 **Rank-based** — models are mapped to integer ranks (lower = better). `known_totals` is the total number of models evaluated on that leaderboard.
@@ -300,9 +300,9 @@ categories = ["general"]
 known_totals = 40
 
 [new_bench.scores]
-gpt55 = 1
-opus47 = 2
-sonnet46 = 5
+gpt56sol = 1
+opus5 = 2
+sonnet5 = 5
 ```
 
 Use `min_score` instead of `known_totals` for score-based benchmarks. Omit models that were not evaluated.

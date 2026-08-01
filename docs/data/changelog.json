@@ -1,6 +1,18 @@
 {
   "entries": [
     {
+      "date": "2026-07-31",
+      "message": "updated pricing for gpt 5.6 terra and luna"
+    },
+    {
+      "date": "2026-07-27",
+      "message": "Remove deprecated model entries"
+    },
+    {
+      "date": "2026-07-26",
+      "message": "Refresh benchmark suite"
+    },
+    {
       "date": "2026-07-26",
       "message": "added GDPval v2"
     },
