@@ -26,7 +26,6 @@ kimi-k3 = 50.1
 minimax3 = 35.4
 muse-spark-11 = 37.5
 opus5 = 55.3
-qwen37-max = 30.6
 sonnet5 = 46.7
 
 # Coding Agent Index
@@ -61,7 +60,6 @@ gemini-flash36 = 50
 gemini-pro31 = 57
 gemma4-31 = 39
 glm52 = 51
-gpt-codex53 = 54
 gpt-oss-120b = 33
 gpt-oss-20b = 24
 gpt-chat55 = 34
@@ -77,7 +75,6 @@ minimax3 = 54.7
 muse-spark-11 = 51
 opus5 = 61
 qwen36-27b = 46
-qwen37-max = 56.6
 sonnet5 = 53
 
 # AISI advanced CTF / expert
@@ -88,7 +85,6 @@ min_score = 27.7
 
 [AISI_CTF.scores]
 fable5 = 68
-gpt-codex53 = 44.3
 
 # https://arcprize.org/leaderboard
 [ARC_AGI_3]
@@ -115,7 +111,6 @@ gemini-flash36 = 1537
 gemini-pro31 = 1444
 gemma4-31 = 1370
 glm52 = 1586
-gpt-codex53 = 1407
 gpt56sol = 1620
 gpt56terra = 1522
 gpt56luna = 1523
@@ -196,7 +191,6 @@ gemini-flash36 = 11
 gemini-pro31 = 17.7
 gemma4-31 = 1.4
 glm52 = 20.9
-gpt-codex53 = 16.9
 gpt-oss-120b = 1.1
 gpt-oss-20b = 1.4
 gpt56sol = 32.3
@@ -210,7 +204,6 @@ kimi-k3 = 23
 minimax3 = 3.7
 muse-spark-11 = 15
 opus5 = 29
-qwen37-max = 11.4
 sonnet5 = 17
 
 # https://deepswe.datacurve.ai
@@ -265,7 +258,6 @@ kimi-k3 = 1686
 minimax3 = 1391
 muse-spark-11 = 1375
 opus5 = 1861
-qwen37-max = 1271
 sonnet5 = 1603
 
 [GraphWalks_BFS_1M]
@@ -317,7 +309,6 @@ minimax3 = 37.1
 muse-spark-11 = 52.2
 opus5 = 56.3
 qwen36-27b = 21.6
-qwen37-max = 38.1
 sonnet5 = 39.6
 
 # LiveBench — coding + agentic subscore
@@ -333,7 +324,6 @@ gemini-flash36 = 60.6
 gemini-pro31 = 60.3
 gemma4-31 = 60.33
 glm52 = 65.7
-gpt-codex53 = 66.5
 gpt56sol = 70.1
 gpt56terra = 66.6
 gpt56luna = 65.7
@@ -361,7 +351,6 @@ fable5 = 69
 gemini-flash36 = 59.4
 gemini-pro31 = 62.3
 glm52 = 57.1
-gpt-codex53 = 69
 gpt56sol = 64
 gpt56terra = 59.8
 gpt56luna = 54.3
@@ -390,7 +379,6 @@ gemini-flash36 = 74.7
 gemini-pro31 = 84.79
 gemma4-31 = 66.35
 glm52 = 81.8
-gpt-codex53 = 83.5
 gpt-oss-120b = 53.84
 gpt56sol = 88
 gpt56terra = 87.1
@@ -418,7 +406,6 @@ fable5 = 83
 gemini-flash36 = 73.6
 gemini-pro31 = 77.1
 glm52 = 73.2
-gpt-codex53 = 74
 gpt56sol = 81
 gpt56terra = 77.9
 gpt56luna = 73.6
@@ -453,7 +440,6 @@ haiku45 = 26
 kimi26 = 91.4
 muse-spark-11 = 89.6
 opus5 = 94.3
-qwen37-max = 89.8
 sonnet5 = 82.8
 
 # https://programbench.com
@@ -486,7 +472,6 @@ kimi27code = 57.9
 kimi-k3 = 60.7
 minimax3 = 45.8
 opus5 = 80.6
-qwen37-max = 70.4
 sonnet5 = 60.6
 
 # https://labs.scale.com/leaderboard/sweatlas-qna
@@ -496,7 +481,6 @@ min_score = 8.2
 
 [sweatlas_codebase_qna.scores]
 gemini-pro31 = 13.5
-gpt-codex53 = 32.6
 
 # https://www.swe-marathon.org
 [SWE_Marathon]

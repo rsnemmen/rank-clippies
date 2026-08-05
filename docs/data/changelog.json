@@ -1,6 +1,14 @@
 {
   "entries": [
     {
+      "date": "2026-08-04",
+      "message": "added Qwen 3.8 max"
+    },
+    {
+      "date": "2026-07-31",
+      "message": "Remove GPT-5.5 and Opus 4.8"
+    },
+    {
       "date": "2026-07-31",
       "message": "updated pricing for gpt 5.6 terra and luna"
     },

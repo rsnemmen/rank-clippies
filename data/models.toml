@@ -42,11 +42,6 @@ cost = 35
 open = false
 company = "openai"
 
-[gpt-codex53]
-cost = 15.75
-open = false
-company = "openai"
-
 [gpt-oss-120b]
 cost = 1.4
 open = true
