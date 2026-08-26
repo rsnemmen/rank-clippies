@@ -1,82 +1,5 @@
 # Categories: coding, agentic, stem, general
 
-# Agentic Index
-[artificial_analysis_agentic]
-categories = ["coding", "agentic"]
-min_score = 1.8
-
-[artificial_analysis_agentic.scores]
-deepseek-flash4 = 31.1
-deepseek4 = 36.4
-fable5 = 52.8
-gemini-flash36 = 38.7
-gemini-pro31 = 21.4
-gemma4-31 = 14.4
-glm52 = 43.1
-gpt-oss-120b = 13.2
-gpt-oss-20b = 3.1
-gpt56sol = 54
-gpt56terra = 47.4
-gpt56luna = 45.6
-grok45 = 45.7
-haiku45 = 16.4
-inkling = 32.3
-kimi26 = 30.3
-kimi-k3 = 50.1
-minimax3 = 35.4
-muse-spark-11 = 37.5
-opus5 = 55.3
-sonnet5 = 46.7
-
-# Coding Agent Index
-[artificial_analysis_coding]
-categories = ["coding"]
-min_score = 24
-
-[artificial_analysis_coding.scores]
-deepseek4 = 31
-fable5 = 66
-gemini-pro31 = 30
-glm52 = 43
-gpt56sol = 67
-gpt56terra = 62
-gpt56luna = 59
-grok45 = 64
-kimi-k3 = 61
-muse-spark-11 = 54
-opus5 = 67
-
-# includes STEM benchmarks: SciCode, Humanity's Last Exam, GPQA Diamond, CritPt
-# (among many others)
-[artificial_analysis_intelligence]
-categories = ["general" , "stem"]
-min_score = 5
-
-[artificial_analysis_intelligence.scores]
-deepseek-flash4 = 47
-deepseek4 = 52
-fable5 = 60
-gemini-flash36 = 50
-gemini-pro31 = 57
-gemma4-31 = 39
-glm52 = 51
-gpt-oss-120b = 33
-gpt-oss-20b = 24
-gpt-chat55 = 34
-gpt56sol = 59
-gpt56terra = 55
-gpt56luna = 51
-grok45 = 54
-haiku45 = 37
-inkling = 41
-kimi26 = 54
-kimi-k3 = 57
-minimax3 = 54.7
-muse-spark-11 = 51
-opus5 = 61
-qwen36-27b = 46
-sonnet5 = 53
-
 # AISI advanced CTF / expert
 # https://www.aisi.gov.uk/blog/our-evaluation-of-openais-gpt-5-5-cyber-capabilities
 [AISI_CTF]
@@ -101,28 +24,29 @@ opus5 = 30.2
 # Code Arena | WebDev
 [arena_webdev]
 categories = ["coding"]
-min_score = 1092
+min_score = 1080
 
 [arena_webdev.scores]
 deepseek-flash4 = 1577
 deepseek4 = 1457
-fable5 = 1629
-gemini-flash36 = 1537
+fable5 = 1626
+gemini-flash37 = 1587
 gemini-pro31 = 1444
 gemma4-31 = 1370
-glm52 = 1586
+glm53max = 1599
 gpt56sol = 1620
 gpt56terra = 1522
 gpt56luna = 1523
-grok45 = 1550
+grok46 = 1629
 haiku45 = 1327
 inkling = 1434
 kimi26 = 1514
-kimi-k3 = 1676
+kimi-k3 = 1674
 minimax3 = 1496
-muse-spark-11 = 1536
-opus5 = 1705
+muse-spark-12 = 1534
+opus5 = 1691
 qwen38-max = 1668
+qwen38-27b = 1595
 sonnet5 = 1545
 
 # General leaderboard (Chatbot Arena — overall)
@@ -134,10 +58,10 @@ min_score = 952
 deepseek-flash4 = 1439
 deepseek4 = 1463
 fable5 = 1509
-gemini-flash36 = 1485
+gemini-flash37 = 1490
 gemini-pro31 = 1487
 gemma4-31 = 1451
-glm52 = 1471
+glm53 = 1487
 gpt-oss-120b = 1353
 gpt-chat55 = 1472
 gpt56sol = 1485
@@ -145,9 +69,91 @@ haiku45 = 1408
 inkling = 1441
 kimi26 = 1405
 kimi-k3 = 1486
-muse-spark-11 = 1491
+muse-spark-12 = 1498
 opus5 = 1495
 qwen38-max = 1496
+qwen38-27b = 1440
+
+# Agentic Index
+[artificial_analysis_agentic]
+categories = ["agentic"]
+min_score = 1.8
+
+[artificial_analysis_agentic.scores]
+deepseek-flash4 = 31.1
+deepseek4 = 50
+fable5 = 52.8
+gemini-flash37 = 45
+gemini-pro31 = 21.4
+gemma4-31 = 14.4
+glm53 = 59
+gpt-oss-120b = 13.2
+gpt-oss-20b = 3.1
+gpt56sol = 58
+gpt56terra = 47.4
+gpt56luna = 45.6
+grok46 = 59
+haiku45 = 16.4
+inkling = 32.3
+kimi26 = 30.3
+kimi-k3 = 50.1
+minimax3 = 35.4
+muse-spark-11 = 37.5
+opus5 = 59
+qwen38-max = 57
+qwen38-27b = 51
+sonnet5 = 46.7
+
+# Coding Agent Index
+[artificial_analysis_coding]
+categories = ["coding"]
+min_score = 24
+
+[artificial_analysis_coding.scores]
+deepseek4 = 50
+fable5 = 67
+gemini-flash37 = 60
+glm52 = 43
+gpt56sol = 65
+gpt56terra = 60
+gpt56luna = 59
+grok46 = 64
+kimi-k3 = 63
+muse-spark-12 = 62
+qwen38-max = 61
+opus5 = 68
+
+# includes STEM benchmarks: SciCode, Humanity's Last Exam, GPQA Diamond, CritPt
+# (among many others)
+[artificial_analysis_intelligence]
+categories = ["general" , "stem"]
+min_score = 5
+
+[artificial_analysis_intelligence.scores]
+deepseek-flash4 = 47
+deepseek4 = 53
+fable5 = 62
+gemini-flash37 = 56
+gemini-pro31 = 57
+gemma4-31 = 39
+glm53 = 60
+gpt-oss-120b = 33
+gpt-oss-20b = 24
+gpt-chat55 = 34
+gpt56sol = 61
+gpt56terra = 57
+gpt56luna = 52
+grok46 = 61
+haiku45 = 37
+inkling = 41
+kimi26 = 54
+kimi-k3 = 60
+minimax3 = 54.7
+muse-spark-11 = 51
+opus5 = 63
+qwen38-27b = 52
+qwen38-max = 58
+sonnet5 = 53
 
 # https://www.anthropic.com/research/Evaluating-Claude-For-Bioinformatics-With-BioMysteryBench
 # human solved
@@ -187,7 +193,7 @@ min_score = 0
 deepseek-flash4 = 7.1
 deepseek4 = 12.9
 fable5 = 28.6
-gemini-flash36 = 11
+gemini-flash37 = 14
 gemini-pro31 = 17.7
 gemma4-31 = 1.4
 glm52 = 20.9
@@ -196,14 +202,15 @@ gpt-oss-20b = 1.4
 gpt56sol = 32.3
 gpt56terra = 30
 gpt56luna = 20.6
-grok45 = 15.4
+grok46 = 17
 haiku45 = 0
 inkling = 5
 kimi26 = 8
 kimi-k3 = 23
 minimax3 = 3.7
-muse-spark-11 = 15
+muse-spark-12 = 18
 opus5 = 29
+qwen38-max = 20
 sonnet5 = 17
 
 # https://deepswe.datacurve.ai
@@ -288,9 +295,9 @@ min_score = 2.72
 
 [HLE.scores]
 deepseek-flash4 = 32.1
-deepseek4 = 35.9
+deepseek4 = 41
 fable5 = 56.5
-gemini-flash36 = 38
+gemini-flash37 = 48
 gemini-pro31 = 44.6
 gemma4-31 = 22.7
 glm52 = 40.5
@@ -299,16 +306,17 @@ gpt-oss-20b = 10.9
 gpt56sol = 47.2
 gpt56terra = 41.8
 gpt56luna = 35.6
-grok45 = 40.3
+grok46 = 43
 haiku45 = 9.7
 inkling = 29.7
 kimi26 = 35.9
 kimi27code = 32.8
-kimi-k3 = 43.5
+kimi-k3 = 47
 minimax3 = 37.1
-muse-spark-11 = 52.2
+muse-spark-12 = 45
 opus5 = 56.3
-qwen36-27b = 21.6
+qwen38-27b = 34
+qwen38-max = 42
 sonnet5 = 39.6
 
 # LiveBench — coding + agentic subscore
@@ -327,16 +335,15 @@ glm52 = 65.7
 gpt56sol = 70.1
 gpt56terra = 66.6
 gpt56luna = 65.7
-grok45 = 62.5
+grok46 = 66.9
 haiku45 = 72.81
 inkling = 60.2
-kimi26 = 62.7
 kimi-k3 = 71.8
-kimi27code = 59.8
 minimax3 = 54.4
 muse-spark-11 = 67.8
 opus5 = 73.3
 qwen38-max = 68.6
+qwen38-27b = 68.5
 sonnet5 = 70
 
 # LiveBench — agentic coding + IF subscore
@@ -348,22 +355,24 @@ min_score = 0
 deepseek-flash4 = 56
 deepseek4 = 52.5
 fable5 = 69
-gemini-flash36 = 59.4
+gemini-flash37 = 69.1
 gemini-pro31 = 62.3
 glm52 = 57.1
 gpt56sol = 64
 gpt56terra = 59.8
 gpt56luna = 54.3
 grok45 = 64
+glm53 = 65.1
 haiku45 = 45.72
 inkling = 59.7
 kimi26 = 55.6
 kimi27code = 51
 kimi-k3 = 66.8
 minimax3 = 49.1
-muse-spark-11 = 64.1
+muse-spark-12 = 66
 opus5 = 64.5
 qwen38-max = 69.4
+qwen38-27b = 67
 sonnet5 = 61.6
 
 # LiveBench — math/stem (math + data analysis subscore)
@@ -373,23 +382,23 @@ min_score = 0
 
 [LiveBench_stem.scores]
 deepseek-flash4 = 83.1
-deepseek4 = 82.6
+deepseek4 = 87.2
 fable5 = 88.7
-gemini-flash36 = 74.7
+gemini-flash37 = 74.7
 gemini-pro31 = 84.79
 gemma4-31 = 66.35
-glm52 = 81.8
+glm53 = 79.1
 gpt-oss-120b = 53.84
 gpt56sol = 88
 gpt56terra = 87.1
 gpt56luna = 82.6
-grok45 = 81.9
+grok46 = 83.2
 haiku45 = 68.41
 inkling = 80.6
 kimi26 = 74.71
 kimi-k3 = 81.6
 minimax3 = 76.6
-muse-spark-11 = 79.8
+muse-spark-12 = 83.8
 opus5 = 85.1
 qwen38-max = 84.9
 sonnet5 = 82.3
@@ -413,46 +422,13 @@ grok45 = 75.8
 inkling = 71.9
 kimi26 = 70.5
 kimi27code = 68.4
-kimi-k3 = 77.9
+kimi-k3 = 79.2
 minimax3 = 67.3
-muse-spark-11 = 75.3
+muse-spark-12 = 78
 opus5 = 80.1
 qwen38-max = 78.5
+qwen38-27b = 75.3
 sonnet5 = 76
-
-# https://github.com/lechmazur/nyt-connections
-[nyt_connections]
-categories = ["general"]
-min_score = 15.3
-
-[nyt_connections.scores]
-deepseek-flash4 = 53.2
-deepseek4 = 75.7
-fable5 = 95.1
-gemini-flash36 = 95.2
-gemini-pro31 = 98.4
-gemma4-31 = 79.5
-gpt-oss-120b = 38.7
-gpt56sol = 96.1
-gpt56terra = 84.7
-gpt56luna = 78.4
-haiku45 = 26
-kimi26 = 91.4
-muse-spark-11 = 89.6
-opus5 = 94.3
-sonnet5 = 82.8
-
-# https://programbench.com
-# "almost" metric
-[ProgramBench]
-categories = ["coding", "agentic"]
-min_score = 0
-
-[ProgramBench.scores]
-gemini-pro31 = 0
-glm52 = 8.5
-haiku45 = 0
-sonnet5 = 1
 
 [simpleBench]
 categories = ["general"]
@@ -461,37 +437,39 @@ min_score = 10.7
 [simpleBench.scores]
 deepseek-flash4 = 61.1
 fable5 = 81.9
-gemini-flash36 = 76.7
+gemini-flash37 = 76.7
 gemini-pro31 = 79.6
+glm53 = 66.2
 gpt-oss-120b = 22.1
 gpt56sol = 71.7
 gpt56terra = 48.9
 gpt56luna = 46.8
+grok46 = 75.9
 inkling = 50
 kimi27code = 57.9
 kimi-k3 = 60.7
 minimax3 = 45.8
+muse-spark-12 = 74.5
 opus5 = 80.6
+qwen38-max = 62.5
+qwen38-27b = 60.2
 sonnet5 = 60.6
 
-# https://labs.scale.com/leaderboard/sweatlas-qna
-[sweatlas_codebase_qna]
-categories = ["coding"]
-min_score = 8.2
-
-[sweatlas_codebase_qna.scores]
-gemini-pro31 = 13.5
-
-# https://www.swe-marathon.org
+# https://www.swe-marathon.org, v1.1
 [SWE_Marathon]
 categories = ["coding", "agentic"]
-min_score = 0
+min_score = 19.4
 
 [SWE_Marathon.scores]
-deepseek4 = 4
-gemini-flash36 = 7
-gemini-pro31 = 2
-kimi26 = 0
+fable5 = 45
+glm53 = 42.5
+gpt56sol = 42.5
+gpt56terra = 32.5
+gpt56luna = 24.4
+grok46 = 31.9
+kimi-k3 = 48.1
+opus5 = 50
+sonnet5 = 30
 
 # v2.1
 [terminal_bench21]
@@ -513,6 +491,22 @@ muse-spark-11 = 80
 opus5 = 89
 qwen38-max = 86.6
 sonnet5 = 80.4
+
+# v3
+[terminal_bench3]
+categories = ["coding", "agentic"]
+min_score = 4.6
+
+[terminal_bench3.scores]
+fable5 = 34.1
+glm53 = 32.4
+gpt56sol = 34.6
+gpt56terra = 20.8
+gpt56luna = 14.3
+grok46 = 26.5
+opus5 = 42.7
+sonnet5 = 14.6
+
 
 # USA Math Olympiad
 [usamo2026]

@@ -17,7 +17,7 @@ cost = 60
 open = false
 company = "anthropic"
 
-[gemini-flash36]
+[gemini-flash37]
 cost = 9
 open = false
 company = "google"
@@ -32,7 +32,7 @@ cost = 0.7
 open = true
 company = "google"
 
-[glm52]
+[glm53]
 cost = 5.8
 open = true
 company = "zhipu"
@@ -67,7 +67,7 @@ cost = 1.4
 open = false
 company = "openai"
 
-[grok45]
+[grok46]
 cost = 8
 open = false
 company = "xai"
@@ -102,7 +102,7 @@ cost = 3
 open = true
 company = "minimax"
 
-[muse-spark-11]
+[muse-spark-12]
 cost = 5.5
 open = false
 company = "meta"
@@ -112,7 +112,7 @@ cost = 30.0
 open = false
 company = "anthropic"
 
-[qwen36-27b]
+[qwen38-27b]
 cost = 0.7
 open = true
 company = "qwen"
