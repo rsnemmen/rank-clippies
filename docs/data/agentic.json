@@ -1,16 +1,16 @@
 {
   "category": "agentic",
   "title": "Agentic and computer use",
-  "generated_at": "2026-08-05T04:19:21Z",
+  "generated_at": "2026-08-26T04:24:30Z",
   "n_benchmarks": 7,
   "benchmark_names": [
-    "artificial_analysis_agentic",
     "AISI_CTF",
     "ARC_AGI_3",
+    "artificial_analysis_agentic",
     "LiveBench_agents",
-    "ProgramBench",
     "SWE_Marathon",
-    "terminal_bench21"
+    "terminal_bench21",
+    "terminal_bench3"
   ],
   "palette": [
     "#0072B2",
@@ -27,416 +27,388 @@
   "models": [
     {
       "rank": 1,
-      "name": "gpt56sol",
-      "avg_pct": 0.01215,
-      "lower_err": 0.01215,
-      "upper_err": 0.025527,
-      "n_bench": 4,
-      "cost": 35.0,
+      "name": "qwen38-max",
+      "avg_pct": 0.034965,
+      "lower_err": 0.017483,
+      "upper_err": 0.060689,
+      "n_bench": 3,
+      "cost": 8.0,
       "rel_cost": 1.0,
       "tier": 1,
-      "is_open": false,
-      "company": "openai",
-      "raw_scores": [
-        0.024299,
-        0.0,
-        0.07781,
-        0.0
-      ]
-    },
-    {
-      "rank": 2,
-      "name": "fable5",
-      "avg_pct": 0.026246,
-      "lower_err": 0.021924,
-      "upper_err": 0.037561,
-      "n_bench": 4,
-      "cost": 60.0,
-      "rel_cost": 1.714286,
-      "tier": 1,
-      "is_open": false,
-      "company": "anthropic",
-      "raw_scores": [
-        0.046729,
-        0.0,
-        0.005764,
-        0.115044
-      ]
-    },
-    {
-      "rank": 3,
-      "name": "opus5",
-      "avg_pct": 0.078075,
-      "lower_err": 0.025122,
-      "upper_err": 0.038956,
-      "n_bench": 4,
-      "cost": 30.0,
-      "rel_cost": 0.857143,
-      "tier": 2,
-      "is_open": false,
-      "company": "anthropic",
-      "raw_scores": [
-        0.0,
-        0.211488,
-        0.070605,
-        0.085546
-      ]
-    },
-    {
-      "rank": 4,
-      "name": "kimi-k3",
-      "avg_pct": 0.097196,
-      "lower_err": 0.029866,
-      "upper_err": 0.004499,
-      "n_bench": 3,
-      "cost": 18.0,
-      "rel_cost": 0.514286,
-      "tier": 2,
-      "is_open": true,
-      "company": "moonshot",
-      "raw_scores": [
-        0.097196,
-        0.037464,
-        0.106195
-      ]
-    },
-    {
-      "rank": 5,
-      "name": "gpt56terra",
-      "avg_pct": 0.142996,
-      "lower_err": 0.006064,
-      "upper_err": 0.21253,
-      "n_bench": 4,
-      "cost": 14.0,
-      "rel_cost": 0.4,
-      "tier": 3,
-      "is_open": false,
-      "company": "openai",
-      "raw_scores": [
-        0.147664,
-        0.979112,
-        0.138329,
-        0.132743
-      ]
-    },
-    {
-      "rank": 6,
-      "name": "qwen38-max",
-      "avg_pct": 0.178171,
-      "lower_err": null,
-      "upper_err": null,
-      "n_bench": 2,
-      "cost": 8.0,
-      "rel_cost": 0.228571,
-      "tier": 2,
       "is_open": true,
       "company": "qwen",
       "raw_scores": [
+        0.034965,
         0.0,
         0.156342
       ]
     },
     {
-      "rank": 7,
-      "name": "glm52",
-      "avg_pct": 0.202635,
-      "lower_err": 0.06971,
-      "upper_err": 0.036239,
+      "rank": 2,
+      "name": "opus5",
+      "avg_pct": 0.035303,
+      "lower_err": 0.035303,
+      "upper_err": 0.046508,
+      "n_bench": 6,
+      "cost": 30.0,
+      "rel_cost": 3.75,
+      "tier": 1,
+      "is_open": false,
+      "company": "anthropic",
+      "raw_scores": [
+        0.211488,
+        0.0,
+        0.070605,
+        0.0,
+        0.085546,
+        0.0
+      ]
+    },
+    {
+      "rank": 3,
+      "name": "gpt56sol",
+      "avg_pct": 0.047646,
+      "lower_err": 0.043276,
+      "upper_err": 0.131255,
+      "n_bench": 6,
+      "cost": 35.0,
+      "rel_cost": 4.375,
+      "tier": 1,
+      "is_open": false,
+      "company": "openai",
+      "raw_scores": [
+        0.0,
+        0.017483,
+        0.07781,
+        0.245098,
+        0.0,
+        0.212598
+      ]
+    },
+    {
+      "rank": 4,
+      "name": "kimi-k3",
+      "avg_pct": 0.084143,
+      "lower_err": 0.028208,
+      "upper_err": 0.034402,
+      "n_bench": 4,
+      "cost": 18.0,
+      "rel_cost": 2.25,
+      "tier": 1,
+      "is_open": true,
+      "company": "moonshot",
+      "raw_scores": [
+        0.155594,
+        0.037464,
+        0.062092,
+        0.106195
+      ]
+    },
+    {
+      "rank": 5,
+      "name": "fable5",
+      "avg_pct": 0.111718,
+      "lower_err": 0.080297,
+      "upper_err": 0.039592,
+      "n_bench": 6,
+      "cost": 60.0,
+      "rel_cost": 7.5,
+      "tier": 1,
+      "is_open": false,
+      "company": "anthropic",
+      "raw_scores": [
+        0.0,
+        0.108392,
+        0.005764,
+        0.163399,
+        0.115044,
+        0.225722
+      ]
+    },
+    {
+      "rank": 6,
+      "name": "glm53",
+      "avg_pct": 0.153529,
+      "lower_err": 0.107059,
+      "upper_err": 0.09788,
       "n_bench": 4,
       "cost": 5.8,
-      "rel_cost": 0.165714,
-      "tier": 3,
+      "rel_cost": 0.725,
+      "tier": 1,
       "is_open": true,
       "company": "zhipu",
       "raw_scores": [
-        0.228037,
-        0.177233,
         0.0,
-        0.271386
+        0.06196,
+        0.245098,
+        0.270341
+      ]
+    },
+    {
+      "rank": 7,
+      "name": "qwen38-27b",
+      "avg_pct": 0.187221,
+      "lower_err": null,
+      "upper_err": null,
+      "n_bench": 2,
+      "cost": 0.7,
+      "rel_cost": 0.0875,
+      "tier": 1,
+      "is_open": true,
+      "company": "qwen",
+      "raw_scores": [
+        0.13986,
+        0.034582
       ]
     },
     {
       "rank": 8,
-      "name": "gpt56luna",
-      "avg_pct": 0.214984,
-      "lower_err": 0.010365,
-      "upper_err": 0.197025,
-      "n_bench": 4,
-      "cost": 1.4,
-      "rel_cost": 0.04,
-      "tier": 3,
-      "is_open": false,
-      "company": "openai",
-      "raw_scores": [
-        0.181308,
-        0.9953,
-        0.217579,
-        0.212389
-      ]
-    },
-    {
-      "rank": 9,
-      "name": "gemini-flash36",
-      "avg_pct": 0.227186,
-      "lower_err": 0.119117,
-      "upper_err": 0.108031,
-      "n_bench": 4,
+      "name": "gemini-flash37",
+      "avg_pct": 0.224539,
+      "lower_err": null,
+      "upper_err": null,
+      "n_bench": 2,
       "cost": 9.0,
-      "rel_cost": 0.257143,
+      "rel_cost": 1.125,
       "tier": 2,
       "is_open": false,
       "company": "google",
       "raw_scores": [
-        0.31028,
-        0.144092,
-        0.0,
-        0.410029
+        0.244755,
+        0.004323
+      ]
+    },
+    {
+      "rank": 9,
+      "name": "muse-spark-12",
+      "avg_pct": 0.298991,
+      "lower_err": null,
+      "upper_err": null,
+      "n_bench": 1,
+      "cost": 5.5,
+      "rel_cost": 0.6875,
+      "tier": 2,
+      "is_open": false,
+      "company": "meta",
+      "raw_scores": [
+        0.048991
       ]
     },
     {
       "rank": 10,
-      "name": "grok45",
-      "avg_pct": 0.228625,
+      "name": "deepseek4",
+      "avg_pct": 0.300429,
       "lower_err": null,
       "upper_err": null,
       "n_bench": 2,
-      "cost": 8.0,
-      "rel_cost": 0.228571,
-      "tier": 3,
-      "is_open": false,
-      "company": "xai",
+      "cost": 5.1,
+      "rel_cost": 0.6375,
+      "tier": 2,
+      "is_open": true,
+      "company": "deepseek",
       "raw_scores": [
-        0.179439,
-        0.07781
+        0.157343,
+        0.243516
       ]
     },
     {
       "rank": 11,
       "name": "sonnet5",
-      "avg_pct": 0.24999,
-      "lower_err": 0.101332,
-      "upper_err": 0.225023,
-      "n_bench": 4,
+      "avg_pct": 0.339233,
+      "lower_err": 0.124198,
+      "upper_err": 0.314362,
+      "n_bench": 5,
       "cost": 18.0,
-      "rel_cost": 0.514286,
-      "tier": 3,
+      "rel_cost": 2.25,
+      "tier": 2,
       "is_open": false,
       "company": "anthropic",
       "raw_scores": [
-        0.160748,
+        0.215035,
         0.112392,
-        0.882353,
-        0.339233
+        0.653595,
+        0.339233,
+        0.737533
       ]
     },
     {
       "rank": 12,
-      "name": "muse-spark-11",
-      "avg_pct": 0.33271,
-      "lower_err": 0.128171,
-      "upper_err": 0.009161,
-      "n_bench": 3,
-      "cost": 5.5,
-      "rel_cost": 0.157143,
-      "tier": 3,
+      "name": "gpt56terra",
+      "avg_pct": 0.387346,
+      "lower_err": 0.232901,
+      "upper_err": 0.18673,
+      "n_bench": 6,
+      "cost": 14.0,
+      "rel_cost": 1.75,
+      "tier": 2,
       "is_open": false,
-      "company": "meta",
+      "company": "openai",
       "raw_scores": [
-        0.33271,
-        0.076369,
-        0.351032
+        0.979112,
+        0.202797,
+        0.138329,
+        0.571895,
+        0.132743,
+        0.574803
       ]
     },
     {
       "rank": 13,
-      "name": "deepseek4",
-      "avg_pct": 0.353271,
-      "lower_err": 0.054878,
-      "upper_err": 0.03765,
-      "n_bench": 3,
-      "cost": 5.1,
-      "rel_cost": 0.145714,
-      "tier": 3,
-      "is_open": true,
-      "company": "deepseek",
-      "raw_scores": [
-        0.353271,
-        0.243516,
-        0.428571
-      ]
-    },
-    {
-      "rank": 14,
       "name": "minimax3",
-      "avg_pct": 0.371963,
-      "lower_err": 0.039728,
-      "upper_err": 0.196025,
+      "avg_pct": 0.412587,
+      "lower_err": 0.06004,
+      "upper_err": 0.175712,
       "n_bench": 3,
       "cost": 3.0,
-      "rel_cost": 0.085714,
-      "tier": 3,
+      "rel_cost": 0.375,
+      "tier": 2,
       "is_open": true,
       "company": "minimax",
       "raw_scores": [
-        0.371963,
+        0.412587,
         0.292507,
         0.764012
       ]
     },
     {
+      "rank": 14,
+      "name": "grok46",
+      "avg_pct": 0.425197,
+      "lower_err": 0.212598,
+      "upper_err": 0.083153,
+      "n_bench": 3,
+      "cost": 8.0,
+      "rel_cost": 1.0,
+      "tier": 2,
+      "is_open": false,
+      "company": "xai",
+      "raw_scores": [
+        0.0,
+        0.591503,
+        0.425197
+      ]
+    },
+    {
       "rank": 15,
       "name": "deepseek-flash4",
-      "avg_pct": 0.42271,
+      "avg_pct": 0.440423,
       "lower_err": null,
       "upper_err": null,
       "n_bench": 2,
       "cost": 0.4,
-      "rel_cost": 0.011429,
-      "tier": 3,
+      "rel_cost": 0.05,
+      "tier": 2,
       "is_open": true,
       "company": "deepseek",
       "raw_scores": [
-        0.452336,
+        0.487762,
         0.193084
       ]
     },
     {
       "rank": 16,
       "name": "inkling",
-      "avg_pct": 0.429907,
-      "lower_err": 0.145069,
-      "upper_err": 0.199501,
+      "avg_pct": 0.466783,
+      "lower_err": 0.163507,
+      "upper_err": 0.181063,
       "n_bench": 3,
       "cost": 4.19,
-      "rel_cost": 0.119714,
-      "tier": 3,
+      "rel_cost": 0.52375,
+      "tier": 2,
       "is_open": true,
       "company": "thinking_machines",
       "raw_scores": [
-        0.429907,
+        0.466783,
         0.139769,
         0.828909
       ]
     },
     {
       "rank": 17,
-      "name": "kimi26",
-      "avg_pct": 0.46729,
-      "lower_err": 0.134221,
-      "upper_err": 0.266355,
-      "n_bench": 3,
-      "cost": 4.1,
-      "rel_cost": 0.117143,
-      "tier": 3,
-      "is_open": true,
-      "company": "moonshot",
+      "name": "gpt56luna",
+      "avg_pct": 0.489836,
+      "lower_err": 0.268085,
+      "upper_err": 0.323966,
+      "n_bench": 6,
+      "cost": 1.4,
+      "rel_cost": 0.175,
+      "tier": 2,
+      "is_open": false,
+      "company": "openai",
       "raw_scores": [
-        0.46729,
-        0.198847,
-        1.0
+        0.9953,
+        0.234266,
+        0.217579,
+        0.836601,
+        0.212389,
+        0.745407
       ]
     },
     {
       "rank": 18,
-      "name": "kimi27code",
-      "avg_pct": 0.51513,
-      "lower_err": null,
-      "upper_err": null,
-      "n_bench": 1,
-      "cost": 4.19,
-      "rel_cost": 0.119714,
-      "tier": 4,
-      "is_open": true,
-      "company": "moonshot",
-      "raw_scores": [
-        0.26513
-      ]
-    },
-    {
-      "rank": 19,
       "name": "gemini-pro31",
-      "avg_pct": 0.673965,
-      "lower_err": 0.046528,
-      "upper_err": 0.246382,
-      "n_bench": 6,
+      "avg_pct": 0.641356,
+      "lower_err": 0.146753,
+      "upper_err": 0.09891,
+      "n_bench": 4,
       "cost": 16.0,
-      "rel_cost": 0.457143,
-      "tier": 4,
+      "rel_cost": 2.0,
+      "tier": 3,
       "is_open": false,
       "company": "google",
       "raw_scores": [
-        0.633645,
         0.989034,
+        0.657343,
         0.102305,
-        1.0,
-        0.714286,
         0.625369
       ]
     },
     {
-      "rank": 20,
-      "name": "haiku45",
-      "avg_pct": 0.727103,
-      "lower_err": 0.192946,
-      "upper_err": 0.136449,
-      "n_bench": 3,
-      "cost": 6.0,
-      "rel_cost": 0.171429,
-      "tier": 4,
-      "is_open": false,
-      "company": "anthropic",
-      "raw_scores": [
-        0.727103,
-        0.34121,
-        1.0
-      ]
-    },
-    {
-      "rank": 21,
+      "rank": 19,
       "name": "gemma4-31",
       "avg_pct": 1.0,
       "lower_err": null,
       "upper_err": null,
       "n_bench": 1,
       "cost": 0.7,
-      "rel_cost": 0.02,
-      "tier": 5,
+      "rel_cost": 0.0875,
+      "tier": 4,
       "is_open": true,
       "company": "google",
       "raw_scores": [
-        0.764486
+        0.77972
       ]
     },
     {
-      "rank": 22,
+      "rank": 20,
       "name": "gpt-oss-120b",
       "avg_pct": 1.0,
       "lower_err": null,
       "upper_err": null,
       "n_bench": 1,
       "cost": 1.4,
-      "rel_cost": 0.04,
-      "tier": 5,
+      "rel_cost": 0.175,
+      "tier": 4,
       "is_open": true,
       "company": "openai",
       "raw_scores": [
-        0.786916
+        0.800699
       ]
     },
     {
-      "rank": 23,
+      "rank": 21,
       "name": "gpt-oss-20b",
       "avg_pct": 1.0,
       "lower_err": null,
       "upper_err": null,
       "n_bench": 1,
       "cost": 0.5,
-      "rel_cost": 0.014286,
-      "tier": 5,
+      "rel_cost": 0.0625,
+      "tier": 4,
       "is_open": true,
       "company": "openai",
       "raw_scores": [
-        0.975701
+        0.977273
       ]
     }
   ]

@@ -1,6 +1,14 @@
 {
   "entries": [
     {
+      "date": "2026-08-25",
+      "message": "updated to latest models"
+    },
+    {
+      "date": "2026-08-04",
+      "message": "Remove deprecated model entries"
+    },
+    {
       "date": "2026-08-04",
       "message": "added Qwen 3.8 max"
     },

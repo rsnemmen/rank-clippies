@@ -72,25 +72,10 @@ cost = 8
 open = false
 company = "xai"
 
-[haiku45]
-cost = 6
-open = false
-company = "anthropic"
-
 [inkling]
 cost = 4.19
 open = true
 company = "thinking_machines"
-
-[kimi26]
-cost = 4.1
-open = true
-company = "moonshot"
-
-[kimi27code]
-cost = 4.19
-open = true
-company = "moonshot"
 
 [kimi-k3]
 cost = 18
