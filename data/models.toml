@@ -12,12 +12,22 @@ cost = 5.1
 open = true
 company = "deepseek"
 
+[deepseek-flash41]
+cost = 0.75
+open = true
+company = "deepseek"
+
 [fable5]
 cost = 60
 open = false
 company = "anthropic"
 
-[gemini-flash37]
+[fable51]
+cost = 60
+open = false
+company = "anthropic"
+
+[gemini-flash38]
 cost = 9
 open = false
 company = "google"
@@ -52,8 +62,13 @@ cost = 0.5
 open = true
 company = "openai"
 
+[gpt6]
+cost = 60
+open = false
+company = "openai"
+
 [gpt56sol]
-cost = 35
+cost = 24
 open = false
 company = "openai"
 
@@ -88,6 +103,11 @@ open = true
 company = "minimax"
 
 [muse-spark-12]
+cost = 5.5
+open = false
+company = "meta"
+
+[muse-spark-13]
 cost = 5.5
 open = false
 company = "meta"
