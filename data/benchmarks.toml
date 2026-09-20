@@ -33,6 +33,31 @@ gpt56luna = 0.2
 grok46 = 2.1
 opus5 = 30.2
 
+# Agent Arena 
+[arena_agent]
+categories = ["agentic"]
+min_score = -15.52
+
+[arena_agent.scores]
+deepseek-flash4 = -0.71
+deepseek-flash41 = 4.88
+fable5 = 8.81
+fable51 = 13.71
+gemini-flash38 = 4.71
+glm53 = 4.37
+gpt6 = 11.54
+gpt56sol = 7.1
+gpt56terra = 1.44
+gpt56luna = -0.44
+grok46 = 2.01
+inkling = -10.02
+kimi-k3 = 6.22
+minimax3 = -5.76
+muse-spark-12 = -1.77
+opus5 = 10.25
+qwen38-max = 3.3
+sonnet5 = 5.97
+
 # Code Arena | WebDev
 [arena_webdev]
 categories = ["coding"]
