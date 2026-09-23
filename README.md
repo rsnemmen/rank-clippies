@@ -137,7 +137,7 @@ min_score = 5
 [artificial_analysis_agentic.scores]
 gemini-flash3 = 50
 gpt56sol = 74
-opus5 = 70
+opus55 = 70
 sonnet5 = 63
 ```
 
@@ -301,7 +301,7 @@ known_totals = 40
 
 [new_bench.scores]
 gpt56sol = 1
-opus5 = 2
+opus55 = 2
 sonnet5 = 5
 ```
 

@@ -2,11 +2,6 @@
 # company = logo slug used for docs/assets/logos/<company>.png; omit for unknown vendors
 # Sorted alphabetically by model name
 
-[deepseek-flash4]
-cost = 0.4
-open = true
-company = "deepseek"
-
 [deepseek4]
 cost = 5.1
 open = true

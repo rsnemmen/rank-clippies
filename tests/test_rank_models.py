@@ -53,6 +53,34 @@ def test_muse_spark_12_is_absent_from_active_data() -> None:
     assert any("muse-spark-13" in benchmark["scores"] for benchmark in active.values())
 
 
+def test_deepseek_flash4_is_absent_from_active_data() -> None:
+    """Keep DeepSeek Flash 4 out of active rankings while retaining Flash 4.1."""
+    data_dir = Path(rank_models.__file__).resolve().parent / "data"
+    with (data_dir / "benchmarks.toml").open("rb") as f:
+        active = tomllib.load(f)
+    with (data_dir / "models.toml").open("rb") as f:
+        models = tomllib.load(f)
+
+    assert all("deepseek-flash4" not in benchmark["scores"] for benchmark in active.values())
+    assert "deepseek-flash4" not in models
+    assert "deepseek-flash41" in models
+    assert any("deepseek-flash41" in benchmark["scores"] for benchmark in active.values())
+
+
+def test_opus5_is_absent_from_active_data() -> None:
+    """Keep Opus 5 out of active rankings while retaining Opus 5.5."""
+    data_dir = Path(rank_models.__file__).resolve().parent / "data"
+    with (data_dir / "benchmarks.toml").open("rb") as f:
+        active = tomllib.load(f)
+    with (data_dir / "models.toml").open("rb") as f:
+        models = tomllib.load(f)
+
+    assert all("opus5" not in benchmark["scores"] for benchmark in active.values())
+    assert "opus5" not in models
+    assert "opus55" in models
+    assert any("opus55" in benchmark["scores"] for benchmark in active.values())
+
+
 def _patch_data(monkeypatch: pytest.MonkeyPatch, benchmarks: list[dict[str, object]]) -> None:
     costs = {
         "alpha": 10.0,
