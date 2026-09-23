@@ -17,11 +17,6 @@ cost = 0.75
 open = true
 company = "deepseek"
 
-[fable5]
-cost = 60
-open = false
-company = "anthropic"
-
 [fable51]
 cost = 60
 open = false
@@ -72,6 +67,11 @@ cost = 24
 open = false
 company = "openai"
 
+[gpt6sol]
+cost = 12
+open = false
+company = "openai"
+
 [gpt56terra]
 cost = 14
 open = false
@@ -79,6 +79,11 @@ company = "openai"
 
 [gpt56luna]
 cost = 1.4
+open = false
+company = "openai"
+
+[gpt6luna]
+cost = 0.6
 open = false
 company = "openai"
 
@@ -112,8 +117,8 @@ cost = 5.5
 open = false
 company = "meta"
 
-[opus5]
-cost = 30.0
+[opus55]
+cost = 24
 open = false
 company = "anthropic"
 

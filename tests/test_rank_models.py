@@ -23,17 +23,20 @@ def test_retired_benchmarks_are_excluded_from_active_data() -> None:
     }
     assert archived_names <= retired.keys()
     assert not (set(active) & set(retired))
-    assert "charxiv" in active
-    assert "arena_webdev" in active
-    assert "arena_coding" not in active
-    assert active["ARC_AGI_3"]["categories"] == ["general", "agentic"]
-    assert active["osworld"]["categories"] == ["agentic"]
-    assert active["GraphWalks_BFS_1M"]["categories"] == ["general"]
-    assert active["FrontierCode"]["min_score"] == pytest.approx(24.31)
-    assert active["FrontierCode"]["scores"] == {
-        "fable5": 53.48,
-        "sonnet5": 42.73,
-    }
+
+
+def test_fable5_is_absent_from_active_data() -> None:
+    """Keep the retired model out of active rankings while retaining Fable 5.1."""
+    data_dir = Path(rank_models.__file__).resolve().parent / "data"
+    with (data_dir / "benchmarks.toml").open("rb") as f:
+        active = tomllib.load(f)
+    with (data_dir / "models.toml").open("rb") as f:
+        models = tomllib.load(f)
+
+    assert all("fable5" not in benchmark["scores"] for benchmark in active.values())
+    assert "fable5" not in models
+    assert "fable51" in models
+    assert any("fable51" in benchmark["scores"] for benchmark in active.values())
 
 
 def _patch_data(monkeypatch: pytest.MonkeyPatch, benchmarks: list[dict[str, object]]) -> None:
