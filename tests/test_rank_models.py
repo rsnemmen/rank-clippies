@@ -39,6 +39,20 @@ def test_fable5_is_absent_from_active_data() -> None:
     assert any("fable51" in benchmark["scores"] for benchmark in active.values())
 
 
+def test_muse_spark_12_is_absent_from_active_data() -> None:
+    """Keep Muse Spark 12 out of active rankings while retaining Muse Spark 13."""
+    data_dir = Path(rank_models.__file__).resolve().parent / "data"
+    with (data_dir / "benchmarks.toml").open("rb") as f:
+        active = tomllib.load(f)
+    with (data_dir / "models.toml").open("rb") as f:
+        models = tomllib.load(f)
+
+    assert all("muse-spark-12" not in benchmark["scores"] for benchmark in active.values())
+    assert "muse-spark-12" not in models
+    assert "muse-spark-13" in models
+    assert any("muse-spark-13" in benchmark["scores"] for benchmark in active.values())
+
+
 def _patch_data(monkeypatch: pytest.MonkeyPatch, benchmarks: list[dict[str, object]]) -> None:
     costs = {
         "alpha": 10.0,

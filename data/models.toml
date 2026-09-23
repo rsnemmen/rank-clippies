@@ -92,6 +92,11 @@ cost = 8
 open = false
 company = "xai"
 
+[grok47]
+cost = 8
+open = false
+company = "xai"
+
 [inkling]
 cost = 4.19
 open = true
@@ -107,10 +112,10 @@ cost = 3
 open = true
 company = "minimax"
 
-[muse-spark-12]
-cost = 5.5
-open = false
-company = "meta"
+[mimov26pro]
+cost = 1.3
+open = true
+company = "xiaomi"
 
 [muse-spark-13]
 cost = 5.5
