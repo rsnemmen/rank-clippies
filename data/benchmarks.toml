@@ -12,9 +12,11 @@ gemini-flash38 = 84.6
 inkling = 36.5
 gpt6 = 95
 gpt56sol = 92.5
+gpt6sol = 59.3
 gpt56terra = 83.9
 gpt56luna = 59.6
 grok46 = 67.1
+opus55 = 93.3
 
 # https://arcprize.org/leaderboard
 [ARC_AGI_3]
@@ -25,6 +27,7 @@ min_score = 0
 gemini-pro31 = 0.4
 gpt6 = 99.9
 gpt56sol = 7.8
+gpt6luna = 0.6
 gpt56terra = 0.8
 gpt56luna = 0.2
 grok46 = 2.1
@@ -417,11 +420,13 @@ categories = ["coding"]
 min_score = 19.4
 
 [SWE_Marathon.scores]
+fable51 = 45.6
 glm53 = 42.5
 gpt56sol = 42.5
 gpt56terra = 32.5
 gpt56luna = 24.4
 grok46 = 31.9
+grok47 = 45.6
 kimi-k3 = 48.1
 muse-spark-13 = 30.6
 sonnet5 = 30
