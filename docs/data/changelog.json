@@ -1,6 +1,34 @@
 {
   "entries": [
     {
+      "date": "2026-09-24",
+      "message": "new gpt 6 models"
+    },
+    {
+      "date": "2026-09-22",
+      "message": "Update benchmarks and remove DeepSeek Flash 4 and Opus 5"
+    },
+    {
+      "date": "2026-09-22",
+      "message": "Update model data and remove Muse Spark 12"
+    },
+    {
+      "date": "2026-09-22",
+      "message": "Update model rankings and remove Fable5"
+    },
+    {
+      "date": "2026-09-20",
+      "message": "added agent arena"
+    },
+    {
+      "date": "2026-09-16",
+      "message": "updated open models for coding"
+    },
+    {
+      "date": "2026-08-25",
+      "message": "Remove deprecated model entries"
+    },
+    {
       "date": "2026-08-25",
       "message": "updated to latest models"
     },

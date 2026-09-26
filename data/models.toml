@@ -37,11 +37,6 @@ cost = 5.8
 open = true
 company = "zhipu"
 
-[gpt-chat55]
-cost = 35
-open = false
-company = "openai"
-
 [gpt-oss-120b]
 cost = 1.4
 open = true
@@ -81,11 +76,6 @@ company = "openai"
 cost = 0.6
 open = false
 company = "openai"
-
-[grok46]
-cost = 8
-open = false
-company = "xai"
 
 [grok47]
 cost = 8

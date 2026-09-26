@@ -1,7 +1,7 @@
 {
   "category": "stem",
   "title": "Math and STEM expert reasoning",
-  "generated_at": "2026-09-23T02:31:51Z",
+  "generated_at": "2026-09-26T16:46:00Z",
   "n_benchmarks": 7,
   "benchmark_names": [
     "artificial_analysis_intelligence",
@@ -302,23 +302,21 @@
     },
     {
       "rank": 15,
-      "name": "grok46",
-      "avg_pct": 0.426901,
-      "lower_err": 0.147661,
-      "upper_err": 0.395028,
-      "n_bench": 6,
+      "name": "grok47",
+      "avg_pct": 0.411421,
+      "lower_err": 0.078087,
+      "upper_err": 0.068853,
+      "n_bench": 4,
       "cost": 8.0,
       "rel_cost": 0.133333,
-      "tier": 3,
+      "tier": 4,
       "is_open": false,
       "company": "xai",
       "raw_scores": [
-        0.245614,
-        0.473684,
-        1.318584,
-        0.380117,
-        0.057269,
-        0.93801
+        0.192982,
+        0.442724,
+        0.59292,
+        0.380117
       ]
     },
     {
@@ -396,23 +394,6 @@
     },
     {
       "rank": 20,
-      "name": "grok47",
-      "avg_pct": 0.492951,
-      "lower_err": null,
-      "upper_err": null,
-      "n_bench": 2,
-      "cost": 8.0,
-      "rel_cost": 0.133333,
-      "tier": 4,
-      "is_open": false,
-      "company": "xai",
-      "raw_scores": [
-        0.192982,
-        0.59292
-      ]
-    },
-    {
-      "rank": 21,
       "name": "deepseek-flash41",
       "avg_pct": 0.548246,
       "lower_err": null,
@@ -428,7 +409,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "name": "qwen38-27b",
       "avg_pct": 0.569837,
       "lower_err": null,
@@ -445,7 +426,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 22,
       "name": "inkling",
       "avg_pct": 0.581871,
       "lower_err": 0.119577,
@@ -464,7 +445,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "name": "gemma4-31",
       "avg_pct": 0.692521,
       "lower_err": 0.211624,
@@ -472,7 +453,7 @@
       "n_bench": 3,
       "cost": 0.7,
       "rel_cost": 0.011667,
-      "tier": 4,
+      "tier": 5,
       "is_open": true,
       "company": "google",
       "raw_scores": [
@@ -482,7 +463,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "name": "gpt-oss-120b",
       "avg_pct": 0.7747,
       "lower_err": 0.120306,
@@ -501,7 +482,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "name": "gpt-oss-20b",
       "avg_pct": 1.0,
       "lower_err": null,
