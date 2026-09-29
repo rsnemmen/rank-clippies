@@ -50,7 +50,6 @@ kimi-k3 = 4.6
 minimax3 = -5.76
 opus55 = 9.8
 qwen38-max = 3.3
-sonnet5 = 4.8
 
 # Code Arena | WebDev
 [arena_webdev]
@@ -79,7 +78,6 @@ muse-spark-13 = 1652
 opus55 = 1827
 qwen38-max = 1688
 qwen38-27b = 1595
-sonnet5 = 1545
 
 # General leaderboard (Chatbot Arena — overall)
 [arena_general]
@@ -162,7 +160,6 @@ min_score = 36.8
 fable51 = 90.3
 gemini-pro31 = 83.6
 gpt56sol = 86.1
-sonnet5 = 84.9
 
 # https://artificialanalysis.ai/evaluations/critpt
 [CritPt]
@@ -303,7 +300,6 @@ minimax3 = 37.1
 opus55= 67.7
 qwen38-27b = 34
 qwen38-max = 42
-sonnet5 = 39.6
 
 # LiveBench — coding + agentic subscore
 [LiveBench_coding]
@@ -328,7 +324,6 @@ muse-spark-13 = 72.6
 opus55 = 80.5
 qwen38-max = 68.6
 qwen38-27b = 68.5
-sonnet5 = 70
 
 # LiveBench — agentic coding + IF subscore
 [LiveBench_agents]
@@ -352,7 +347,6 @@ minimax3 = 49.1
 muse-spark-13 = 71
 qwen38-max = 69.4
 qwen38-27b = 67
-sonnet5 = 61.6
 
 # LiveBench — math/stem (reasoning + math + data analysis subscore)
 [LiveBench_stem]
@@ -378,7 +372,6 @@ minimax3 = 76.6
 muse-spark-13 = 88.4
 opus55 = 89.8
 qwen38-max = 86
-sonnet5 = 84.5
 
 # LiveBench — overall score
 [LiveBench_general]
@@ -405,7 +398,6 @@ muse-spark-13 = 81.6
 opus55 = 83.2
 qwen38-max = 78.5
 qwen38-27b = 75.3
-sonnet5 = 76
 
 [simpleBench]
 categories = ["general"]
@@ -428,7 +420,6 @@ muse-spark-13 = 81.8
 opus55 = 88.4
 qwen38-max = 62.5
 qwen38-27b = 60.2
-sonnet5 = 60.6
 
 # https://www.swe-marathon.org, v1.1
 [SWE_Marathon]
@@ -444,7 +435,6 @@ gpt56luna = 24.4
 grok47 = 45.6
 kimi-k3 = 48.1
 muse-spark-13 = 30.6
-sonnet5 = 30
 
 # v4
 [terminal_bench4]

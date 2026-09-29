@@ -62,7 +62,6 @@ kimi26 = 58.6
 minimax3 = 59
 muse-spark-11 = 61.5
 qwen36-27b = 53.5
-sonnet5 = 63.2
 
 # Retired 2026-07-26: contaminated and flawed at frontier capability levels.
 [swebench_verified]
