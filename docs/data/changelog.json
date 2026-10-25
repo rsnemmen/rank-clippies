@@ -2,6 +2,10 @@
   "entries": [
     {
       "date": "2026-09-28",
+      "message": "Remove Sonnet 5 and refresh rankings"
+    },
+    {
+      "date": "2026-09-28",
       "message": "Copy model and benchmark updates to main"
     },
     {

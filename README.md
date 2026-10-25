@@ -163,6 +163,15 @@ https://artificialanalysis.ai
 https://gorilla.cs.berkeley.edu/leaderboard.html#leaderboard  
 https://www.swebench.com
 
+Additional sources: [Vals Index](https://www.vals.ai/benchmarks/vals_index) and
+[BioMysteryBench](https://www.vals.ai/benchmarks/biomysterybench).
+
+Vals Index v2.1 contributes its overall GDP-weighted accuracy to the general and agentic
+rankings. BioMysteryBench uses Vals AI's human-solvable subset with the Terminus 2 harness;
+its overall and human-difficult scores are not mixed into that table. GDPval-AA uses the
+v2.1 Elo ratings. These tables use the lowest score on each full source leaderboard as
+the normalization floor, including models not tracked here.
+
 ### `data/models.toml`
 
 One TOML table per model, alphabetical by model name. Each entry holds USD cost and model type:

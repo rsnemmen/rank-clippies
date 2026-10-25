@@ -27,6 +27,11 @@ cost = 16.0
 open = false
 company = "google"
 
+[gemini4]
+cost = 12.0
+open = false
+company = "google"
+
 [gemma4-31]
 cost = 0.7
 open = true
@@ -47,13 +52,8 @@ cost = 0.5
 open = true
 company = "openai"
 
-[gpt6]
+[gpt6astra]
 cost = 60
-open = false
-company = "openai"
-
-[gpt56sol]
-cost = 24
 open = false
 company = "openai"
 
@@ -62,13 +62,8 @@ cost = 12
 open = false
 company = "openai"
 
-[gpt56terra]
-cost = 14
-open = false
-company = "openai"
-
-[gpt56luna]
-cost = 1.4
+[gpt61sol]
+cost = 12
 open = false
 company = "openai"
 
@@ -81,6 +76,11 @@ company = "openai"
 cost = 8
 open = false
 company = "xai"
+
+[haiku55]
+cost = 0.6
+open = false
+company = "anthropic"
 
 [inkling]
 cost = 4.19
@@ -104,6 +104,11 @@ company = "xiaomi"
 
 [muse-spark-13]
 cost = 5.5
+open = false
+company = "meta"
+
+[muse-wonder-1]
+cost = 24
 open = false
 company = "meta"
 
