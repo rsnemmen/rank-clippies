@@ -22,12 +22,12 @@ cost = 9
 open = false
 company = "google"
 
-[gemini-pro31]
-cost = 16.0
+[g4argon]
+cost = 12.0
 open = false
 company = "google"
 
-[gemini4]
+[g4carbon]
 cost = 12.0
 open = false
 company = "google"
@@ -67,6 +67,11 @@ cost = 12
 open = false
 company = "openai"
 
+[gpt61terra]
+cost = 6
+open = false
+company = "openai"
+
 [gpt6luna]
 cost = 0.6
 open = false
@@ -81,11 +86,6 @@ company = "xai"
 cost = 0.6
 open = false
 company = "anthropic"
-
-[inkling]
-cost = 4.19
-open = true
-company = "thinking_machines"
 
 [kimi-k3]
 cost = 18

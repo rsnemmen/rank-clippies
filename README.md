@@ -181,8 +181,8 @@ One TOML table per model, alphabetical by model name. Each entry holds USD cost 
 cost = 5.1
 open = true
 
-[gemini-pro31]
-cost = 16.0
+[gemini-flash38]
+cost = 9
 open = false
 ```
 

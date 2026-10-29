@@ -11,13 +11,11 @@ deepseek-flash4 = 88.1
 deepseek4 = 90.1
 fable5 = 92.6
 gemini-flash36 = 93
-gemini-pro31 = 94.3
 gemma4-31 = 84.3
 glm52 = 91.2
 gpt-oss-120b = 80.9
 gpt-oss-20b = 71
 haiku45 = 71.2
-inkling = 87
 kimi26 = 90.5
 kimi-k3 = 93.5
 minimax3 = 92.9
@@ -31,7 +29,6 @@ categories = ["general"]
 min_score = 44.3
 
 [MMMLU.scores]
-gemini-pro31 = 92.6
 gemma4-31 = 88.4
 gpt-oss-120b = 83.8
 haiku45 = 83
@@ -46,12 +43,10 @@ deepseek-flash4 = 52.6
 deepseek4 = 55.4
 fable5 = 80.3
 gemini-flash36 = 55.1
-gemini-pro31 = 54.2
 gemma4-31 = 35.7
 glm52 = 62.1
 gpt-oss-120b = 12
 haiku45 = 39.5
-inkling = 54.3
 kimi26 = 58.6
 minimax3 = 59
 muse-spark-11 = 61.5
@@ -65,10 +60,8 @@ min_score = 52
 [swebench_verified.scores]
 deepseek-flash4 = 79
 deepseek4 = 80.6
-gemini-pro31 = 80.6
 gemma4-31 = 52
 haiku45 = 66.6
-inkling = 77.6
 kimi26 = 80.2
 qwen36-27b = 77.2
 
@@ -80,7 +73,5 @@ min_score = 72.4
 
 [charxiv_notools.scores]
 gemini-flash36 = 84.2
-gemini-pro31 = 83.3
 fable5 = 88.9
-inkling = 78.1
 kimi-k3 = 84.8
