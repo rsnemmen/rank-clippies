@@ -1,6 +1,10 @@
 {
   "entries": [
     {
+      "date": "2026-10-28",
+      "message": "Remove gemini-pro31 and inkling, add g4argon/g4carbon scores, refresh rankings"
+    },
+    {
       "date": "2026-10-25",
       "message": "Remove gpt56 models, document Vals Index sources, and refresh rankings"
     },

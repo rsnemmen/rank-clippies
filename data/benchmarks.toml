@@ -53,7 +53,7 @@ categories = ["coding"]
 min_score = 1080
 
 [arena_webdev.scores]
-deepseek-flash41 = 1614
+deepseek-flash41 = 1665
 deepseek4 = 1457
 fable51 = 1755
 gemini-flash38 = 1567
@@ -61,10 +61,10 @@ gemma4-31 = 1370
 g4argon = 1674
 g4carbon = 1768
 glm53 = 1599
+glm53-flash = 1607
 gpt6astra = 1793
 gpt61sol = 1681
 grok47 = 1632
-kimi-k3 = 1674
 minimax3 = 1496
 mimov26pro = 1628
 muse-spark-13 = 1652
@@ -89,7 +89,6 @@ glm53 = 1487
 gpt-oss-120b = 1353
 gpt6astra = 1478
 gpt61sol = 1483
-kimi-k3 = 1486
 muse-spark-13 = 1494
 muse-wonder-1 = 1509
 opus55 = 1509
@@ -104,6 +103,7 @@ min_score = 20
 
 [artificial_analysis_coding.scores]
 deepseek4 = 43
+deepseek-flash41 = 47
 fable51 = 62
 gemini-flash38 = 42
 g4argon = 64
@@ -114,7 +114,6 @@ gpt61sol = 63
 gpt6luna = 41
 gpt61terra = 48
 grok47 = 56
-kimi-k3 = 52
 muse-spark-13 = 54
 muse-wonder-1 = 68
 qwen38-max = 43
@@ -141,7 +140,6 @@ gpt61terra = 48
 gpt-oss-120b = 16
 grok47 = 47
 haiku55 = 43
-kimi-k3 = 44
 muse-spark-13 = 48
 muse-wonder-1 = 56
 mimov26pro = 46
@@ -156,44 +154,41 @@ sonnet55 = 56
 # Floor is the lowest published human-solvable score across the full leaderboard.
 [BioMysteryBench]
 categories = ["stem"]
-min_score = 67.123
+min_score = 42.59
 
 [BioMysteryBench.scores]
-deepseek-flash41 = 78.539
-gemini-flash38 = 71.689
-g4argon = 84.932
-gpt6astra = 89.041
-gpt61sol = 89.041
-gpt6luna = 71.689
-grok47 = 78.539
-kimi-k3 = 79.909
-opus55 = 86.758
-sonnet55 = 89.498
+deepseek-flash41 = 67.78
+gemini-flash38 = 62.22
+g4argon = 76.3
+gpt6astra = 79.3
+gpt61sol = 79.6
+grok47 = 69.3
+haiku55 = 70.4
+kimi-k31-pro = 75.6
+opus55 = 79.3
+sonnet55 = 81.1
 
 # https://artificialanalysis.ai/evaluations/critpt
+# V2
 [CritPt]
 categories = ["stem"]
-min_score = 0
+min_score = 4
 
 [CritPt.scores]
-deepseek4 = 12.9
-fable51 = 31.1
-gemini-flash38 = 18
-gemma4-31 = 1.4
-g4argon = 27
-gpt-oss-120b = 1.1
-gpt-oss-20b = 1.4
-gpt6astra = 32
-gpt61sol = 31.7
-gpt6luna = 19.4
-gpt61terra = 28
-grok47 = 18
-kimi-k3 = 23
-minimax3 = 3.7
-muse-spark-13 = 25
-opus55 = 31.7
-qwen38-max = 20
-sonnet55 = 31
+deepseek-flash41 = 24
+fable51 = 51
+gemini-flash38 = 43.5
+g4carbon = 63
+gpt6astra = 70.5
+gpt61sol = 68.5
+gpt6luna = 41.5
+gpt61terra = 64.5
+grok47 = 32
+muse-spark-13 = 46
+muse-wonder-1 = 53
+opus55 = 61
+qwen38-max = 28.5
+sonnet55 = 56
 
 # v4
 [CursorBench]
@@ -201,9 +196,11 @@ categories = ["coding"]
 min_score = 16
 
 [CursorBench.scores]
+deepseek-flash41 = 47.7
 fable51 = 51.8
 gemini-flash38 = 39.6
 glm53 = 42.6
+glm53-flash = 36.8
 grok47 = 46.3
 muse-spark-13 = 41.6
 opus55 = 57.8
@@ -221,35 +218,54 @@ min_score = 5
 
 [DeepSWE.scores]
 deepseek4 = 8
+deepseek-flash41 = 53
 fable51 = 67.4
 gemini-flash38 = 75.4
 g4argon = 77.9
+glm53-flash = 63
 gpt6astra = 74.1
 gpt61sol = 71.9
 opus55 = 74.2
 grok47 = 71
-kimi-k3 = 67.5
 mimov26pro = 71.9
 
 # https://cognition.com/frontiercode
-# FrontierCode 1.1 Main, best published reasoning effort per model
+# FrontierCode 2
 [FrontierCode]
 categories = ["coding"]
 min_score = 8
 
 [FrontierCode.scores]
-deepseek4 = 28.5
-fable51 = 50.9
-gemini-flash38 = 41.2
-g4argon = 55
-glm53 = 40.1
-gpt6astra = 53.3
-gpt61sol = 50.2
-gpt6luna = 42.4
+deepseek-flash41 = 19.3
+fable51 = 32.4
+g4argon = 26.3
+g4carbon = 40
+glm53 = 17.8
+glm53-flash = 14.2
+gpt6astra = 42.8
+gpt61sol = 39
+gpt6luna = 21.9
 gpt61terra = 46.7
-kimi-k3 = 44.2
-opus55 = 54.6
-sonnet55 = 52.1
+haiku55 = 27.7
+muse-wonder-1 = 24.3
+opus55 = 45.5
+sonnet55 = 41
+
+# https://www.benchflow.ai/frontierphysics
+[FrontierPhysics]
+categories = ["stem"]
+min_score = 8
+
+[FrontierPhysics.scores]
+deepseek-flash41 = 10.7
+fable51 = 11.3
+g4argon = 8.3
+glm53 = 7.1
+gpt6astra = 23.2
+gpt61sol = 19.6
+gpt61terra = 14.3
+haiku55 = 4.2
+opus55 = 27.4
 
 [GDPpdf]
 categories = ["general"]
@@ -260,12 +276,14 @@ deepseek-flash41 = 19.8
 fable51 = 27.6
 gemini-flash38 = 23.2
 g4argon = 22
+g4carbon = 28
 gpt6astra = 34.2
 gpt61sol = 32
 gpt6luna = 23
 gpt61terra = 29
 grok47 = 22.8
 muse-spark-13 = 27.6
+muse-wonder-1 = 31
 opus55 = 30.6
 qwen38-max = 23.2
 
@@ -282,6 +300,7 @@ deepseek4 = 1441
 fable51 = 1735
 gemini-flash38 = 1412
 g4argon = 1611
+g4carbon = 1733
 gemma4-31 = 614
 glm53 = 1656
 gpt-oss-120b = 596
@@ -290,7 +309,6 @@ gpt6astra = 1542
 gpt61sol = 1575
 gpt6luna = 1438
 grok47 = 1710
-kimi-k3 = 1540
 minimax3 = 1246
 mimov26pro = 1686
 muse-spark-13 = 1672
@@ -323,6 +341,7 @@ fable51 = 62.1
 gemini-flash38 = 52.1
 gpt6astra = 64.7
 gpt61sol = 64.2
+gpt61terra = 62.7
 grok47 = 56.7
 opus55 = 65.6
 
@@ -335,40 +354,39 @@ min_score = 9
 deepseek-flash41 = 25.3
 fable51 = 60.1
 gemini-flash38 = 33.1
-gemma4-31 = 22.7
 g4argon = 57
 g4carbon = 69.1
-gpt-oss-120b = 14.9
-gpt-oss-20b = 10.9
-gpt6astra = 54.7
-gpt61terra = 46
-gpt61sol = 53
-grok47 = 43
-kimi-k3 = 47
-minimax3 = 37.1
-opus55 = 64.4
-qwen38-27b = 34
-qwen38-max = 42
-sonnet55 = 55
+gpt6astra = 63.8
+gpt61terra = 47.3
+gpt61sol = 58.8
+grok47 = 23.2
+haiku55 = 29.6
+muse-wonder-1 = 48.5
+muse-spark-13 = 30.3
+opus55 = 67.9
+qwen38-max = 24
+sonnet55 = 53.3
 
 # LiveBench — coding + agentic subscore
 [LiveBench_coding]
 categories = ["coding"]
-min_score = 0
+min_score = 27.1
 
 [LiveBench_coding.scores]
-deepseek-flash41 = 64.6
-fable51 = 89.3
-gemini-flash38 = 56.2
-g4argon = 79.8
-gpt6astra = 88.1
-gpt61sol = 84.5
-grok47 = 67.3
-haiku55 = 70.5
-muse-spark-13 = 65.3
-muse-wonder-1 = 69.7
-opus55 = 90.7
-sonnet55 = 86.8
+deepseek-flash41 = 61.5
+fable51 = 86.4
+gemini-flash38 = 44.7
+g4argon = 73.4
+glm53-flash = 45.4
+gpt6astra = 84.4
+gpt61sol = 80.4
+gpt61terra = 68.2
+grok47 = 62.6
+haiku55 = 62
+muse-spark-13 = 53.2
+muse-wonder-1 = 67
+opus55 = 82.9
+sonnet55 = 76.8
 
 # LiveBench — agentic
 [LiveBench_agents]
@@ -384,7 +402,6 @@ gpt6astra = 66.5
 gpt61sol = 64.3
 opus55 = 68.7
 glm53 = 65.1
-kimi-k3 = 66.8
 minimax3 = 49.1
 muse-spark-13 = 71
 qwen38-max = 69.4
@@ -441,7 +458,6 @@ glm53 = 66.2
 gpt-oss-120b = 22.1
 gpt6astra = 83.6
 gpt61sol = 73.1
-kimi-k3 = 60.7
 minimax3 = 45.8
 muse-spark-13 = 81.8
 opus55 = 88.4
@@ -461,7 +477,6 @@ glm53 = 42.5
 gpt6astra = 42.5
 gpt61sol = 42.5
 grok47 = 45.6
-kimi-k3 = 48.1
 muse-spark-13 = 30.6
 muse-wonder-1 = 53.1
 sonnet55 = 51.3
@@ -473,20 +488,20 @@ categories = ["coding", "agentic"]
 min_score = 11.2
 
 [terminal_bench4.scores]
-deepseek-flash41 = 26.8
+deepseek-flash41 = 15.7
 fable51 = 57.9
 gemini-flash38 = 19.1
 g4argon = 57.4
 g4carbon = 65.2
 glm53 = 41.8
-gpt6astra = 58.2
+glm53-flash = 35.8
+gpt6astra = 68.1
 gpt61terra = 50.3
 gpt61sol = 55.9
 grok47 = 37.6
-kimi-k3 = 12.6
 mimov26pro = 34.9
 opus55 = 66.4
-sonnet55 = 70.6
+sonnet55 = 61.8
 
 # v0.1
 [terminal_bench_science]
@@ -494,16 +509,16 @@ categories = ["agentic", "stem", "coding"]
 min_score = 3.3
 
 [terminal_bench_science.scores]
-fable51 = 52.6
+deepseek-flash41 = 15.7
+fable51 = 40
 gemini-flash38 = 12.4
 g4argon = 57.6
 g4carbon = 64.8
 glm53 = 8.1
-gpt6astra = 64.6
+gpt6astra = 68.1
 gpt61sol = 57
 gpt61terra = 58.3
-kimi-k3 = 7.1
-opus55 = 58.7
+opus55 = 63.3
 
 # https://www.vals.ai/benchmarks/vals_index
 # v2.1, overall GDP-weighted accuracy, published default settings (checked 2026-10-02)
@@ -524,7 +539,6 @@ gpt6astra = 65
 gpt61sol = 61.154
 gpt6luna = 51.216
 grok47 = 54.947
-kimi-k3 = 50.701
 minimax3 = 36.535
 mimov26pro = 55.199
 muse-spark-13 = 58.162

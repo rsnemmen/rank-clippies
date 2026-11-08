@@ -1,6 +1,31 @@
 # Historical benchmark archive. This file is intentionally not loaded by rank_models.py
 # and does not contribute to aggregate rankings or website exports.
 
+# https://artificialanalysis.ai/evaluations/critpt
+[CritPt]
+categories = ["stem"]
+min_score = 0
+
+[CritPt.scores]
+deepseek4 = 12.9
+fable51 = 31.1
+gemini-flash38 = 18
+gemma4-31 = 1.4
+g4argon = 27
+gpt-oss-120b = 1.1
+gpt-oss-20b = 1.4
+gpt6astra = 32
+gpt61sol = 31.7
+gpt6luna = 19.4
+gpt61terra = 28
+grok47 = 18
+minimax3 = 3.7
+muse-spark-13 = 25
+opus55 = 31.7
+qwen38-max = 20
+sonnet55 = 31
+
+
 # Retired 2026-07-26: saturated frontier signal; retained for historical reference.
 [GPQA_diamond]
 categories = ["general", "stem"]
@@ -17,7 +42,6 @@ gpt-oss-120b = 80.9
 gpt-oss-20b = 71
 haiku45 = 71.2
 kimi26 = 90.5
-kimi-k3 = 93.5
 minimax3 = 92.9
 muse-spark-11 = 90
 opus5 = 93
@@ -74,4 +98,3 @@ min_score = 72.4
 [charxiv_notools.scores]
 gemini-flash36 = 84.2
 fable5 = 88.9
-kimi-k3 = 84.8

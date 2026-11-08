@@ -42,6 +42,11 @@ cost = 5.8
 open = true
 company = "zhipu"
 
+[glm53-flash]
+cost = 0.65
+open = true
+company = "zhipu"
+
 [gpt-oss-120b]
 cost = 1.4
 open = true
@@ -87,8 +92,8 @@ cost = 0.6
 open = false
 company = "anthropic"
 
-[kimi-k3]
-cost = 18
+[kimi-k31-pro]
+cost = 12
 open = true
 company = "moonshot"
 

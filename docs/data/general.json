@@ -1,7 +1,7 @@
 {
   "category": "general",
   "title": "General intelligence",
-  "generated_at": "2026-10-29T01:57:46Z",
+  "generated_at": "2026-11-08T18:20:17Z",
   "n_benchmarks": 12,
   "benchmark_names": [
     "ARC_AGI_2",
@@ -35,8 +35,8 @@
       "name": "g4carbon",
       "avg_pct": 0.0,
       "lower_err": 0.0,
-      "upper_err": 0.0,
-      "n_bench": 6,
+      "upper_err": 0.066657,
+      "n_bench": 8,
       "cost": 12.0,
       "rel_cost": 1.0,
       "tier": 1,
@@ -46,6 +46,8 @@
         0.117422,
         0.0,
         0.0,
+        0.192547,
+        0.049736,
         0.0,
         0.0,
         0.0
@@ -56,11 +58,11 @@
       "name": "opus55",
       "avg_pct": 0.017241,
       "lower_err": 0.015617,
-      "upper_err": 0.038353,
+      "upper_err": 0.009235,
       "n_bench": 11,
       "cost": 24.0,
       "rel_cost": 2.0,
-      "tier": 2,
+      "tier": 1,
       "is_open": false,
       "company": "anthropic",
       "raw_scores": [
@@ -71,7 +73,7 @@
         0.111801,
         0.0,
         0.942308,
-        0.078203,
+        0.019967,
         0.017045,
         0.0,
         0.00325
@@ -86,14 +88,14 @@
       "n_bench": 6,
       "cost": 12.0,
       "rel_cost": 1.0,
-      "tier": 2,
+      "tier": 1,
       "is_open": false,
       "company": "anthropic",
       "raw_scores": [
         0.170141,
         0.051724,
         0.002641,
-        0.234609,
+        0.262895,
         0.0625,
         0.054643
       ]
@@ -107,7 +109,7 @@
       "n_bench": 10,
       "cost": 60.0,
       "rel_cost": 5.0,
-      "tier": 2,
+      "tier": 1,
       "is_open": false,
       "company": "anthropic",
       "raw_scores": [
@@ -125,33 +127,14 @@
     },
     {
       "rank": 5,
-      "name": "muse-wonder-1",
-      "avg_pct": 0.082112,
-      "lower_err": 0.035072,
-      "upper_err": 0.067264,
-      "n_bench": 4,
-      "cost": 24.0,
-      "rel_cost": 2.0,
-      "tier": 2,
-      "is_open": false,
-      "company": "meta",
-      "raw_scores": [
-        0.260005,
-        0.032986,
-        0.051724,
-        0.1125
-      ]
-    },
-    {
-      "rank": 6,
       "name": "gpt6astra",
       "avg_pct": 0.087273,
       "lower_err": 0.07108,
-      "upper_err": 0.060886,
+      "upper_err": 0.023764,
       "n_bench": 12,
       "cost": 60.0,
       "rel_cost": 5.0,
-      "tier": 2,
+      "tier": 1,
       "is_open": false,
       "company": "openai",
       "raw_scores": [
@@ -163,14 +146,14 @@
         0.0,
         0.133803,
         0.782051,
-        0.239601,
+        0.088186,
         0.021591,
         0.061776,
         0.087741
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "name": "g4argon",
       "avg_pct": 0.103433,
       "lower_err": 0.07421,
@@ -178,7 +161,7 @@
       "n_bench": 11,
       "cost": 12.0,
       "rel_cost": 1.0,
-      "tier": 2,
+      "tier": 1,
       "is_open": false,
       "company": "google",
       "raw_scores": [
@@ -196,15 +179,36 @@
       ]
     },
     {
+      "rank": 7,
+      "name": "muse-wonder-1",
+      "avg_pct": 0.105939,
+      "lower_err": 0.042302,
+      "upper_err": 0.117189,
+      "n_bench": 6,
+      "cost": 24.0,
+      "rel_cost": 2.0,
+      "tier": 1,
+      "is_open": false,
+      "company": "meta",
+      "raw_scores": [
+        0.260005,
+        0.032986,
+        0.051724,
+        0.099379,
+        0.342762,
+        0.1125
+      ]
+    },
+    {
       "rank": 8,
       "name": "gpt61sol",
       "avg_pct": 0.119278,
       "lower_err": 0.070344,
-      "upper_err": 0.054293,
+      "upper_err": 0.041528,
       "n_bench": 11,
       "cost": 12.0,
       "rel_cost": 1.0,
-      "tier": 2,
+      "tier": 1,
       "is_open": false,
       "company": "openai",
       "raw_scores": [
@@ -215,7 +219,7 @@
         0.12069,
         0.068323,
         0.119278,
-        0.267887,
+        0.171381,
         0.029545,
         0.196911,
         0.150232
@@ -223,14 +227,34 @@
     },
     {
       "rank": 9,
+      "name": "gpt61terra",
+      "avg_pct": 0.189655,
+      "lower_err": 0.028164,
+      "upper_err": 0.058847,
+      "n_bench": 5,
+      "cost": 6.0,
+      "rel_cost": 0.5,
+      "tier": 2,
+      "is_open": false,
+      "company": "openai",
+      "raw_scores": [
+        0.248502,
+        0.189655,
+        0.161491,
+        0.362729,
+        0.122727
+      ]
+    },
+    {
+      "rank": 10,
       "name": "muse-spark-13",
-      "avg_pct": 0.169259,
-      "lower_err": 0.086407,
-      "upper_err": 0.031118,
-      "n_bench": 8,
+      "avg_pct": 0.189655,
+      "lower_err": 0.104713,
+      "upper_err": 0.015314,
+      "n_bench": 9,
       "cost": 5.5,
       "rel_cost": 0.458333,
-      "tier": 3,
+      "tier": 2,
       "is_open": false,
       "company": "meta",
       "raw_scores": [
@@ -239,29 +263,10 @@
         0.189655,
         0.204969,
         0.076585,
+        0.645591,
         0.148864,
         0.084942,
         0.198846
-      ]
-    },
-    {
-      "rank": 10,
-      "name": "gpt61terra",
-      "avg_pct": 0.189655,
-      "lower_err": 0.028164,
-      "upper_err": 0.058847,
-      "n_bench": 5,
-      "cost": 6.0,
-      "rel_cost": 0.5,
-      "tier": 3,
-      "is_open": false,
-      "company": "openai",
-      "raw_scores": [
-        0.248502,
-        0.189655,
-        0.161491,
-        0.384359,
-        0.122727
       ]
     },
     {
@@ -273,7 +278,7 @@
       "n_bench": 10,
       "cost": 9.0,
       "rel_cost": 0.75,
-      "tier": 3,
+      "tier": 2,
       "is_open": false,
       "company": "google",
       "raw_scores": [
@@ -298,7 +303,7 @@
       "n_bench": 3,
       "cost": 1.3,
       "rel_cost": 0.108333,
-      "tier": 3,
+      "tier": 2,
       "is_open": true,
       "company": "xiaomi",
       "raw_scores": [
@@ -316,7 +321,7 @@
       "n_bench": 5,
       "cost": 5.8,
       "rel_cost": 0.483333,
-      "tier": 3,
+      "tier": 2,
       "is_open": true,
       "company": "zhipu",
       "raw_scores": [
@@ -332,11 +337,11 @@
       "name": "grok47",
       "avg_pct": 0.251085,
       "lower_err": 0.068659,
-      "upper_err": 0.143072,
+      "upper_err": 0.148196,
       "n_bench": 7,
       "cost": 8.0,
       "rel_cost": 0.666667,
-      "tier": 3,
+      "tier": 2,
       "is_open": false,
       "company": "xai",
       "raw_scores": [
@@ -344,7 +349,7 @@
         0.206897,
         0.354037,
         0.059859,
-        0.434276,
+        0.763727,
         0.157955,
         0.251085
       ]
@@ -358,7 +363,7 @@
       "n_bench": 4,
       "cost": 5.1,
       "rel_cost": 0.425,
-      "tier": 3,
+      "tier": 2,
       "is_open": true,
       "company": "deepseek",
       "raw_scores": [
@@ -370,6 +375,43 @@
     },
     {
       "rank": 16,
+      "name": "qwen38-27b",
+      "avg_pct": 0.274557,
+      "lower_err": 0.096728,
+      "upper_err": 0.105402,
+      "n_bench": 4,
+      "cost": 0.7,
+      "rel_cost": 0.058333,
+      "tier": 2,
+      "is_open": true,
+      "company": "qwen",
+      "raw_scores": [
+        0.152778,
+        0.431034,
+        0.18618,
+        0.362934
+      ]
+    },
+    {
+      "rank": 17,
+      "name": "haiku55",
+      "avg_pct": 0.275862,
+      "lower_err": 0.061226,
+      "upper_err": 0.190688,
+      "n_bench": 3,
+      "cost": 0.6,
+      "rel_cost": 0.05,
+      "tier": 2,
+      "is_open": false,
+      "company": "anthropic",
+      "raw_scores": [
+        0.275862,
+        0.657238,
+        0.153409
+      ]
+    },
+    {
+      "rank": 18,
       "name": "qwen38-max",
       "avg_pct": 0.287356,
       "lower_err": 0.215699,
@@ -377,7 +419,7 @@
       "n_bench": 8,
       "cost": 8.0,
       "rel_cost": 0.666667,
-      "tier": 3,
+      "tier": 2,
       "is_open": true,
       "company": "qwen",
       "raw_scores": [
@@ -386,34 +428,13 @@
         0.241379,
         0.341615,
         0.077025,
-        0.450915,
+        0.750416,
         0.333333,
         0.359574
       ]
     },
     {
-      "rank": 17,
-      "name": "kimi-k3",
-      "avg_pct": 0.289348,
-      "lower_err": 0.12368,
-      "upper_err": 0.058045,
-      "n_bench": 6,
-      "cost": 18.0,
-      "rel_cost": 1.5,
-      "tier": 3,
-      "is_open": true,
-      "company": "moonshot",
-      "raw_scores": [
-        0.072917,
-        0.258621,
-        0.134683,
-        0.36772,
-        0.356499,
-        0.320075
-      ]
-    },
-    {
-      "rank": 18,
+      "rank": 19,
       "name": "deepseek-flash41",
       "avg_pct": 0.310345,
       "lower_err": 0.0917,
@@ -421,7 +442,7 @@
       "n_bench": 7,
       "cost": 0.75,
       "rel_cost": 0.0625,
-      "tier": 4,
+      "tier": 2,
       "is_open": true,
       "company": "deepseek",
       "raw_scores": [
@@ -435,23 +456,6 @@
       ]
     },
     {
-      "rank": 19,
-      "name": "haiku55",
-      "avg_pct": 0.314636,
-      "lower_err": null,
-      "upper_err": null,
-      "n_bench": 2,
-      "cost": 0.6,
-      "rel_cost": 0.05,
-      "tier": 4,
-      "is_open": false,
-      "company": "anthropic",
-      "raw_scores": [
-        0.275862,
-        0.153409
-      ]
-    },
-    {
       "rank": 20,
       "name": "gpt6luna",
       "avg_pct": 0.347826,
@@ -460,7 +464,7 @@
       "n_bench": 5,
       "cost": 0.6,
       "rel_cost": 0.05,
-      "tier": 4,
+      "tier": 3,
       "is_open": false,
       "company": "openai",
       "raw_scores": [
@@ -473,97 +477,73 @@
     },
     {
       "rank": 21,
-      "name": "qwen38-27b",
-      "avg_pct": 0.362934,
-      "lower_err": 0.176755,
-      "upper_err": 0.0681,
-      "n_bench": 5,
+      "name": "gemma4-31",
+      "avg_pct": 0.437967,
+      "lower_err": null,
+      "upper_err": null,
+      "n_bench": 2,
       "cost": 0.7,
       "rel_cost": 0.058333,
       "tier": 3,
       "is_open": true,
-      "company": "qwen",
+      "company": "google",
       "raw_scores": [
-        0.152778,
-        0.431034,
-        0.18618,
-        0.584027,
-        0.362934
+        0.133681,
+        0.542254
       ]
     },
     {
       "rank": 22,
       "name": "minimax3",
-      "avg_pct": 0.532446,
-      "lower_err": 0.015205,
-      "upper_err": 0.015817,
-      "n_bench": 5,
+      "avg_pct": 0.532752,
+      "lower_err": 0.0788,
+      "upper_err": 0.016007,
+      "n_bench": 4,
       "cost": 3.0,
       "rel_cost": 0.25,
-      "tier": 5,
+      "tier": 4,
       "is_open": true,
       "company": "minimax",
       "raw_scores": [
         0.517241,
         0.264085,
-        0.532446,
         0.548263,
         0.550248
       ]
     },
     {
       "rank": 23,
-      "name": "gemma4-31",
-      "avg_pct": 0.542254,
-      "lower_err": 0.204286,
-      "upper_err": 0.114897,
-      "n_bench": 3,
-      "cost": 0.7,
-      "rel_cost": 0.058333,
-      "tier": 4,
-      "is_open": true,
-      "company": "google",
-      "raw_scores": [
-        0.133681,
-        0.542254,
-        0.772047
-      ]
-    },
-    {
-      "rank": 24,
       "name": "gpt-oss-120b",
-      "avg_pct": 0.741379,
-      "lower_err": 0.191203,
-      "upper_err": 0.111903,
-      "n_bench": 5,
+      "avg_pct": 0.645778,
+      "lower_err": 0.157191,
+      "upper_err": 0.123577,
+      "n_bench": 4,
       "cost": 1.4,
       "rel_cost": 0.116667,
-      "tier": 6,
+      "tier": 4,
       "is_open": true,
       "company": "openai",
       "raw_scores": [
         0.303819,
         0.741379,
         0.550176,
-        0.90183,
         0.853282
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "name": "gpt-oss-20b",
-      "avg_pct": 0.9187,
+      "avg_pct": 0.919014,
       "lower_err": null,
       "upper_err": null,
-      "n_bench": 2,
+      "n_bench": 1,
       "cost": 0.5,
       "rel_cost": 0.041667,
-      "tier": 6,
+      "tier": 5,
       "is_open": true,
       "company": "openai",
       "raw_scores": [
-        0.669014,
-        0.968386
+        0.669014
       ]
     }
   ]
