@@ -17,6 +17,11 @@ cost = 60
 open = false
 company = "anthropic"
 
+[fable52]
+cost = 48
+open = false
+company = "anthropic"
+
 [gemini-flash38]
 cost = 9
 open = false
