@@ -4,7 +4,8 @@ Compute a unified model ranking from multiple benchmark leaderboards.
 
 Each benchmark score is normalized to its gap from the best tracked model
 (0 = best, 1 = the benchmark's floor), a model's score is the median gap across
-its benchmarks, and rank intervals and tiers come from resampling benchmarks.
+its benchmarks shrunk toward a below-average result in proportion to how few
+benchmarks it has, and rank intervals and tiers come from resampling benchmarks.
 
 Usage:  python rank_models.py [general|coding|agentic|stem]
         python rank_models.py coding --plot
@@ -16,6 +17,7 @@ import json
 import math
 import os
 from pathlib import Path
+import statistics
 import subprocess
 import sys
 import tomllib
@@ -23,6 +25,8 @@ from typing import Any, NamedTuple
 
 from ranking_math import (
     RANK_INTERVAL,
+    SHRINK_K,
+    SHRINK_QUANTILE,
     TIER_ALPHA,
     RankingResult,
     Replicate,
@@ -30,6 +34,7 @@ from ranking_math import (
     bootstrap_scores,
     calculate_rankings,
     rank_intervals,
+    shrinkage_prior,
 )
 
 CATEGORIES: dict[str, str] = {
@@ -40,7 +45,7 @@ CATEGORIES: dict[str, str] = {
 }
 
 # Axis label shared by both plots (the website uses the same wording in docs/app.js)
-_SCORE_LABEL = "Gap to best model, % of benchmark range (lower = better)"
+_SCORE_LABEL = "Adjusted gap to best model, % of benchmark range (lower = better)"
 
 
 class RawRanking(NamedTuple):
@@ -71,6 +76,20 @@ def get_y_upper_limit(max_score: float) -> int:
     """
     upper = math.ceil(max_score / 10) * 10
     return min(upper, 100)
+
+
+def _plotted_max(
+    results: list[RankingResult], model_scores: dict[str, list[float]] | None = None
+) -> float:
+    """Return the largest plotted value in percent: score + upper bar, and raw dots if given.
+
+    Shrinkage pulls the worst scores toward the middle, so the scores alone no longer reach
+    as far as the error bars or the raw per-benchmark values drawn beside them.
+    """
+    values = [avg + (upper_err or 0.0) for _, avg, _, upper_err, _, _ in results]
+    if model_scores is not None:
+        values += [s for r in results for s in model_scores.get(r[0], [])]
+    return max(values, default=1.0) * 100
 
 
 # Okabe-Ito colorblind-safe palette (recommended by Nature journals)
@@ -190,6 +209,27 @@ def categorize_tiers(
         print("\n" + "=" * 80 + "\n")
 
     return tiers
+
+
+def print_shrinkage_debug(
+    results: list[RankingResult], model_scores: dict[str, list[float]]
+) -> None:
+    """Print each model's raw median gap and its score after coverage shrinkage."""
+    prior = shrinkage_prior(model_scores)
+    if prior is None:
+        return
+    print("\n" + "=" * 80)
+    print("SHRINKAGE DEBUG OUTPUT")
+    print("=" * 80)
+    print(f"\n📊 score = (n × median + {SHRINK_K:g} × prior) / (n + {SHRINK_K:g})")
+    print(
+        f"   prior = {SHRINK_QUANTILE * 100:.0f}th percentile of all models' medians = {prior:.4f}"
+    )
+    print(f"\n      {'Model':<30} {'n':>3} {'Median':>8} {'Own wt':>8} {'Score':>8}")
+    for model, score, _, _, n, _ in results:
+        median = statistics.median(model_scores[model])
+        weight = n / (n + SHRINK_K)
+        print(f"      {model:<30} {n:>3} {median:>8.4f} {weight:>8.2f} {score:>8.4f}")
 
 
 def create_plot(
@@ -404,8 +444,7 @@ def create_plot(
                 lambda x, _: f"{x:g}" if x >= 1 else f"{x:.2g}"
             )
         )
-        max_score = max(avg for _, avg, _, _, _, _ in results) * 100
-        upper_limit = get_y_upper_limit(max_score)
+        upper_limit = get_y_upper_limit(_plotted_max(results))
         ax.set_ylim(upper_limit, 0)
 
         if quadrants:
@@ -619,8 +658,7 @@ def create_ranking_plot(
 
         ax.invert_yaxis()
 
-        max_score = max(avg for _, avg, _, _, _, _ in results) * 100
-        upper_limit = get_y_upper_limit(max_score)
+        upper_limit = get_y_upper_limit(_plotted_max(results, model_scores))
         ax.set_xlim(left=0, right=upper_limit)
 
         # Tier legend (top right)
@@ -858,6 +896,7 @@ def compute_rankings(category: str) -> dict[str, Any]:
     results = raw.results
     tier_mapping = categorize_tiers(results, raw.replicates)
     intervals = rank_intervals(raw.replicates, results)
+    prior = shrinkage_prior(raw.model_scores)
 
     costs_with_values = [r[5] for r in results if r[5] is not None]
     best_cost = costs_with_values[0] if costs_with_values else None
@@ -875,6 +914,7 @@ def compute_rankings(category: str) -> dict[str, Any]:
                 "rank_hi": rank_hi,
                 "name": model,
                 "avg_pct": round(avg, 6),
+                "median_pct": round(statistics.median(raw.model_scores[model]), 6),
                 "lower_err": round(lower_err, 6) if lower_err is not None else None,
                 "upper_err": round(upper_err, 6) if upper_err is not None else None,
                 "n_bench": n,
@@ -900,6 +940,11 @@ def compute_rankings(category: str) -> dict[str, Any]:
             "n_boot": len(raw.replicates),
             "rank_interval": RANK_INTERVAL,
             "tier_alpha": TIER_ALPHA,
+        },
+        "shrinkage": {
+            "k": SHRINK_K,
+            "prior_quantile": SHRINK_QUANTILE,
+            "prior": round(prior, 6) if prior is not None else None,
         },
         "palette": _NATURE_COLORS,
         "models": models_out,
@@ -979,7 +1024,7 @@ def main() -> None:
         const="docs/data",
         default=None,
         metavar="DIR",
-        help="Export ranking data as JSON for all categories to DIR (default: docs/data). Requires pandas.",
+        help="Export ranking data as JSON for all categories to DIR (default: docs/data).",
     )
     args = parser.parse_args()
     color = _supports_color(args.no_color)
@@ -1090,9 +1135,16 @@ def main() -> None:
         print(_row(rank_p, model_p, range_p, avg_p, lower_p, upper_p, nb_p, cost_p))
 
     print(sep_line)
+    prior = shrinkage_prior(raw.model_scores)
     print(
-        "  Gap: median over benchmarks of (best - score) / (best - floor); 0 = best tracked model."
+        f"  Gap: (n x median + {SHRINK_K:g} x prior) / (n + {SHRINK_K:g}), "
+        "median of (best - score) / (best - floor) over n benchmarks."
     )
+    if prior is not None:
+        print(
+            f"  0 = best tracked model. prior = {prior:.3f}, the "
+            f"{SHRINK_QUANTILE * 100:.0f}th percentile of models' medians (below average)."
+        )
     print(
         f"  Rank range: {RANK_INTERVAL:.0%} interval from resampling benchmarks. "
         "-IQR/+IQR: spread across benchmarks."
@@ -1148,6 +1200,7 @@ def main() -> None:
         )
 
     if args.debug:
+        print_shrinkage_debug(results, raw.model_scores)
         # Tiers cover every ranked model, including those without cost data
         categorize_tiers(results, raw.replicates, debug=True)
 

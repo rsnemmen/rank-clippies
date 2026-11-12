@@ -34,7 +34,7 @@ make validate   # ruff + mypy --strict + pytest + JSON export smoke test
 Stdlib-only for core; pandas/matplotlib/numpy are imported lazily inside plotting functions only.
 
 `ranking_math.py` (shared with `ranking_history.py` / `animate_rankings.py`):
-- `calculate_rankings(benchmarks)` — normalized gaps, median, sparse-data penalty, asymmetric IQR
+- `calculate_rankings(benchmarks)` — normalized gaps, median, coverage shrinkage toward `shrinkage_prior` (`SHRINK_K`, `SHRINK_QUANTILE`), asymmetric IQR
 - `bootstrap_scores(benchmarks)` — resamples benchmarks with replacement (`N_BOOT`, fixed seed)
 - `rank_intervals(replicates, results)` / `assign_tiers(results, replicates)` — 68% rank ranges and contiguous tiers
 
@@ -84,8 +84,8 @@ min_score = 13.2                  # score-based: floor value
 model_a = 94.2
 # Omit models that were not evaluated on this benchmark.
 ```
-- Score-based (`min_score`): percentile derived from score range; higher = better
-- Rank-based (`known_totals`): percentile = rank / total; lower rank number = better
+- Score-based (`min_score`): gap = (best − score) / (best − min_score); higher score = better
+- Rank-based (`known_totals`): gap = rank / total; lower rank number = better
 - Omitted scores mean the model was not evaluated on that benchmark
 - Valid category tags: `general`, `coding`, `agentic`, `stem` (defined in `CATEGORIES` in `rank_models.py`)
 

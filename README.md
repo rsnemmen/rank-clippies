@@ -1,6 +1,6 @@
 # LLM Benchmark Aggregator
 
-A command-line tool that computes a unified model ranking from multiple benchmark leaderboards. It normalizes each benchmark score to a common 0–1 scale (the gap to the best tracked model), takes the median across benchmarks, and outputs a single sorted table so you can compare models at a glance. Rank ranges and tiers come from resampling the benchmarks, so they show how much each position depends on which benchmarks happen to be included.
+A command-line tool that computes a unified model ranking from multiple benchmark leaderboards. It normalizes each benchmark score to a common 0–1 scale (the gap to the best tracked model), takes the median across benchmarks, shrinks models with few benchmarks toward a below-average result, and outputs a single sorted table so you can compare models at a glance. Rank ranges and tiers come from resampling the benchmarks, so they show how much each position depends on which benchmarks happen to be included.
 
 Visualize model performance with tiering: Generate scatter plots showing performance vs. cost, with models color-coded by "indistinguishable from best" performance tiers.
 
@@ -19,16 +19,16 @@ The above command will produce the following output:
 +-----------------------------------------------------------------------------------------------------+
 | Rank  | Model                   | Rank range | Gap    | -IQR   | +IQR   | # Benchmarks  | Rel. Cost |
 +-----------------------------------------------------------------------------------------------------+
-| 1     | fable52                 | 1          | 0.000  | 0.000  | 0.015  | 8             | 1.000     |
-| 2     | opus55                  | 2-4        | 0.033  | 0.024  | 0.079  | 13            | 0.500     |
-| 3     | kimi-k31-pro*           | 2-11       | 0.062  | 0.029  | 0.019  | 3             | 0.250     |
-| 4     | g4carbon                | 1-5        | 0.076  | 0.076  | 0.036  | 10            | 0.250     |
-| 5     | gpt6astra               | 3-7        | 0.087  | 0.066  | 0.099  | 14            | 1.250     |
-| 6     | gpt61sol                | 5-10       | 0.139  | 0.071  | 0.060  | 12            | 0.250     |
+| 1     | fable52                 | 1-2        | 0.038  | 0.000  | 0.014  | 8             | 1.000     |
+| 2     | opus55                  | 2-3        | 0.055  | 0.023  | 0.073  | 13            | 0.500     |
+| 3     | g4carbon                | 1-5        | 0.100  | 0.069  | 0.032  | 10            | 0.250     |
+| 4     | gpt6astra               | 3-7        | 0.104  | 0.062  | 0.092  | 14            | 1.250     |
+| 5     | kimi-k31-pro*           | 4-9        | 0.132  | 0.022  | 0.014  | 3             | 0.250     |
+| 6     | gpt61sol                | 5-9        | 0.154  | 0.065  | 0.055  | 12            | 0.250     |
 ...
 ```
 
-`kimi-k31-pro` is listed third, but on only three benchmarks it could plausibly be anywhere from 2nd to 11th.
+`kimi-k31-pro` has the third-best median, but it rests on only three benchmarks: shrinkage (Methodology §3) places it 5th, and resampling the benchmarks puts it anywhere from 4th to 9th.
 
 For the plots:
 
@@ -218,21 +218,36 @@ A model's base score is the median of its gaps across all benchmarks it appears 
 
 Benchmarks are not equally hard, and models are not all run on the same ones, so a model evaluated mostly on benchmarks where everyone scores near the top gets a better median than an equally capable model evaluated on harder ones. This matters most for models on few benchmarks; the rank ranges in §5 make it visible.
 
-### 3. Sparse-data penalty
+### 3. Coverage shrinkage
 
-Models evaluated on very few benchmarks get a penalty added to their average to avoid over-rewarding thin evidence:
+A median taken over one or two benchmarks is weak evidence. Each model's median is therefore blended with a phantom result worth one benchmark:
 
-| Benchmarks appeared in | Penalty |
-|------------------------|---------|
-| 1                      | +0.25   |
-| 2                      | +0.10   |
-| 3 or more              | +0.00   |
+```
+score = (n × median + prior) / (n + 1)
+```
 
-**Note:** Penalized scores are capped at 1.0 to prevent exceeding the theoretical maximum.
+`n` is the number of benchmarks the model appears in. `prior` is the 75th percentile of all models' medians in the category, i.e. a below-average result. The model's own median gets weight n / (n + 1):
+
+| Benchmarks appeared in | Weight on own median |
+|------------------------|----------------------|
+| 1                      | 50%                  |
+| 2                      | 67%                  |
+| 3                      | 75%                  |
+| 5                      | 83%                  |
+| 10                     | 91%                  |
+
+- Every extra benchmark helps, by a little less each time. There is no cutoff.
+- A thin model with a strong median is pulled down. A thin model whose median is already worse than the prior is pulled up toward it, because one bad result is also thin evidence.
+- Every model is pulled slightly, including the leader, so the best score is no longer exactly 0. Between near-tied top models, the one with more benchmarks gains a little.
+- **Why the 75th percentile:** until shown otherwise, a model with little evidence is assumed somewhat below average, which keeps the conservative intent of a penalty.
+- **Why one benchmark's worth:** the value estimated from the data (within-model variance / between-model variance) is 0.8–1.7 on current data, but it swings from 0.3 to 13 across past snapshots. A fixed value keeps the rule stable from one data update to the next.
+- The constants are `SHRINK_K` and `SHRINK_QUANTILE` in `ranking_math.py`. The prior is recomputed in every bootstrap resample (§5). Scores are capped at 1.0.
+
+This replaced a flat sparse-data penalty (+0.25 for one benchmark, +0.10 for two, nothing from three on) in November 2026.
 
 ### 4. Asymmetric IQR bounds (spread)
 
-The lower (`median − Q1`) and upper (`Q3 − median`) distances from the median to the first and third quartiles are kept separate, reflecting the skew of each model's per-benchmark gaps. They are drawn as error bars in plots. They describe how consistent a model is across benchmarks; they do not shrink as benchmarks are added, so they are not a measure of how precisely the median is known. Models with fewer than 3 benchmarks report `N/A` and get no error bar.
+The lower (`median − Q1`) and upper (`Q3 − median`) distances from the median to the first and third quartiles are kept separate, reflecting the skew of each model's per-benchmark gaps. Both are scaled by the same weight n / (n + 1) as the score (§3), so the bars still bracket it. They are drawn as error bars in plots. They describe how consistent a model is across benchmarks; they do not shrink as benchmarks are added, so they are not a measure of how precisely the median is known. Models with fewer than 3 benchmarks report `N/A` and get no error bar.
 
 ### 5. Uncertainty: benchmark bootstrap
 
@@ -265,12 +280,12 @@ See the sample in [Quick start](#quick-start).
 | **Rank**         | Position in the final aggregated ranking (1 = best).                        |
 | **Model**        | Model identifier string (exactly as written in the file); `*` = open-weight. |
 | **Rank range**   | 68% bootstrap rank interval (see Methodology §5).                           |
-| **Gap**          | Median gap to the best tracked model after sparse-data penalty, 0–1 scale (0 = best). |
+| **Gap**          | Median gap to the best tracked model after coverage shrinkage (§3), 0–1 scale (lower = better). |
 | **-IQR / +IQR**  | Lower (`median − Q1`) and upper (`Q3 − median`) spread across benchmarks, or `N/A`. |
 | **# Benchmarks** | Number of benchmarks the model was evaluated on.                            |
 | **Rel. Cost**    | Cost relative to the best-ranked model (best = 1.000), or `N/A` if unavailable. |
 
-The JSON export (`--export-json`) carries the same values per model (`avg_pct` holds the gap, `rank_lo`/`rank_hi` the rank range) plus a top-level `uncertainty` block with the bootstrap settings.
+The JSON export (`--export-json`) carries the same values per model (`avg_pct` holds the gap, `median_pct` the raw median before shrinkage, `rank_lo`/`rank_hi` the rank range) plus top-level `uncertainty` and `shrinkage` blocks with the bootstrap settings and the prior.
 
 ### Visualization Plot (`--plot`)
 

@@ -3,11 +3,19 @@
 from bisect import bisect_left
 import math
 import random
+import statistics
 import sys
 from typing import Any
 
 BENCHMARK_META_KEYS = {"known_totals", "min_score", "__name"}
+# (model, score, lower_err, upper_err, n_benchmarks, cost); score is the shrunk median gap.
 RankingResult = tuple[str, float, float | None, float | None, int, float | None]
+
+# Coverage shrinkage: a model's median gap is blended with a phantom result worth SHRINK_K
+# benchmarks, set at the SHRINK_QUANTILE of all models' medians (0.75 = below average).
+# Own data gets weight n / (n + SHRINK_K), so thin evidence counts for less, smoothly.
+SHRINK_K = 1.0
+SHRINK_QUANTILE = 0.75
 
 # One bootstrap replicate: model -> aggregate score. Models with no resampled data are absent.
 Replicate = dict[str, float]
@@ -23,12 +31,34 @@ RANK_INTERVAL = 0.68
 TIER_ALPHA = 0.16
 
 
+def _quantile(sorted_values: list[float], q: float) -> float:
+    """Return the q-quantile of an ascending list by linear interpolation between neighbours."""
+    idx = (len(sorted_values) - 1) * q
+    lo = int(idx)
+    hi = min(lo + 1, len(sorted_values) - 1)
+    return sorted_values[lo] + (idx - lo) * (sorted_values[hi] - sorted_values[lo])
+
+
+def shrinkage_prior(model_scores: dict[str, list[float]]) -> float | None:
+    """Return the phantom result models are shrunk toward: a quantile of all models' medians."""
+    medians = sorted(statistics.median(s) for s in model_scores.values() if s)
+    return _quantile(medians, SHRINK_QUANTILE) if medians else None
+
+
+def shrink(value: float, n: int, prior: float) -> float:
+    """Blend a model's own value (from n benchmarks) with the prior worth SHRINK_K benchmarks."""
+    return (n * value + SHRINK_K * prior) / (n + SHRINK_K)
+
+
 def calculate_rankings(
     benchmarks: list[dict[str, Any]],
     cost_dict: dict[str, float] | None = None,
     warn: bool = True,
 ) -> tuple[list[RankingResult], dict[str, list[float]]]:
-    """Calculate normalized medians, sparse penalties, and asymmetric IQR bounds."""
+    """Calculate normalized gaps, shrunk medians, and asymmetric IQR bounds.
+
+    Returns ranked tuples (best first) and each model's raw per-benchmark gaps.
+    """
     cost_dict = cost_dict or {}
     model_scores: dict[str, list[float]] = {}
 
@@ -71,34 +101,23 @@ def calculate_rankings(
                 pct = rank / total
                 model_scores.setdefault(model, []).append(pct)
 
+    prior = shrinkage_prior(model_scores)
     results: list[RankingResult] = []
     for model, scores in model_scores.items():
         n = len(scores)
-        if n == 0:
+        if n == 0 or prior is None:
             continue
 
         sorted_scores = sorted(scores)
-        mid = n // 2
-        median = (
-            sorted_scores[mid]
-            if n % 2 == 1
-            else (sorted_scores[mid - 1] + sorted_scores[mid]) / 2
-        )
-
-        penalty = 0.25 if n == 1 else (0.10 if n == 2 else 0.0)
-        avg = min(median + penalty, 1.0)
+        median = statistics.median(sorted_scores)
+        avg = min(shrink(median, n, prior), 1.0)
 
         if n >= 3:
-            q1_idx = (n - 1) * 0.25
-            q3_idx = (n - 1) * 0.75
-            q1 = sorted_scores[int(q1_idx)] + (q1_idx % 1) * (
-                sorted_scores[min(int(q1_idx) + 1, n - 1)] - sorted_scores[int(q1_idx)]
-            )
-            q3 = sorted_scores[int(q3_idx)] + (q3_idx % 1) * (
-                sorted_scores[min(int(q3_idx) + 1, n - 1)] - sorted_scores[int(q3_idx)]
-            )
-            lower_err = median - q1
-            upper_err = q3 - median
+            # Blending Q1 and Q3 the same way scales the bars by n / (n + k), so they
+            # still bracket the shrunk score.
+            weight = n / (n + SHRINK_K)
+            lower_err = weight * (median - _quantile(sorted_scores, 0.25))
+            upper_err = weight * (_quantile(sorted_scores, 0.75) - median)
         else:
             lower_err = None
             upper_err = None

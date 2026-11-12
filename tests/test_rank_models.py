@@ -49,7 +49,9 @@ def test_muse_spark_12_is_absent_from_active_data() -> None:
     with (data_dir / "models.toml").open("rb") as f:
         models = tomllib.load(f)
 
-    assert all("muse-spark-12" not in benchmark["scores"] for benchmark in active.values())
+    assert all(
+        "muse-spark-12" not in benchmark["scores"] for benchmark in active.values()
+    )
     assert "muse-spark-12" not in models
     assert "muse-spark-13" in models
     assert any("muse-spark-13" in benchmark["scores"] for benchmark in active.values())
@@ -63,10 +65,14 @@ def test_deepseek_flash4_is_absent_from_active_data() -> None:
     with (data_dir / "models.toml").open("rb") as f:
         models = tomllib.load(f)
 
-    assert all("deepseek-flash4" not in benchmark["scores"] for benchmark in active.values())
+    assert all(
+        "deepseek-flash4" not in benchmark["scores"] for benchmark in active.values()
+    )
     assert "deepseek-flash4" not in models
     assert "deepseek-flash41" in models
-    assert any("deepseek-flash41" in benchmark["scores"] for benchmark in active.values())
+    assert any(
+        "deepseek-flash41" in benchmark["scores"] for benchmark in active.values()
+    )
 
 
 def test_opus5_is_absent_from_active_data() -> None:
@@ -83,7 +89,9 @@ def test_opus5_is_absent_from_active_data() -> None:
     assert any("opus55" in benchmark["scores"] for benchmark in active.values())
 
 
-def _patch_data(monkeypatch: pytest.MonkeyPatch, benchmarks: list[dict[str, object]]) -> None:
+def _patch_data(
+    monkeypatch: pytest.MonkeyPatch, benchmarks: list[dict[str, object]]
+) -> None:
     costs = {
         "alpha": 10.0,
         "beta": 20.0,
@@ -97,19 +105,35 @@ def _patch_data(monkeypatch: pytest.MonkeyPatch, benchmarks: list[dict[str, obje
 
     def fake_load_data(
         category: str,
-    ) -> tuple[list[dict[str, object]], dict[str, float], dict[str, bool], dict[str, str], str, list[str]]:
-        return benchmarks, costs, open_models, {}, "Synthetic", [
-            str(b.get("__name", f"bench-{i}")) for i, b in enumerate(benchmarks, 1)
-        ]
+    ) -> tuple[
+        list[dict[str, object]],
+        dict[str, float],
+        dict[str, bool],
+        dict[str, str],
+        str,
+        list[str],
+    ]:
+        return (
+            benchmarks,
+            costs,
+            open_models,
+            {},
+            "Synthetic",
+            [str(b.get("__name", f"bench-{i}")) for i, b in enumerate(benchmarks, 1)],
+        )
 
     monkeypatch.setattr(rank_models, "load_data", fake_load_data)
 
 
-def _result_by_model(results: list[tuple[object, ...]]) -> dict[str, tuple[object, ...]]:
+def _result_by_model(
+    results: list[tuple[object, ...]],
+) -> dict[str, tuple[object, ...]]:
     return {str(row[0]): row for row in results}
 
 
-def test_synthetic_three_benchmark_golden_scores(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_synthetic_three_benchmark_golden_scores(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     _patch_data(
         monkeypatch,
         [
@@ -140,11 +164,13 @@ def test_synthetic_three_benchmark_golden_scores(monkeypatch: pytest.MonkeyPatch
     results, model_scores, *_ = rank_models._compute_raw("synthetic")
     by_model = _result_by_model(results)
 
+    # Raw medians 0.2 / 0.4 / 0.8, so the prior (75th percentile) is 0.6. With n = 3 each
+    # score is (3 x median + 0.6) / 4, and the raw IQR offsets are scaled by 3/4.
     assert [row[0] for row in results] == ["alpha", "beta", "gamma"]
     assert model_scores["alpha"] == pytest.approx([0.0, 0.2, 0.2])
-    assert by_model["alpha"][1:5] == pytest.approx((0.2, 0.1, 0.0, 3))
-    assert by_model["beta"][1:5] == pytest.approx((0.4, 0.2, 0.05, 3))
-    assert by_model["gamma"][1:5] == pytest.approx((0.8, 0.0, 0.1, 3))
+    assert by_model["alpha"][1:5] == pytest.approx((0.3, 0.075, 0.0, 3))
+    assert by_model["beta"][1:5] == pytest.approx((0.45, 0.15, 0.0375, 3))
+    assert by_model["gamma"][1:5] == pytest.approx((0.75, 0.0, 0.075, 3))
 
 
 def test_zero_range_min_score_benchmark_is_skipped_with_warning(
@@ -161,12 +187,17 @@ def test_zero_range_min_score_benchmark_is_skipped_with_warning(
     results, model_scores, *_ = rank_models._compute_raw("synthetic")
     captured = capsys.readouterr()
 
-    assert "Warning: benchmark 'flat_scores' skipped because score range is zero." in captured.err
+    assert (
+        "Warning: benchmark 'flat_scores' skipped because score range is zero."
+        in captured.err
+    )
     assert model_scores["alpha"] == pytest.approx([0.2])
     assert results[0][0] == "alpha"
 
 
-def test_all_none_benchmark_is_skipped_without_crash(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_all_none_benchmark_is_skipped_without_crash(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     _patch_data(
         monkeypatch,
         [
@@ -181,7 +212,9 @@ def test_all_none_benchmark_is_skipped_without_crash(monkeypatch: pytest.MonkeyP
     assert [row[0] for row in results] == ["alpha"]
 
 
-def test_tied_scores_have_deterministic_order_and_tier(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_tied_scores_have_deterministic_order_and_tier(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     _patch_data(
         monkeypatch,
         [
@@ -198,7 +231,9 @@ def test_tied_scores_have_deterministic_order_and_tier(monkeypatch: pytest.Monke
     assert tiers == {"tie_a": 1, "tie_b": 1}
 
 
-def test_sparse_data_penalties_and_missing_iqr(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_sparse_models_are_shrunk_and_have_no_iqr(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     _patch_data(
         monkeypatch,
         [
@@ -210,17 +245,20 @@ def test_sparse_data_penalties_and_missing_iqr(monkeypatch: pytest.MonkeyPatch) 
     results, *_ = rank_models._compute_raw("synthetic")
     by_model = _result_by_model(results)
 
-    assert by_model["solo"][1] == pytest.approx(0.35)
+    # Raw medians 0.1 (n=1) and 0.3 (n=2); prior = 75th percentile = 0.25.
+    assert by_model["solo"][1] == pytest.approx((0.1 + 0.25) / 2)
     assert by_model["solo"][2] is None
     assert by_model["solo"][3] is None
     assert by_model["solo"][4] == 1
-    assert by_model["two"][1] == pytest.approx(0.4)
+    assert by_model["two"][1] == pytest.approx((2 * 0.3 + 0.25) / 3)
     assert by_model["two"][2] is None
     assert by_model["two"][3] is None
     assert by_model["two"][4] == 2
 
 
-def test_mixed_min_score_and_known_totals_aggregate(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_mixed_min_score_and_known_totals_aggregate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     _patch_data(
         monkeypatch,
         [
@@ -234,8 +272,9 @@ def test_mixed_min_score_and_known_totals_aggregate(monkeypatch: pytest.MonkeyPa
 
     assert model_scores["alpha"] == pytest.approx([0.0, 0.2])
     assert model_scores["beta"] == pytest.approx([0.5, 0.5])
-    assert by_model["alpha"][1] == pytest.approx(0.2)
-    assert by_model["beta"][1] == pytest.approx(0.6)
+    # Raw medians 0.1 and 0.5; prior = 75th percentile = 0.4; n = 2 for both.
+    assert by_model["alpha"][1] == pytest.approx((2 * 0.1 + 0.4) / 3)
+    assert by_model["beta"][1] == pytest.approx((2 * 0.5 + 0.4) / 3)
     assert [row[0] for row in results] == ["alpha", "beta"]
 
 
@@ -277,6 +316,17 @@ def test_compute_rankings_export_shape(monkeypatch: pytest.MonkeyPatch) -> None:
     assert exported["benchmark_names"] == ["score_one", "rank_one", "score_two"]
 
     assert exported["uncertainty"]["method"] == "benchmark bootstrap"
+    assert exported["shrinkage"] == {
+        "k": ranking_math.SHRINK_K,
+        "prior_quantile": ranking_math.SHRINK_QUANTILE,
+        "prior": pytest.approx(
+            ranking_math.shrinkage_prior(
+                {m["name"]: m["raw_scores"] for m in exported["models"]}
+            )
+        ),
+    }
+    for row in exported["models"]:
+        assert row["median_pct"] == pytest.approx(sorted(row["raw_scores"])[1])
 
     model = exported["models"][0]
     assert model["rank_lo"] <= model["rank"] <= model["rank_hi"]
@@ -301,11 +351,15 @@ def test_compute_rankings_export_shape(monkeypatch: pytest.MonkeyPatch) -> None:
 def _patch_toml(
     monkeypatch: pytest.MonkeyPatch, benchmarks: dict[str, dict[str, object]]
 ) -> None:
-    monkeypatch.setattr(rank_models, "_load_benchmarks_toml", lambda _: list(benchmarks.items()))
+    monkeypatch.setattr(
+        rank_models, "_load_benchmarks_toml", lambda _: list(benchmarks.items())
+    )
     monkeypatch.setattr(rank_models, "_load_models_toml", lambda _: {})
 
 
-def test_score_below_floor_exits_naming_benchmark(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_score_below_floor_exits_naming_benchmark(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     _patch_toml(
         monkeypatch,
         {
@@ -373,6 +427,50 @@ def test_bootstrap_is_deterministic_and_thin_models_get_wider_rank_intervals() -
     for position, row in enumerate(results, 1):
         lo, hi = intervals[row[0]]
         assert lo <= position <= hi
+
+
+def test_shrinkage_fades_smoothly_with_coverage() -> None:
+    """Same raw median on 1, 2, 3 and 6 benchmarks: each extra benchmark helps, by less."""
+    counts = (1, 2, 3, 6)
+    benchmarks: list[dict[str, object]] = []
+    for i in range(6):
+        bench: dict[str, object] = {
+            "__name": f"b{i}",
+            "min_score": 0,
+            "leader": 100,
+            "weak_a": 40,
+            "weak_b": 20,
+        }
+        bench.update({f"m{n}": 80 for n in counts if i < n})
+        benchmarks.append(bench)
+
+    results, model_scores = ranking_math.calculate_rankings(benchmarks)
+    score = {row[0]: row[1] for row in results}
+
+    # Raw medians sorted: 0 (leader), 0.2 x 4 (m<n>), 0.6, 0.8 -> 75th percentile = 0.4.
+    prior = ranking_math.shrinkage_prior(model_scores)
+    assert prior is not None
+    assert prior == pytest.approx(0.4)
+    for n in counts:
+        assert score[f"m{n}"] == pytest.approx((n * 0.2 + prior) / (n + 1))
+
+    per_benchmark_gain = [
+        (score[f"m{a}"] - score[f"m{b}"]) / (b - a) for a, b in pairwise(counts)
+    ]
+    assert all(gain > 0 for gain in per_benchmark_gain)
+    assert per_benchmark_gain == sorted(per_benchmark_gain, reverse=True)
+    # The model at the top of its benchmarks is pulled toward the prior too, but less.
+    assert 0 < score["leader"] < score["m6"]
+
+
+@pytest.mark.parametrize("category", sorted(rank_models.CATEGORIES))
+def test_shrinkage_keeps_raw_median_order_among_equal_coverage(category: str) -> None:
+    exported = rank_models.compute_rankings(category)
+    by_n: dict[int, list[float]] = {}
+    for model in exported["models"]:  # already sorted by shrunk score
+        by_n.setdefault(model["n_bench"], []).append(model["median_pct"])
+    for medians in by_n.values():
+        assert medians == sorted(medians)
 
 
 def test_models_that_never_share_a_resample_are_indistinguishable() -> None:

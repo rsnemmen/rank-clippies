@@ -40,12 +40,14 @@
     <h2>Methodology</h2>
     <p>On each benchmark, a model's score is its gap to the best tracked model as a share of the
        benchmark's range: (best &#x2212; score) / (best &#x2212; floor), so 0 = best and 1 = the floor.
-       The final score is the median gap across all benchmarks a model was evaluated on.
-       Models with fewer than 3 benchmarks receive a sparse-data penalty (+0.25 for n=1, +0.10 for n=2).
+       A model's median gap across its n benchmarks is then blended with a below-average result
+       (the 75th percentile of all models' medians) counted as one extra benchmark:
+       (n &#xD7; median + prior) / (n + 1). Thin evidence is pulled harder: one benchmark keeps
+       50% weight on its own result, three keep 75%, ten keep 91%.
        Uncertainty comes from resampling the category's benchmarks with replacement 2,000 times and
        re-ranking each time: the tooltip's rank range covers the middle 68% of those ranks.
        Tiers are contiguous in rank: a model joins the tier leader while it matches or beats the
-       leader in at least 16% of resamples. Error bars span Q1 to Q3 of a model's per-benchmark gaps;
+       leader in at least 16% of resamples. Error bars span Q1 to Q3 of a model's per-benchmark gaps, blended the same way;
        they show spread across benchmarks, not uncertainty in the median (none shown for n&lt;3).
        Marker size in the ranking chart scales with cost. Diamonds = open-weight models.
        &#x2020; = n=2 benchmarks &nbsp;&nbsp; &#x2021; = n=1 benchmark.</p>

@@ -136,7 +136,12 @@ function filterModels(models, { hideOpen, hideSparse }) {
 }
 
 // Axis label shared with rank_models.py (_SCORE_LABEL)
-const SCORE_LABEL = "Gap to best model, % of benchmark range (lower = better)";
+const SCORE_LABEL = "Adjusted gap to best model, % of benchmark range (lower = better)";
+
+// Raw median gap before coverage shrinkage, on the same 0–100 scale as the axis
+function rawMedian(m) {
+  return m.median_pct != null ? (m.median_pct * 100).toFixed(1) : "—";
+}
 
 // 68% rank interval from the benchmark bootstrap, e.g. "3–7"
 function rankRange(m) {
@@ -205,12 +210,13 @@ function buildScatterTraces(models, palette) {
         n_bench: m.n_bench,
         cost: m.cost != null ? m.cost.toFixed(0) : "N/A",
         open: m.is_open,
+        median: rawMedian(m),
         raw: m.raw_scores.map(s => (s * 100).toFixed(1)).join(", ") || "—",
       })),
       hovertemplate:
         "<b>%{customdata.name}</b> (Rank %{customdata.rank})<br>" +
         "Plausible rank range (68%): %{customdata.range}<br>" +
-        "Gap to best: %{y:.1f}<br>" +
+        "Adjusted gap to best: %{y:.1f} (raw median %{customdata.median})<br>" +
         "Cost: %{x:.2f}× best<br>" +
         "Benchmarks (n=%{customdata.n_bench}): %{customdata.raw}<br>" +
         "%{customdata.open}<extra></extra>",
@@ -222,7 +228,8 @@ function buildScatterTraces(models, palette) {
 
 function buildScatterLayout(models, palette, showQuadrants, showLabels, title) {
   const plottable = models.filter(m => m.rel_cost != null);
-  const scores = plottable.map(m => m.avg_pct * 100);
+  // Size the axis to the error bars, not just the scores: shrinkage pulls the worst scores in.
+  const scores = plottable.map(m => (m.avg_pct + (m.upper_err ?? 0)) * 100);
   const costs = plottable.map(m => m.rel_cost);
   const logCosts = costs.map(c => Math.log10(c));
   const maxScore = scores.length ? Math.max(...scores) : 100;
@@ -404,13 +411,14 @@ function buildRankingTraces(models, palette) {
           range: rankRange(m),
           name: m.name,
           n_bench: m.n_bench,
+          median: rawMedian(m),
           raw: m.raw_scores.map(s => (s * 100).toFixed(1)).join(", ") || "—",
           open: m.is_open,
         })),
         hovertemplate:
           "<b>%{customdata.name}</b> (Rank %{customdata.rank})<br>" +
           "Plausible rank range (68%): %{customdata.range}<br>" +
-          "Gap to best: %{x:.1f}<br>" +
+          "Adjusted gap to best: %{x:.1f} (raw median %{customdata.median})<br>" +
           "Benchmarks (n=%{customdata.n_bench}): %{customdata.raw}<br>" +
           "%{customdata.open}<extra></extra>",
       });
@@ -444,7 +452,11 @@ function buildRankingTraces(models, palette) {
 }
 
 function buildRankingLayout(sorted, n, title) {
-  const scores = sorted.map(m => m.avg_pct * 100);
+  // Include error bars and the raw per-benchmark dots so neither is clipped.
+  const scores = sorted.flatMap(m => [
+    (m.avg_pct + (m.upper_err ?? 0)) * 100,
+    ...m.raw_scores.map(s => s * 100),
+  ]);
   const maxScore = scores.length ? Math.max(...scores) : 100;
   const upper = Math.min(Math.ceil(maxScore / 10) * 10, 100);
 

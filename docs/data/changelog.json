@@ -1,6 +1,10 @@
 {
   "entries": [
     {
+      "date": "2026-11-12",
+      "message": "Replace IQR tiering with benchmark bootstrap; fix FrontierPhysics data"
+    },
+    {
       "date": "2026-11-10",
       "message": "added Fable 5.2"
     },

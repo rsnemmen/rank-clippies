@@ -43,7 +43,8 @@ def test_all_historical_formats(path, text):
     benches = history.parse_benchmarks(text, path, "general")
     assert len(benches) == 1
     assert benches[0]["model-v1"] == 42
-    assert calculate_rankings(benches)[0][0][1] == 0.25
+    # A lone model is its own shrinkage prior, so its score is its raw gap of 0.
+    assert calculate_rankings(benches)[0][0][1] == 0.0
 
 
 def test_chained_assignment_counts_benchmark_once():
@@ -175,7 +176,8 @@ def test_aggregate_removes_models_and_retired_benchmarks():
     assert states[-1]["removed"] == ["SWE_Marathon"]
     assert states[-1]["added"] == ["HLE"]
     assert [m["name"] for m in states[-1]["models"]] == ["new"]
-    assert states[-1]["models"][0]["value"] == 75
+    assert states[-1]["models"][0]["value"] == 100
+    assert states[-1]["models"][0]["sparse"]
 
 
 def test_progress_retains_retired_benchmark():

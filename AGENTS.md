@@ -1,7 +1,7 @@
 # Agent Guidelines for LLM_rank
 
 ## Project Overview
-Python tool for computing unified model rankings from benchmark leaderboards using percentile-normalized scores. Features ASCII table output and optional visualization with statistical tiering based on the "Indistinguishable from Best" method.
+Python tool for computing unified model rankings from benchmark leaderboards using gap-to-best normalized scores. Features ASCII table output and optional visualization with statistical tiering based on the "Indistinguishable from Best" method.
 
 **Repository:** https://github.com/rsnemmen/rank-clippies
 
@@ -19,13 +19,16 @@ gap = (max_score - score) / (max_score - min_score)
 
 0 = best tracked model, 1 = the floor. This is not a percentile, and a new top model shifts everyone's gap. `min_score` should be the lowest score on the full source leaderboard; `load_data` exits if any score is below it. Rank-based benchmarks (`known_totals`) use `rank / known_totals`, a true percentile; ranks must lie in `1..known_totals`.
 
-### Aggregation and Penalties
-A model's composite score is the unweighted median of its gaps across all benchmarks it appears on. The median is preferred over the mean for robustness against outlier benchmarks. To avoid boosting models that score well on only a single benchmark, a sparse-data penalty is added:
-- +0.25 for one benchmark
-- +0.10 for two benchmarks
-- 0 for three or more
+### Aggregation and Coverage Shrinkage
+A model's raw score is the unweighted median of its gaps across all benchmarks it appears on. The median is preferred over the mean for robustness against outlier benchmarks. To avoid over-rewarding thin evidence, the median is blended with a below-average phantom result worth `SHRINK_K = 1` benchmark:
 
-Asymmetric IQR bounds (`median − Q1`, `Q3 − median`) are shown as error bars. They measure spread across benchmarks, not uncertainty in the median. Models with n<3 have none.
+```
+score = (n × median + SHRINK_K × prior) / (n + SHRINK_K)
+```
+
+`prior` (`shrinkage_prior`) is the `SHRINK_QUANTILE = 0.75` quantile of all models' medians in the same benchmark set, so it is recomputed in every bootstrap resample. Own-data weight is n/(n+1): 50% at n=1, 75% at n=3, 91% at n=10. k is deliberately fixed: the data-estimated σ²/τ² ratio swings from 0.3 to 13 across history snapshots.
+
+Asymmetric IQR bounds (`median − Q1`, `Q3 − median`), scaled by the same n/(n+k) weight, are shown as error bars. They measure spread across benchmarks, not uncertainty in the median. Models with n<3 have none.
 
 ### Uncertainty and Tiering (benchmark bootstrap)
 Implemented in `ranking_math.py`. `bootstrap_scores` resamples the category's benchmarks with replacement (`N_BOOT = 2000`, fixed seed) and reruns `calculate_rankings` on each draw; all models share each draw, so comparisons are paired.
@@ -74,7 +77,7 @@ python -m pytest tests/test_file.py::test_function -v  # single test
 make validate                                      # ruff + mypy --strict + pytest + JSON export smoke test
 ```
 
-Tests live in `tests/` and cover ranking math, sparse-data penalties, TOML loader errors, and website JSON export shape.
+Tests live in `tests/` and cover ranking math, coverage shrinkage, bootstrap tiering, TOML loader errors, and website JSON export shape.
 
 ## CLI Usage
 

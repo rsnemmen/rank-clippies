@@ -276,7 +276,7 @@ def ranking_states(
                     "value": 100 * (1 - score),
                     "composite": score,
                     "count": n,
-                    "penalty": 0.25 if n == 1 else 0.10 if n == 2 else 0.0,
+                    "sparse": n < 3,
                 }
                 for name, score, _, _, n, _ in results
             ],

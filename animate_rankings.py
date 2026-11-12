@@ -323,7 +323,7 @@ def render_video(
                         " *"
                         if row.get("retained")
                         else " †"
-                        if row.get("penalty")
+                        if row.get("sparse")
                         else ""
                     )
                     label.set_text(row["name"] + marker)
@@ -331,7 +331,7 @@ def render_video(
                     value.set_text(
                         f"{row['value']:.1f}"
                         if is_progress
-                        else f"{row['value']:.1f}  /  {row['count']}{' †' if row['penalty'] else ''}"
+                        else f"{row['value']:.1f}  /  {row['count']}{' †' if row.get('sparse') else ''}"
                     )
                 if is_progress:
                     chapter_start = new
@@ -384,7 +384,7 @@ def render_video(
                         textwrap.fill(
                             "Benchmarks: " + ", ".join(current["benchmarks"]), 160
                         )
-                        + "\n† Sparse-data penalty: +0.25 (1 benchmark), +0.10 (2).  Relative standing depends on the observed benchmark set."
+                        + "\n† Fewer than 3 benchmarks.  Scores are shrunk toward a below-average result in proportion to how few benchmarks a model has.  Relative standing depends on the observed benchmark set."
                     )
                 status.set_text(
                     "Transition · interpolated bars"
@@ -535,7 +535,7 @@ def main() -> None:
                 "view": view,
                 "benchmark": benchmark if view == "progress" else None,
                 "date_semantics": "committer calendar date; final relevant snapshot per day; first-parent history",
-                "methodology": "Current median normalization with sparse penalties; progress retains latest past scores per version, not running maxima.",
+                "methodology": "Current median normalization with coverage shrinkage; progress retains latest past scores per version, not running maxima.",
                 "settings": {
                     "width": 1920,
                     "height": 1080,
