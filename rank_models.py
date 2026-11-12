@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 """
-Compute a unified model ranking from multiple benchmark leaderboards
-using percentile-normalized scores.
+Compute a unified model ranking from multiple benchmark leaderboards.
+
+Each benchmark score is normalized to its gap from the best tracked model
+(0 = best, 1 = the benchmark's floor), a model's score is the median gap across
+its benchmarks, and rank intervals and tiers come from resampling benchmarks.
 
 Usage:  python rank_models.py [general|coding|agentic|stem]
         python rank_models.py coding --plot
@@ -13,10 +16,21 @@ import json
 import math
 import os
 from pathlib import Path
-import tomllib
 import subprocess
 import sys
-from typing import Any
+import tomllib
+from typing import Any, NamedTuple
+
+from ranking_math import (
+    RANK_INTERVAL,
+    TIER_ALPHA,
+    RankingResult,
+    Replicate,
+    assign_tiers,
+    bootstrap_scores,
+    calculate_rankings,
+    rank_intervals,
+)
 
 CATEGORIES: dict[str, str] = {
     "general": "General intelligence",
@@ -25,8 +39,22 @@ CATEGORIES: dict[str, str] = {
     "stem": "Math and STEM expert reasoning",
 }
 
-_BENCHMARK_META_KEYS = {"known_totals", "min_score", "__name"}
-RankingResult = tuple[str, float, float | None, float | None, int, float | None]
+# Axis label shared by both plots (the website uses the same wording in docs/app.js)
+_SCORE_LABEL = "Gap to best model, % of benchmark range (lower = better)"
+
+
+class RawRanking(NamedTuple):
+    """Ranked results plus the inputs needed to render or export them."""
+
+    results: list[RankingResult]
+    model_scores: dict[str, list[float]]
+    cost_dict: dict[str, float]
+    open_dict: dict[str, bool]
+    company_dict: dict[str, str]
+    title: str
+    benchmark_names: list[str]
+    replicates: list[Replicate]
+
 
 # Directory containing company logo PNGs (docs/ is the GitHub Pages web root)
 _LOGO_DIR = Path(__file__).parent / "docs" / "assets" / "logos"
@@ -103,196 +131,72 @@ def _c(text: str, code: str, enabled: bool) -> str:
 
 
 def categorize_tiers(
-    results: list[RankingResult], k: float = 1.0, debug: bool = False
+    results: list[RankingResult],
+    replicates: list[Replicate],
+    alpha: float = TIER_ALPHA,
+    debug: bool = False,
 ) -> dict[str, int]:
-    """Categorize models into tiers based on IQR-based overlap with tier leaders.
+    """Group models into tiers the benchmark bootstrap cannot separate from the tier leader.
 
-    Uses the "Indistinguishable from Best" method: models whose spread intervals
-    overlap with the leader's interval are placed in the same tier.
+    The best remaining model leads each tier. Walking down the ranking, a model joins the
+    tier while it matches or beats the leader in at least `alpha` of the resamples, so tiers
+    are always contiguous in rank order. See ranking_math.assign_tiers.
 
     Args:
-        results: List of tuples (model, avg, lower_err, upper_err, n, cost) from main computation
-        k: Multiplier for the asymmetric IQR interval (1.0 = ±bounds, 2.0 = wider)
-        debug: If True, print detailed tiering debug output
+        results: Ranked tuples (model, score, lower_err, upper_err, n, cost), best first
+        replicates: Bootstrap replicates from ranking_math.bootstrap_scores
+        alpha: Minimum share of resamples in which a candidate must match the leader
+        debug: If True, print every leader/candidate comparison
 
     Returns:
         Dictionary mapping model names to tier numbers (1, 2, 3, ...)
     """
-    import pandas as pd  # type: ignore[import-untyped]
-
-    # Calculate fallback averages for models without enough data (n < 3)
-    valid_lowers = [le for _, _, le, _, _, _ in results if le is not None]
-    valid_uppers = [ue for _, _, _, ue, _, _ in results if ue is not None]
-    avg_lower = sum(valid_lowers) / len(valid_lowers) if valid_lowers else 0.0
-    avg_upper = sum(valid_uppers) / len(valid_uppers) if valid_uppers else 0.0
+    tiers, steps = assign_tiers(results, replicates, alpha)
 
     if debug:
+        scores = {r[0]: r[1] for r in results}
         print("\n" + "=" * 80)
         print("TIERING DEBUG OUTPUT")
         print("=" * 80)
-        print("\n📊 INITIAL DATA PREPARATION")
-        print(f"   Total models: {len(results)}")
-        print(f"   Models with valid bounds: {len(valid_lowers)}")
-        print(f"   Average lower err (fallback): {avg_lower:.6f}")
-        print(f"   Average upper err (fallback): {avg_upper:.6f}")
-        print(f"   k (interval multiplier): {k}")
-
-    # Prepare data - convert scores and bounds to percentage scale
-    df_data = []
-    if debug:
-        print("\n📋 MODEL DATA (converted to percentage scale):")
+        print("\n📊 METHOD")
+        print(f"   Models: {len(results)}")
+        print(f"   Bootstrap replicates (benchmarks resampled): {len(replicates)}")
         print(
-            f"   {'Model':<30} {'Score':<12} {'-err':<12} {'+err':<12} {'Source':<15}"
-        )
-        print(f"   {'-' * 30} {'-' * 12} {'-' * 12} {'-' * 12} {'-' * 15}")
-
-    for model, avg, lower_err, upper_err, n, cost in results:
-        eff_lower = lower_err if lower_err is not None else avg_lower
-        eff_upper = upper_err if upper_err is not None else avg_upper
-        spread_source = "measured" if lower_err is not None else "average"
-        if debug:
-            print(
-                f"   {model:<30} {avg * 100:>11.4f} {eff_lower * 100:>11.4f} {eff_upper * 100:>11.4f} {spread_source:<15}"
-            )
-        df_data.append(
-            {
-                "model": model,
-                "score": avg * 100,
-                "lower": eff_lower * 100,
-                "upper": eff_upper * 100,
-            }
+            f"   Join threshold: candidate at least as good as leader in >= {alpha:.0%} of resamples"
         )
 
-    df = pd.DataFrame(df_data)
-
-    # Sort by score (ascending) - lowest scores (best performers) first
-    df = df.sort_values(by="score", ascending=True).reset_index(drop=True)
-    df["tier"] = 0
-
-    if debug:
-        print("\n🔄 SORTING: Models sorted by score (ascending - best first)")
-        print(
-            f"   Best performer: {df.loc[0, 'model']} (score: {df.loc[0, 'score']:.4f})"
-        )
-        print(
-            f"   Worst performer: {df.loc[len(df) - 1, 'model']} (score: {df.loc[len(df) - 1, 'score']:.4f})"
-        )
-        print("\n" + "=" * 80)
-        print("BEGINNING TIER ASSIGNMENT LOOP")
-        print("=" * 80)
-
-    current_tier = 1
-    remaining_indices = df.index.tolist()
-
-    while len(remaining_indices) > 0:
-        if debug:
-            print(f"\n{'─' * 80}")
-            print(f"TIER {current_tier} ASSIGNMENT")
-            print(f"{'─' * 80}")
-            print(f"   Remaining models to tier: {len(remaining_indices)}")
-            print(
-                f"   Remaining model names: {[df.loc[i, 'model'] for i in remaining_indices]}"
-            )
-
-        # Identify the leader (lowest scoring/best performing remaining item)
-        leader_idx = remaining_indices[0]
-        leader_score = df.loc[leader_idx, "score"]
-        leader_upper = df.loc[leader_idx, "upper"]
-        leader_max = leader_score + (k * leader_upper)
-
-        if debug:
-            print("\n   👑 LEADER SELECTION:")
-            print(f"      Leader: {df.loc[leader_idx, 'model']}")
-            print(f"      Leader score: {leader_score:.4f}")
-            print(f"      Leader +err: {leader_upper:.4f}")
-            print(
-                f"      Leader's upper bound (score + {k}×upper_err): {leader_max:.4f}"
-            )
-            print(
-                "\n   🔍 OVERLAP CHECK (candidate's lower bound ≤ leader's upper bound):"
-            )
-            print(f"      Leader's max (upper bound): {leader_max:.4f}")
-            print(
-                f"\n      {'Model':<30} {'Score':<12} {'-err':<12} {'Lower Bound':<15} {'Overlap?':<10}"
-            )
-            print(f"      {'-' * 30} {'-' * 12} {'-' * 12} {'-' * 15} {'-' * 10}")
-
-        # Find all items whose lower bound overlaps with leader's upper bound
-        current_batch = df.loc[remaining_indices]
-        candidate_mins = current_batch["score"] - (k * current_batch["lower"])
-
-        # Check overlap condition: if candidate's best case overlaps with leader's worst case
-        tier_members_mask = candidate_mins <= leader_max
-        tier_member_indices = current_batch[tier_members_mask].index.tolist()
-
-        if debug:
-            for idx in remaining_indices:
-                model = df.loc[idx, "model"]
-                score = df.loc[idx, "score"]
-                lower = df.loc[idx, "lower"]
-                lower_bound = score - (k * lower)
-                overlaps = lower_bound <= leader_max
-                overlap_str = "YES ✓" if overlaps else "NO ✗"
+        current_leader = ""
+        for leader, candidate, p, joined in steps:
+            if leader != current_leader:
+                current_leader = leader
+                print(f"\n{'─' * 80}")
                 print(
-                    f"      {model:<30} {score:>11.4f} {lower:>11.4f} {lower_bound:>14.4f} {overlap_str:<10}"
+                    f"TIER {tiers[leader]}  👑 leader: {leader} (score {scores[leader]:.4f})"
                 )
-
-        # Assign tier
-        if debug:
-            print(f"\n   ✅ TIER {current_tier} MEMBERS:")
-            for idx in tier_member_indices:
-                model = df.loc[idx, "model"]
-                score = df.loc[idx, "score"]
-                print(f"      • {model} (score: {score:.4f})")
-
-        df.loc[tier_member_indices, "tier"] = current_tier
-
-        # Remove tiered items from remaining list
-        remaining_indices = [
-            idx for idx in remaining_indices if idx not in tier_member_indices
-        ]
-
-        if debug:
-            print("\n   📊 PROGRESS:")
-            print(
-                f"      Assigned {len(tier_member_indices)} model(s) to Tier {current_tier}"
-            )
-            print(f"      Remaining models: {len(remaining_indices)}")
-            if len(remaining_indices) > 0:
+                print(f"{'─' * 80}")
                 print(
-                    f"      Next leader will be: {df.loc[remaining_indices[0], 'model']}"
+                    f"      {'Candidate':<30} {'Score':>8} {'P(as good)':>14}  Joins?"
                 )
-            else:
-                print("      All models have been assigned to tiers!")
+            mark = "YES ✓" if joined else "NO ✗ (leads next tier)"
+            print(f"      {candidate:<30} {scores[candidate]:>8.4f} {p:>14.3f}  {mark}")
 
-        current_tier += 1
-
-    # Final summary
-    if debug:
-        total_tiers = current_tier - 1
+        n_tiers = max(tiers.values(), default=0)
         print("\n" + "=" * 80)
-        print("TIERING COMPLETE")
+        print(f"📈 FINAL TIER ASSIGNMENTS ({n_tiers} tiers total)")
         print("=" * 80)
-        print(f"\n📈 FINAL TIER ASSIGNMENTS ({total_tiers} tiers total):")
-
-        for tier_num in range(1, total_tiers + 1):
-            tier_models = df[df["tier"] == tier_num]["model"].tolist()
-            print(f"\n   Tier {tier_num}: {len(tier_models)} model(s)")
-            for model in tier_models:
-                score = df[df["model"] == model]["score"].values[0]
-                print(f"      • {model} (score: {score:.4f})")
-
+        for tier_num in range(1, n_tiers + 1):
+            members = [r[0] for r in results if tiers[r[0]] == tier_num]
+            print(f"   Tier {tier_num}: {', '.join(members)}")
         print("\n" + "=" * 80 + "\n")
 
-    # Create mapping from model name to tier
-    return dict(zip(df["model"], df["tier"]))
+    return tiers
 
 
 def create_plot(
     results: list[RankingResult],
     output_filename: str,
+    tier_mapping: dict[str, int],
     open_models: set[str] | None = None,
-    debug: bool = False,
     category: str | None = None,
     quadrants: bool = False,
     model_scores: dict[str, list[float]] | None = None,
@@ -303,14 +207,14 @@ def create_plot(
     Args:
         results: List of tuples (model, avg, lower_err, upper_err, n, cost) from main computation
         output_filename: Path to save the PNG output
-        debug: If True, show detailed tiering debug output
+        tier_mapping: Model name -> tier, computed over the full category ranking
         category: Optional category label shown as subtitle
         quadrants: If True, draw quadrant dividers and labels on the plot
         model_scores: Per-model list of raw benchmark percentiles for overlay dots
     """
     try:
         import matplotlib
-        import pandas as pd
+        import pandas as pd  # type: ignore[import-untyped]
         import matplotlib.pyplot as plt
         from matplotlib.lines import Line2D
         from matplotlib.offsetbox import AnnotationBbox, OffsetImage
@@ -320,20 +224,12 @@ def create_plot(
         print("  pip install pandas matplotlib", file=sys.stderr)
         sys.exit(1)
 
-    # Calculate fallback averages for models without enough data (n < 3)
-    valid_lowers = [le for _, _, le, _, _, _ in results if le is not None]
-    valid_uppers = [ue for _, _, _, ue, _, _ in results if ue is not None]
-    avg_lower = sum(valid_lowers) / len(valid_lowers) if valid_lowers else 0.0
-    avg_upper = sum(valid_uppers) / len(valid_uppers) if valid_uppers else 0.0
-
-    # Categorize models into tiers
-    tier_mapping = categorize_tiers(results, k=1.0, debug=debug)
-
-    # Convert results to DataFrame
+    # Convert results to DataFrame. Error bars show the Q1-Q3 spread across benchmarks;
+    # models with n < 3 have no quartiles and get no bar.
     df_data = []
     for model, avg, lower_err, upper_err, n, cost in results:
-        eff_lower = lower_err if lower_err is not None else avg_lower
-        eff_upper = upper_err if upper_err is not None else avg_upper
+        eff_lower = lower_err if lower_err is not None else 0.0
+        eff_upper = upper_err if upper_err is not None else 0.0
         df_data.append(
             {
                 "Model Name": model,
@@ -465,7 +361,7 @@ def create_plot(
 
         base_title = "LLM Model Performance vs. Cost"
         ax.set_title(f"{base_title}\n{category}" if category else base_title, pad=12)
-        ax.set_ylabel("Percentile rank (lower = better)")
+        ax.set_ylabel(_SCORE_LABEL)
         ax.set_xlabel("Cost relative to best model (log scale)")
         ax.grid(True, linestyle="--", linewidth=0.6, alpha=0.5)
 
@@ -594,20 +490,22 @@ def create_plot(
 def create_ranking_plot(
     results: list[RankingResult],
     output_filename: str,
+    tier_mapping: dict[str, int],
     open_models: set[str] | None = None,
-    debug: bool = False,
     category: str | None = None,
     model_scores: dict[str, list[float]] | None = None,
+    intervals: dict[str, tuple[int, int]] | None = None,
 ) -> None:
     """Create a horizontal ranking plot with models ordered by score.
 
     Args:
         results: List of tuples (model, avg, lower_err, upper_err, n, cost) from main computation
         output_filename: Path to save the PNG output
+        tier_mapping: Model name -> tier, computed over the full category ranking
         open_models: Set of open source model names
-        debug: If True, show detailed tiering debug output
         category: Optional category label shown in the title
-        model_scores: Per-model list of raw benchmark percentiles for overlay dots
+        model_scores: Per-model list of raw benchmark gaps for overlay dots
+        intervals: Optional model name -> (best, worst) bootstrap rank, shown in the labels
     """
     try:
         import matplotlib
@@ -623,12 +521,6 @@ def create_ranking_plot(
 
     random.seed(42)
 
-    valid_lowers = [le for _, _, le, _, _, _ in results if le is not None]
-    valid_uppers = [ue for _, _, _, ue, _, _ in results if ue is not None]
-    avg_lower = sum(valid_lowers) / len(valid_lowers) if valid_lowers else 0.0
-    avg_upper = sum(valid_uppers) / len(valid_uppers) if valid_uppers else 0.0
-
-    tier_mapping = categorize_tiers(results, k=1.0, debug=debug)
     sorted_results = sorted(results, key=lambda r: r[1])
     n_models = len(sorted_results)
 
@@ -652,8 +544,8 @@ def create_ranking_plot(
         for i, (model, avg, lower_err, upper_err, n_bench, cost) in enumerate(
             sorted_results
         ):
-            eff_lower = lower_err if lower_err is not None else avg_lower
-            eff_upper = upper_err if upper_err is not None else avg_upper
+            eff_lower = lower_err if lower_err is not None else 0.0
+            eff_upper = upper_err if upper_err is not None else 0.0
             tier = tier_mapping.get(model, 1)
             color = colors[tier - 1]
             is_open = open_models and model in open_models
@@ -698,14 +590,25 @@ def create_ranking_plot(
                         zorder=4,
                     )
 
+        def _range_suffix(model: str) -> str:
+            if not intervals or model not in intervals:
+                return ""
+            lo, hi = intervals[model]
+            return f"  [{lo}–{hi}]" if lo != hi else f"  [{lo}]"
+
         y_labels = [
-            f"{i + 1}. {model}" + ("‡" if n_b == 1 else ("†" if n_b == 2 else ""))
+            f"{i + 1}. {model}"
+            + ("‡" if n_b == 1 else ("†" if n_b == 2 else ""))
+            + _range_suffix(model)
             for i, (model, _, _, _, n_b, _) in enumerate(sorted_results)
         ]
         ax.set_yticks(range(n_models))
         ax.set_yticklabels(y_labels)
 
-        ax.set_xlabel("Percentile rank (lower = better)")
+        xlabel = _SCORE_LABEL
+        if intervals:
+            xlabel += f"\n[a–b] = {RANK_INTERVAL:.0%} rank interval from resampling benchmarks"
+        ax.set_xlabel(xlabel)
         base_title = "Model Ranking"
         ax.set_title(f"{base_title} — {category}" if category else base_title, pad=12)
         ax.grid(True, axis="x", linestyle="--", linewidth=0.6, alpha=0.5)
@@ -850,8 +753,30 @@ def load_data(
             sys.exit(
                 f"Error: benchmark '{name}' must have either 'min_score' or 'known_totals'."
             )
-        if not isinstance(b.get("scores"), dict):
+        scores = b.get("scores")
+        if not isinstance(scores, dict):
             sys.exit(f"Error: benchmark '{name}' is missing 'scores' table.")
+        # Out-of-range values silently produce normalized gaps outside 0-1
+        if "min_score" in b:
+            floor = b["min_score"]
+            below = {m: v for m, v in scores.items() if v is not None and v < floor}
+            if below:
+                listed = ", ".join(f"{m}={v}" for m, v in sorted(below.items()))
+                sys.exit(
+                    f"Error: benchmark '{name}' has scores below min_score={floor}: {listed}. "
+                    "Lower the floor or check the scores against the source."
+                )
+        else:
+            total = b["known_totals"]
+            bad = {
+                m: v for m, v in scores.items() if v is not None and not 1 <= v <= total
+            }
+            if bad:
+                listed = ", ".join(f"{m}={v}" for m, v in sorted(bad.items()))
+                sys.exit(
+                    f"Error: benchmark '{name}' has ranks outside 1..known_totals={total}: "
+                    f"{listed}."
+                )
 
     # Warn about model names in benchmarks.toml not present in models.toml
     all_benchmark_models: set[str] = set()
@@ -909,99 +834,13 @@ def load_data(
     return benchmarks, cost_dict, open_dict, company_dict, title, benchmark_names
 
 
-def _compute_raw(
-    category: str,
-) -> tuple[
-    list[RankingResult],
-    dict[str, list[float]],
-    dict[str, float],
-    dict[str, bool],
-    dict[str, str],
-    str,
-    list[str],
-]:
-    """Load data and compute ranked results. Returns raw objects for table/plot rendering or JSON export."""
+def _compute_raw(category: str) -> RawRanking:
+    """Load data, rank models, and bootstrap over benchmarks for rank intervals and tiers."""
     benchmarks, cost_dict, open_dict, company_dict, title, benchmark_names = load_data(
         category
     )
-
-    model_scores: dict[str, list[float]] = {}
-
-    for bench in benchmarks:
-        benchmark_name = str(bench.get("__name", "unnamed benchmark"))
-        min_score = bench.get("min_score")
-        if min_score is not None:
-            observed = [
-                v
-                for k, v in bench.items()
-                if k not in _BENCHMARK_META_KEYS and v is not None
-            ]
-            if not observed:
-                continue
-            max_score = max(observed)
-            score_range = max_score - min_score
-            if score_range == 0:
-                print(
-                    f"Warning: benchmark '{benchmark_name}' skipped because score range is zero.",
-                    file=sys.stderr,
-                )
-                continue
-            for model, score in bench.items():
-                if model in _BENCHMARK_META_KEYS:
-                    continue
-                if score is None:
-                    continue
-                pct = (max_score - score) / score_range
-                model_scores.setdefault(model, []).append(pct)
-        else:
-            total = bench.get("known_totals")
-            if not total:
-                continue
-            for model, rank in bench.items():
-                if model in _BENCHMARK_META_KEYS:
-                    continue
-                if rank is None:
-                    continue
-                pct = rank / total
-                model_scores.setdefault(model, []).append(pct)
-
-    results: list[RankingResult] = []
-    for model, scores in model_scores.items():
-        n = len(scores)
-        if n == 0:
-            continue
-
-        sorted_scores = sorted(scores)
-        mid = n // 2
-        median = (
-            sorted_scores[mid]
-            if n % 2 == 1
-            else (sorted_scores[mid - 1] + sorted_scores[mid]) / 2
-        )
-
-        penalty = 0.25 if n == 1 else (0.10 if n == 2 else 0.0)
-        avg = min(median + penalty, 1.0)
-
-        if n >= 3:
-            q1_idx = (n - 1) * 0.25
-            q3_idx = (n - 1) * 0.75
-            q1 = sorted_scores[int(q1_idx)] + (q1_idx % 1) * (
-                sorted_scores[min(int(q1_idx) + 1, n - 1)] - sorted_scores[int(q1_idx)]
-            )
-            q3 = sorted_scores[int(q3_idx)] + (q3_idx % 1) * (
-                sorted_scores[min(int(q3_idx) + 1, n - 1)] - sorted_scores[int(q3_idx)]
-            )
-            lower_err = median - q1
-            upper_err = q3 - median
-        else:
-            lower_err = None
-            upper_err = None
-
-        cost = cost_dict.get(model)
-        results.append((model, avg, lower_err, upper_err, n, cost))
-
-    results.sort(key=lambda r: r[1])
-    return (
+    results, model_scores = calculate_rankings(benchmarks, cost_dict)
+    return RawRanking(
         results,
         model_scores,
         cost_dict,
@@ -1009,28 +848,16 @@ def _compute_raw(
         company_dict,
         title,
         benchmark_names,
+        bootstrap_scores(benchmarks),
     )
 
 
 def compute_rankings(category: str) -> dict[str, Any]:
-    """Compute rankings and return a JSON-serializable dict for web export. Requires pandas."""
-    try:
-        import pandas as pd  # noqa: F401
-    except ImportError:
-        sys.exit(
-            "Error: --export-json requires pandas. Install with: pip install pandas"
-        )
-
-    (
-        results,
-        model_scores,
-        cost_dict,
-        open_dict,
-        company_dict,
-        title,
-        benchmark_names,
-    ) = _compute_raw(category)
-    tier_mapping = categorize_tiers(results, k=1.0, debug=False)
+    """Compute rankings and return a JSON-serializable dict for web export."""
+    raw = _compute_raw(category)
+    results = raw.results
+    tier_mapping = categorize_tiers(results, raw.replicates)
+    intervals = rank_intervals(raw.replicates, results)
 
     costs_with_values = [r[5] for r in results if r[5] is not None]
     best_cost = costs_with_values[0] if costs_with_values else None
@@ -1040,9 +867,12 @@ def compute_rankings(category: str) -> dict[str, Any]:
         rel_cost = (
             cost / best_cost if (cost is not None and best_cost is not None) else None
         )
+        rank_lo, rank_hi = intervals[model]
         models_out.append(
             {
                 "rank": idx,
+                "rank_lo": rank_lo,
+                "rank_hi": rank_hi,
                 "name": model,
                 "avg_pct": round(avg, 6),
                 "lower_err": round(lower_err, 6) if lower_err is not None else None,
@@ -1051,20 +881,26 @@ def compute_rankings(category: str) -> dict[str, Any]:
                 "cost": cost,
                 "rel_cost": round(rel_cost, 6) if rel_cost is not None else None,
                 "tier": tier_mapping.get(model, 0),
-                "is_open": model in open_dict,
-                "company": company_dict.get(model),
-                "raw_scores": [round(s, 6) for s in model_scores.get(model, [])],
+                "is_open": model in raw.open_dict,
+                "company": raw.company_dict.get(model),
+                "raw_scores": [round(s, 6) for s in raw.model_scores.get(model, [])],
             }
         )
 
     return {
         "category": category,
-        "title": title,
-        "generated_at": datetime.datetime.now(datetime.timezone.utc).strftime(
+        "title": raw.title,
+        "generated_at": datetime.datetime.now(datetime.UTC).strftime(
             "%Y-%m-%dT%H:%M:%SZ"
         ),
-        "n_benchmarks": len(benchmark_names),
-        "benchmark_names": benchmark_names,
+        "n_benchmarks": len(raw.benchmark_names),
+        "benchmark_names": raw.benchmark_names,
+        "uncertainty": {
+            "method": "benchmark bootstrap",
+            "n_boot": len(raw.replicates),
+            "rank_interval": RANK_INTERVAL,
+            "tier_alpha": TIER_ALPHA,
+        },
         "palette": _NATURE_COLORS,
         "models": models_out,
     }
@@ -1170,9 +1006,12 @@ def main() -> None:
         print(f"Valid categories: {', '.join(CATEGORIES)}", file=sys.stderr)
         sys.exit(1)
 
-    results, model_scores, cost_dict, open_dict, company_dict, category, _bnames = (
-        _compute_raw(category)
-    )
+    raw = _compute_raw(category)
+    results = raw.results
+    open_dict = raw.open_dict
+    title = raw.title
+    tier_mapping = categorize_tiers(results, raw.replicates)
+    intervals = rank_intervals(raw.replicates, results)
 
     # ── Normalize costs relative to best-ranked model with cost data ─────
     costs_with_values = [r[5] for r in results if r[5] is not None]
@@ -1182,7 +1021,8 @@ def main() -> None:
     col = {
         "rank": 6,
         "model": 24,
-        "avg": 10,
+        "range": 11,
+        "avg": 7,
         "lower": 7,
         "upper": 7,
         "nb": 14,
@@ -1191,24 +1031,17 @@ def main() -> None:
     total_w = sum(col.values()) + 2 * len(col) + 1
     sep = "+" + "-" * (total_w - 2) + "+"
 
-    # Compute tier mapping for table colors; skipped silently if pandas is missing
-    tier_mapping: dict[str, int] = {}
-    if color:
-        try:
-            tier_mapping = categorize_tiers(results, k=1.0, debug=False)
-        except ImportError:
-            pass
-
-    def _row(rk: str, md: str, av: str, lo: str, hi: str, nb: str, ct: str) -> str:
-        return f"| {rk}| {md}| {av}| {lo}| {hi}| {nb}| {ct}|"
+    def _row(*cells: str) -> str:
+        return "".join(f"| {cell}" for cell in cells) + "|"
 
     sep_line = _c(sep, "2", color)
     hdr = (
         _c(f"{'Rank':<{col['rank']}}", "1", color),
         _c(f"{'Model':<{col['model']}}", "1", color),
-        _c(f"{'Avg Pctl':<{col['avg']}}", "1", color),
-        _c(f"{'-err':<{col['lower']}}", "1", color),
-        _c(f"{'+err':<{col['upper']}}", "1", color),
+        _c(f"{'Rank range':<{col['range']}}", "1", color),
+        _c(f"{'Gap':<{col['avg']}}", "1", color),
+        _c(f"{'-IQR':<{col['lower']}}", "1", color),
+        _c(f"{'+IQR':<{col['upper']}}", "1", color),
         _c(f"{'# Benchmarks':<{col['nb']}}", "1", color),
         _c(f"{'Rel. Cost':<{col['cost']}}", "1", color),
     )
@@ -1220,6 +1053,8 @@ def main() -> None:
     _rank_codes = {1: "1;38;5;220", 2: "1;38;5;250", 3: "1;38;5;208"}
 
     for idx, (model, avg, lower_err, upper_err, n, cost) in enumerate(results, 1):
+        rank_lo, rank_hi = intervals[model]
+        range_s = f"{rank_lo}-{rank_hi}" if rank_lo != rank_hi else f"{rank_lo}"
         avg_s = f"{avg:.3f}"
         lower_s = f"{lower_err:.3f}" if lower_err is not None else "N/A"
         upper_s = f"{upper_err:.3f}" if upper_err is not None else "N/A"
@@ -1233,12 +1068,13 @@ def main() -> None:
         model_disp = model + ("*" if model in open_dict else "")
 
         # Pad to column width before applying color so ANSI codes don't affect alignment
-        rank_p = _c(f"{str(idx):<{col['rank']}}", _rank_codes.get(idx, ""), color)
+        rank_p = _c(f"{idx!s:<{col['rank']}}", _rank_codes.get(idx, ""), color)
         model_p = f"{model_disp:<{col['model']}}"
+        range_p = f"{range_s:<{col['range']}}"
         avg_p = f"{avg_s:<{col['avg']}}"
         lower_p = f"{lower_s:<{col['lower']}}"
         upper_p = f"{upper_s:<{col['upper']}}"
-        nb_p = f"{str(n):<{col['nb']}}"
+        nb_p = f"{n!s:<{col['nb']}}"
         cost_p = f"{cost_s:<{col['cost']}}"
 
         tier = tier_mapping.get(model, 0)
@@ -1251,9 +1087,16 @@ def main() -> None:
             )
             cost_p = _c(cost_p, cost_code, color)
 
-        print(_row(rank_p, model_p, avg_p, lower_p, upper_p, nb_p, cost_p))
+        print(_row(rank_p, model_p, range_p, avg_p, lower_p, upper_p, nb_p, cost_p))
 
     print(sep_line)
+    print(
+        "  Gap: median over benchmarks of (best - score) / (best - floor); 0 = best tracked model."
+    )
+    print(
+        f"  Rank range: {RANK_INTERVAL:.0%} interval from resampling benchmarks. "
+        "-IQR/+IQR: spread across benchmarks."
+    )
     if color and open_dict:
         print("  * open-weight model")
 
@@ -1275,42 +1118,38 @@ def main() -> None:
             )
             sys.exit(1)
 
-        stem = category
         figures_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "figures"
         )
         os.makedirs(figures_dir, exist_ok=True)
         open_models = set(open_dict.keys()) if open_dict else set()
 
-        plot_filename = os.path.join(figures_dir, f"{stem}.png")
+        plot_filename = os.path.join(figures_dir, f"{title}.png")
         create_plot(
             plottable_results,
             plot_filename,
+            tier_mapping,
             open_models,
-            debug=args.debug,
-            category=category,
+            category=title,
             quadrants=args.quadrants,
-            model_scores=model_scores,
-            companies=company_dict,
+            model_scores=raw.model_scores,
+            companies=raw.company_dict,
         )
 
-        ranking_plot_filename = os.path.join(figures_dir, f"{stem}_ranking.png")
+        ranking_plot_filename = os.path.join(figures_dir, f"{title}_ranking.png")
         create_ranking_plot(
             results,
             ranking_plot_filename,
+            tier_mapping,
             open_models,
-            debug=args.debug,
-            category=category,
-            model_scores=model_scores,
+            category=title,
+            model_scores=raw.model_scores,
+            intervals=intervals,
         )
-    elif args.debug:
-        # Run tiering with debug output even without plot
-        # Filter results to only include models with cost data for consistency
-        plottable_results = [r for r in results if r[5] is not None]
-        if plottable_results:
-            categorize_tiers(plottable_results, k=1.0, debug=True)
-        else:
-            categorize_tiers(results, k=1.0, debug=True)
+
+    if args.debug:
+        # Tiers cover every ranked model, including those without cost data
+        categorize_tiers(results, raw.replicates, debug=True)
 
 
 if __name__ == "__main__":

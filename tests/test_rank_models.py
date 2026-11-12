@@ -1,9 +1,11 @@
+from itertools import pairwise
 from pathlib import Path
 import tomllib
 
 import pytest
 
 import rank_models
+import ranking_math
 
 
 def test_retired_benchmarks_are_excluded_from_active_data() -> None:
@@ -189,10 +191,10 @@ def test_tied_scores_have_deterministic_order_and_tier(monkeypatch: pytest.Monke
         ],
     )
 
-    results, *_ = rank_models._compute_raw("synthetic")
-    tiers = rank_models.categorize_tiers(results)
+    raw = rank_models._compute_raw("synthetic")
+    tiers = rank_models.categorize_tiers(raw.results, raw.replicates)
 
-    assert [row[0] for row in results] == ["tie_a", "tie_b"]
+    assert [row[0] for row in raw.results] == ["tie_a", "tie_b"]
     assert tiers == {"tie_a": 1, "tie_b": 1}
 
 
@@ -274,9 +276,14 @@ def test_compute_rankings_export_shape(monkeypatch: pytest.MonkeyPatch) -> None:
     assert exported["n_benchmarks"] == 3
     assert exported["benchmark_names"] == ["score_one", "rank_one", "score_two"]
 
+    assert exported["uncertainty"]["method"] == "benchmark bootstrap"
+
     model = exported["models"][0]
+    assert model["rank_lo"] <= model["rank"] <= model["rank_hi"]
     assert {
         "rank",
+        "rank_lo",
+        "rank_hi",
         "name",
         "avg_pct",
         "lower_err",
@@ -289,3 +296,96 @@ def test_compute_rankings_export_shape(monkeypatch: pytest.MonkeyPatch) -> None:
         "company",
         "raw_scores",
     } <= model.keys()
+
+
+def _patch_toml(
+    monkeypatch: pytest.MonkeyPatch, benchmarks: dict[str, dict[str, object]]
+) -> None:
+    monkeypatch.setattr(rank_models, "_load_benchmarks_toml", lambda _: list(benchmarks.items()))
+    monkeypatch.setattr(rank_models, "_load_models_toml", lambda _: {})
+
+
+def test_score_below_floor_exits_naming_benchmark(monkeypatch: pytest.MonkeyPatch) -> None:
+    _patch_toml(
+        monkeypatch,
+        {
+            "Physics": {
+                "categories": ["stem"],
+                "min_score": 8,
+                "scores": {"alpha": 27.4, "beta": 4.2},
+            }
+        },
+    )
+
+    with pytest.raises(SystemExit) as exc_info:
+        rank_models.load_data("stem")
+
+    assert "'Physics'" in str(exc_info.value)
+    assert "beta=4.2" in str(exc_info.value)
+    assert "alpha" not in str(exc_info.value)
+
+
+def test_rank_outside_known_totals_exits(monkeypatch: pytest.MonkeyPatch) -> None:
+    _patch_toml(
+        monkeypatch,
+        {
+            "Leaderboard": {
+                "categories": ["general"],
+                "known_totals": 10,
+                "scores": {"alpha": 1, "beta": 11},
+            }
+        },
+    )
+
+    with pytest.raises(SystemExit) as exc_info:
+        rank_models.load_data("general")
+
+    assert "'Leaderboard'" in str(exc_info.value)
+    assert "beta=11" in str(exc_info.value)
+
+
+def _spread_benchmarks() -> list[dict[str, object]]:
+    """Ten benchmarks: six fillers, a model on all ten, and a noisy model on three."""
+    benchmarks: list[dict[str, object]] = []
+    for i in range(10):
+        bench: dict[str, object] = {"__name": f"b{i}", "min_score": 0}
+        for j, base in enumerate([90, 80, 70, 60, 50, 40]):
+            bench[f"filler{j}"] = base + (i * 7 + j * 3) % 9 - 4
+        bench["thick"] = 65 + (i % 3) - 1
+        if i < 3:
+            bench["thin"] = [95, 30, 66][i]
+        benchmarks.append(bench)
+    return benchmarks
+
+
+def test_bootstrap_is_deterministic_and_thin_models_get_wider_rank_intervals() -> None:
+    benchmarks = _spread_benchmarks()
+    results, _ = ranking_math.calculate_rankings(benchmarks)
+
+    first = ranking_math.bootstrap_scores(benchmarks)
+    second = ranking_math.bootstrap_scores(benchmarks)
+    assert first == second
+
+    intervals = ranking_math.rank_intervals(first, results)
+    thin_lo, thin_hi = intervals["thin"]
+    thick_lo, thick_hi = intervals["thick"]
+    assert thin_hi - thin_lo > thick_hi - thick_lo
+    for position, row in enumerate(results, 1):
+        lo, hi = intervals[row[0]]
+        assert lo <= position <= hi
+
+
+def test_models_that_never_share_a_resample_are_indistinguishable() -> None:
+    replicates = [{"a": 0.1}, {"b": 0.5}]
+    assert ranking_math.prob_at_least_as_good(replicates, "b", "a") == 1.0
+
+
+@pytest.mark.parametrize("category", sorted(rank_models.CATEGORIES))
+def test_real_data_tiers_are_contiguous_in_rank_order(category: str) -> None:
+    exported = rank_models.compute_rankings(category)
+    tiers = [model["tier"] for model in exported["models"]]
+
+    assert tiers[0] == 1
+    assert all(b - a in (0, 1) for a, b in pairwise(tiers))
+    for model in exported["models"]:
+        assert model["rank_lo"] <= model["rank"] <= model["rank_hi"]

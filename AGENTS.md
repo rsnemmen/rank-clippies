@@ -10,34 +10,27 @@ Python tool for computing unified model rankings from benchmark leaderboards usi
 
 ## Methodology
 
-### Percentile Normalization
-Different leaderboards evaluate different numbers of models. Being ranked 5th out of 600 models is more impressive than 5th out of 30. To make cross-benchmark comparisons fair, normalize each rank to a fractional percentile:
+### Normalization
+Every current benchmark is score-based. Each score becomes its gap to the best tracked model as a share of the benchmark's range:
 
 ```
-percentile = rank / total_models_evaluated
+gap = (max_score - score) / (max_score - min_score)
 ```
 
-This puts every score on a 0-1 scale (0 = best, 1 = worst).
+0 = best tracked model, 1 = the floor. This is not a percentile, and a new top model shifts everyone's gap. `min_score` should be the lowest score on the full source leaderboard; `load_data` exits if any score is below it. Rank-based benchmarks (`known_totals`) use `rank / known_totals`, a true percentile; ranks must lie in `1..known_totals`.
 
 ### Aggregation and Penalties
-A model's composite score is the unweighted median of its percentiles across all benchmarks it appears on. The median is preferred over the mean for robustness against outlier benchmarks. To avoid boosting models that score well on only a single benchmark, a sparse-data penalty is added:
+A model's composite score is the unweighted median of its gaps across all benchmarks it appears on. The median is preferred over the mean for robustness against outlier benchmarks. To avoid boosting models that score well on only a single benchmark, a sparse-data penalty is added:
 - +0.25 for one benchmark
 - +0.10 for two benchmarks
 - 0 for three or more
 
-### Statistical Tiering
-Models are grouped into tiers using the "indistinguishable from best" method:
-1. The best model becomes the tier leader
-2. Every remaining model whose asymmetric Q1–Q3 interval overlaps with the leader's interval joins the same tier
-3. Remove the tier, promote the next-best model to leader, and repeat
+Asymmetric IQR bounds (`median − Q1`, `Q3 − median`) are shown as error bars. They measure spread across benchmarks, not uncertainty in the median. Models with n<3 have none.
 
-Model i is grouped with leader j if:
-```
-score_i + upper_err_i >= score_j - lower_err_j
-```
-where `lower_err = median − Q1` and `upper_err = Q3 − median`.
-
-Asymmetric IQR bounds are the dispersion measure for error bars and tiering — the natural robust companion to the median aggregate. The lower and upper distances from the median to Q1 and Q3 are kept separate, reflecting the true skew of each model's benchmark distribution. Models evaluated on fewer than three benchmarks have no IQR bounds (degenerate for n<3), so the average lower/upper across all other models is used as a stand-in.
+### Uncertainty and Tiering (benchmark bootstrap)
+Implemented in `ranking_math.py`. `bootstrap_scores` resamples the category's benchmarks with replacement (`N_BOOT = 2000`, fixed seed) and reruns `calculate_rankings` on each draw; all models share each draw, so comparisons are paired.
+- `rank_intervals`: the middle 68% of each model's bootstrap ranks, widened if needed to include its listed rank.
+- `assign_tiers`: the best remaining model leads a tier; walking down the ranking, each model joins while `P(score_i ≤ score_leader) ≥ TIER_ALPHA` (0.16) over resamples where both have data; the first that fails leads the next tier. Tiers are therefore contiguous in rank order.
 
 ### Cost Metric
 Use USD per 1M tokens (input + output combined) as the cost metric for consistent relative comparisons across providers. In both the ASCII table and the scatter plot, costs are normalized so the best-ranked model = 1.000; all other values are multiples of that baseline.
@@ -178,6 +171,7 @@ except ImportError as exc:
 ```
 .
 ├── rank_models.py          # Main script (executable)
+├── ranking_math.py         # Shared normalization, median aggregation, bootstrap tiering
 ├── data/
 │   ├── benchmarks.toml     # All benchmarks with category tags (single source of truth)
 │   └── models.toml         # All model metadata: cost and open-weight flag
@@ -219,7 +213,7 @@ except ImportError as exc:
 
 When implementing debug functionality:
 - Use conditional printing based on a `debug: bool` parameter
-- The `k` parameter controls the tier overlap multiplier (1.0 = one-sigma-equivalent interval)
+- The `alpha` parameter of `categorize_tiers` (default `TIER_ALPHA = 0.16`) is the minimum share of bootstrap resamples in which a candidate must match the tier leader
 - Structure output with clear headers and separators
 - Include all intermediate calculation steps
 - Show before/after states for transformations

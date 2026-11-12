@@ -1,6 +1,14 @@
 {
   "entries": [
     {
+      "date": "2026-11-10",
+      "message": "added Fable 5.2"
+    },
+    {
+      "date": "2026-11-08",
+      "message": "Remove kimi-k3, refresh benchmark data, and regenerate rankings"
+    },
+    {
       "date": "2026-10-28",
       "message": "Remove gemini-pro31 and inkling, add g4argon/g4carbon scores, refresh rankings"
     },

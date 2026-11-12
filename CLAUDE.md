@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Single-file Python CLI (`rank_models.py`) that aggregates LLM benchmark leaderboards into a unified ranking using percentile normalization and statistical tiering. See `AGENTS.md` for full methodology details.
+Python CLI (`rank_models.py`, with shared math in `ranking_math.py`) that aggregates LLM benchmark leaderboards into a unified ranking: each score is normalized to its gap from the best tracked model, aggregated by median, with rank ranges and tiers from a benchmark bootstrap. See `AGENTS.md` for full methodology details.
 
 **Repository:** https://github.com/rsnemmen/rank-clippies
 
@@ -31,14 +31,20 @@ make validate   # ruff + mypy --strict + pytest + JSON export smoke test
 
 ## Architecture
 
-Everything lives in `rank_models.py` (stdlib-only for core; pandas/matplotlib/numpy imported lazily inside plotting functions):
+Stdlib-only for core; pandas/matplotlib/numpy are imported lazily inside plotting functions only.
 
+`ranking_math.py` (shared with `ranking_history.py` / `animate_rankings.py`):
+- `calculate_rankings(benchmarks)` — normalized gaps, median, sparse-data penalty, asymmetric IQR
+- `bootstrap_scores(benchmarks)` — resamples benchmarks with replacement (`N_BOOT`, fixed seed)
+- `rank_intervals(replicates, results)` / `assign_tiers(results, replicates)` — 68% rank ranges and contiguous tiers
+
+`rank_models.py`:
 - `_load_benchmarks_toml(filepath)` / `_load_models_toml(filepath)` — load TOML data via `tomllib`
-- `load_data(category)` — loads `data/benchmarks.toml` + `data/models.toml`, validates benchmark schema, filters by category tag, and returns `(benchmarks, cost_dict, open_dict, company_dict, title, benchmark_names)`
-- `_compute_raw(category)` — computes percentile scores, applies sparse-data penalties, and returns ranked tuples plus raw model scores
-- `compute_rankings(category)` — builds the JSON-serializable shape consumed by the static website
+- `load_data(category)` — loads `data/benchmarks.toml` + `data/models.toml`, validates benchmark schema (including scores below `min_score` and ranks outside `1..known_totals`), filters by category tag, and returns `(benchmarks, cost_dict, open_dict, company_dict, title, benchmark_names)`
+- `_compute_raw(category)` — returns a `RawRanking` NamedTuple: ranked tuples, raw model scores, metadata, and bootstrap replicates
+- `compute_rankings(category)` — builds the JSON-serializable shape consumed by the static website (adds `rank_lo`/`rank_hi`)
 - `main()` — handles CLI parsing, ASCII table output, optional plotting, and `--export-json`
-- `categorize_tiers()` — groups models into tiers via "Indistinguishable from Best" (asymmetric Q1–Q3 interval overlap); requires pandas
+- `categorize_tiers(results, replicates)` — wraps `assign_tiers` and prints the `--debug` trace
 - `create_plot()` — scatter plot (performance vs. cost, log-scale X); cost is normalized so the best-ranked model = 1.0; saves `<basename>.png`; optional `-q`/`--quadrants` flag shades and labels four regions (Best value / Premium / Budget / Avoid) using geometric-mean cost and median score as midpoints
 - `create_ranking_plot()` — horizontal ranking chart; saves `<basename>_ranking.png`
 
@@ -46,7 +52,8 @@ Everything lives in `rank_models.py` (stdlib-only for core; pandas/matplotlib/nu
 
 ```
 .
-├── rank_models.py          # CLI, ranking logic, plots, and JSON export
+├── rank_models.py          # CLI, plots, and JSON export
+├── ranking_math.py         # Shared normalization, aggregation, bootstrap tiering
 ├── data/
 │   ├── benchmarks.toml     # Benchmark definitions and scores
 │   └── models.toml         # Model cost, open-weight, and company metadata

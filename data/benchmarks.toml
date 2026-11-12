@@ -296,15 +296,17 @@ opus55 = 45.5
 sonnet55 = 41
 
 # https://www.benchflow.ai/frontierphysics
+# Overall pass rate, not "Verifier pass" (checked 2026-11-12).
+# Floor is the lowest Overall score across the full leaderboard.
 [FrontierPhysics]
 categories = ["stem"]
-min_score = 8
+min_score = 0
 
 [FrontierPhysics.scores]
-deepseek-flash41 = 10.7
+deepseek-flash41 = 3.6
 fable51 = 11.3
 g4argon = 8.3
-glm53 = 7.1
+glm53 = 4.2
 gpt6astra = 23.2
 gpt61sol = 19.6
 gpt61terra = 14.3

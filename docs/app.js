@@ -135,6 +135,15 @@ function filterModels(models, { hideOpen, hideSparse }) {
   });
 }
 
+// Axis label shared with rank_models.py (_SCORE_LABEL)
+const SCORE_LABEL = "Gap to best model, % of benchmark range (lower = better)";
+
+// 68% rank interval from the benchmark bootstrap, e.g. "3–7"
+function rankRange(m) {
+  if (m.rank_lo == null || m.rank_hi == null) return "—";
+  return m.rank_lo === m.rank_hi ? `${m.rank_lo}` : `${m.rank_lo}–${m.rank_hi}`;
+}
+
 // Deterministic pseudo-random for reproducible jitter
 function pseudoRand(seed) {
   const x = Math.sin(seed + 1) * 10000;
@@ -191,6 +200,7 @@ function buildScatterTraces(models, palette) {
       showlegend: showLegend,
       customdata: gm.map(m => ({
         rank: m.rank,
+        range: rankRange(m),
         name: m.name,
         n_bench: m.n_bench,
         cost: m.cost != null ? m.cost.toFixed(0) : "N/A",
@@ -199,7 +209,8 @@ function buildScatterTraces(models, palette) {
       })),
       hovertemplate:
         "<b>%{customdata.name}</b> (Rank %{customdata.rank})<br>" +
-        "Score: %{y:.1f}%ile<br>" +
+        "Plausible rank range (68%): %{customdata.range}<br>" +
+        "Gap to best: %{y:.1f}<br>" +
         "Cost: %{x:.2f}× best<br>" +
         "Benchmarks (n=%{customdata.n_bench}): %{customdata.raw}<br>" +
         "%{customdata.open}<extra></extra>",
@@ -236,7 +247,7 @@ function buildScatterLayout(models, palette, showQuadrants, showLabels, title) {
       tickfont: { size: 10 },
     },
     yaxis: {
-      title: "Percentile rank (lower = better)",
+      title: SCORE_LABEL,
       range: [upper, 0],
       showgrid: true,
       gridcolor: "#d0d0d0",
@@ -390,6 +401,7 @@ function buildRankingTraces(models, palette) {
         showlegend: !isOpen,
         customdata: gm.map(m => ({
           rank: m.rank,
+          range: rankRange(m),
           name: m.name,
           n_bench: m.n_bench,
           raw: m.raw_scores.map(s => (s * 100).toFixed(1)).join(", ") || "—",
@@ -397,7 +409,8 @@ function buildRankingTraces(models, palette) {
         })),
         hovertemplate:
           "<b>%{customdata.name}</b> (Rank %{customdata.rank})<br>" +
-          "Score: %{x:.1f}%ile<br>" +
+          "Plausible rank range (68%): %{customdata.range}<br>" +
+          "Gap to best: %{x:.1f}<br>" +
           "Benchmarks (n=%{customdata.n_bench}): %{customdata.raw}<br>" +
           "%{customdata.open}<extra></extra>",
       });
@@ -455,7 +468,7 @@ function buildRankingLayout(sorted, n, title) {
   return {
     title: { text: `Model Ranking — ${title}`, x: 0.5, xanchor: "center" },
     xaxis: {
-      title: "Percentile rank (lower = better)",
+      title: SCORE_LABEL,
       range: [0, upper],
       showgrid: true,
       gridcolor: "#d0d0d0",

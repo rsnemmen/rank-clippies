@@ -1,8 +1,8 @@
 # LLM Benchmark Aggregator
 
-A command-line tool that computes a unified model ranking from multiple benchmark leaderboards using **percentile-normalized** scores. It ingests a simple data file of per-benchmark ranks, normalizes them to a common 0–1 scale, and outputs a single sorted table so you can compare models at a glance.
+A command-line tool that computes a unified model ranking from multiple benchmark leaderboards. It normalizes each benchmark score to a common 0–1 scale (the gap to the best tracked model), takes the median across benchmarks, and outputs a single sorted table so you can compare models at a glance. Rank ranges and tiers come from resampling the benchmarks, so they show how much each position depends on which benchmarks happen to be included.
 
-Visualize model performance with robust tiering: Generate scatter plots showing performance vs. cost, with models color-coded by performance tiers based on the "Indistinguishable from Best" overlap rule.
+Visualize model performance with tiering: Generate scatter plots showing performance vs. cost, with models color-coded by "indistinguishable from best" performance tiers.
 
 ## Quick start
 
@@ -16,21 +16,19 @@ Valid categories: `general`, `coding`, `agentic`, `stem`.
 The above command will produce the following output:
 
 ```text
-+-------------------------------------------------------------------------------------+
-| Rank  | Model                   | Avg Pctl  | -err  | +err  | # Benchmarks  | Rel. Cost |
-+-------------------------------------------------------------------------------------+
-| 1     | opus                    | 0.030     | 0.018     | 7             | 1.000     |
-| 2     | gemini                  | 0.076     | 0.044     | 7             | 0.435     |
-| 3     | gpt                     | 0.077     | 0.041     | 7             | 0.553     |
-| 4     | gpt-codex               | 0.095     | 0.063     | 6             | 0.553     |
-| 5     | gpt-pro                 | 0.103     | 0.091     | 3             | 6.588     |
-| 6     | sonnet                  | 0.170     | 0.121     | 7             | 0.588     |
-| 7     | kimi                    | 0.205     | 0.115     | 7             | 0.141     |
-| 8     | glm                     | 0.226     | 0.198     | 7             | 0.111     |
-| 9     | gemini-flash            | 0.237     | 0.209     | 7             | 0.118     |
-| 10    | haiku                   | 0.241     | 0.183     | 5             | 0.200     |
++-----------------------------------------------------------------------------------------------------+
+| Rank  | Model                   | Rank range | Gap    | -IQR   | +IQR   | # Benchmarks  | Rel. Cost |
++-----------------------------------------------------------------------------------------------------+
+| 1     | fable52                 | 1          | 0.000  | 0.000  | 0.015  | 8             | 1.000     |
+| 2     | opus55                  | 2-4        | 0.033  | 0.024  | 0.079  | 13            | 0.500     |
+| 3     | kimi-k31-pro*           | 2-11       | 0.062  | 0.029  | 0.019  | 3             | 0.250     |
+| 4     | g4carbon                | 1-5        | 0.076  | 0.076  | 0.036  | 10            | 0.250     |
+| 5     | gpt6astra               | 3-7        | 0.087  | 0.066  | 0.099  | 14            | 1.250     |
+| 6     | gpt61sol                | 5-10       | 0.139  | 0.071  | 0.060  | 12            | 0.250     |
 ...
 ```
+
+`kimi-k31-pro` is listed third, but on only three benchmarks it could plausibly be anywhere from 2nd to 11th.
 
 For the plots:
 
@@ -46,11 +44,11 @@ Plots are written to `figures/General intelligence.png` and `figures/General int
 
 This will output two plots. The first is the average ranking as a function of API cost:
 ![](docs/general.png)  
-**Figure 1: General intelligence vs model cost.** Y-axis indicates the median percentile rank on a scale from 1 (best) to 100 (worst). X-axis is the cost relative to the best-ranked model (log scale; best model = 1). Colors indicate the model tier. Error bars span Q1 to Q3 around the median (asymmetric), indicating the variation of a model ranking across different benchmarks. Circles = proprietary models; diamonds = open-weight models.
+**Figure 1: General intelligence vs model cost.** Y-axis is the median gap to the best tracked model, as a percentage of each benchmark's range (0 = best). X-axis is the cost relative to the best-ranked model (log scale; best model = 1). Colors indicate the model tier. Error bars span Q1 to Q3 of a model's per-benchmark gaps: they show how much the model varies across benchmarks, not how precisely its median is known (models on fewer than 3 benchmarks have none). Circles = proprietary models; diamonds = open-weight models.
 
 The second plot is a different visualization of the tiers: 
 ![](docs/general_ranking.png)  
-**Figure 2: Model ranking (general intelligence).** Bigger circles indicate more expensive models. Small semi-transparent dots show the individual per-benchmark percentile values, revealing the spread, skewness, and outliers behind each aggregate score.
+**Figure 2: Model ranking (general intelligence).** Bigger circles indicate more expensive models. Small semi-transparent dots show the individual per-benchmark gaps, revealing the spread, skewness, and outliers behind each aggregate score. The `[a–b]` after each name is the model's 68% rank range from resampling benchmarks.
 
 To regenerate plots for all four categories in one shot:
 
@@ -96,7 +94,7 @@ python rank_models.py [category] [-p|--plot] [-d|--debug] [-q|--quadrants]
 |----------|-------------|
 | `category` | Ranking category to compute. One of `general`, `coding`, `agentic`, `stem`. Defaults to `coding` if not provided. |
 | `-p`, `--plot` | Generate PNG scatter plots of model performance vs. cost with tiering visualization. Written to `figures/<Category title>.png` and `figures/<Category title>_ranking.png`. |
-| `-d`, `--debug` | Show detailed tiering diagnostics including leader selection, overlap checks, and tier assignments. |
+| `-d`, `--debug` | Show detailed tiering diagnostics: each tier leader, every candidate's bootstrap probability of matching it, and the final tier assignments. |
 | `-q`, `--quadrants` | Overlay quadrant dividers and labels on the scatter plot. Divides the chart into four regions — **Best value** (low cost, high perf), **Premium** (high cost, high perf), **Budget** (low cost, low perf), **Avoid** (high cost, low perf) — using the geometric mean of cost and median score as midpoints. Requires `--plot`. |
 
 ### Automation shortcuts
@@ -127,7 +125,7 @@ One TOML table per benchmark. Each benchmark has:
 - Either `min_score` (score-based) or `known_totals` (rank-based).
 - A nested `[benchmark_name.scores]` table mapping model name to score or rank.
 
-**Score-based** — model scores are numeric, higher = better. `min_score` sets the floor for percentile normalization.
+**Score-based** — model scores are numeric, higher = better. `min_score` sets the normalization floor. Use the lowest score on the full source leaderboard, including models not tracked here, and note the source in a comment. Every listed score must be at or above `min_score`; `rank_models.py` exits with an error otherwise. The floor sets how much a benchmark spreads models apart, so it effectively controls the benchmark's weight.
 
 ```toml
 [artificial_analysis_agentic]
@@ -140,7 +138,7 @@ gpt56sol = 74
 opus55 = 70
 ```
 
-**Rank-based** — models are mapped to integer ranks (lower = better). `known_totals` is the total number of models evaluated on that leaderboard.
+**Rank-based** — models are mapped to integer ranks (lower = better). `known_totals` is the total number of models evaluated on that leaderboard. Ranks must lie in `1..known_totals`.
 
 ```toml
 [livebench_coding]
@@ -196,28 +194,29 @@ Models absent from `models.toml` show `N/A` in the Rel. Cost column.
 
 ## Methodology
 
-### 1. Percentile normalization
+### 1. Normalization
+
+**Score-based benchmarks** (all current benchmarks):
+
+```
+gap = (max_score - score) / (max_score - min_score)
+```
+
+`max_score` is the best score among tracked models, so the best tracked model gets 0.0 and a model at the floor gets 1.0. This is a gap to the leader, not a percentile: it says how far behind the best tracked model a model is, as a share of the benchmark's range. Because the best tracked model defines 0, adding a new top model shifts every other model's gap on that benchmark, so scores are comparable within one run but not across dates.
 
 **Rank-based benchmarks:**
 
 ```
-percentile = rank / known_totals
+gap = rank / known_totals
 ```
 
-**Score-based benchmarks:**
-
-```
-percentile = (max_score - score) / (max_score - min_score)
-```
-
-In both cases, 0.0 = best and 1.0 = worst.
-
-**Why percentile normalization?**  
-Raw ranks from different benchmarks are not directly comparable. A rank of 10 on a 300-model leaderboard is far more impressive than a rank of 10 on a 30-model leaderboard. Dividing each rank by the total number of evaluated models (`known_totals`) maps every score onto a 0–1 fractional percentile (0 = best, 1 = worst), making cross-benchmark comparison meaningful.
+This is a true fractional percentile: a rank of 10 on a 300-model leaderboard (0.033) counts for more than a rank of 10 on a 30-model leaderboard (0.333).
 
 ### 2. Median aggregation
 
-A model's base score is the median of its percentile values across all benchmarks it appears in. Every benchmark carries equal weight. The median is used instead of the mean for robustness against outlier benchmarks where a model performs unusually well or poorly.
+A model's base score is the median of its gaps across all benchmarks it appears in. Every benchmark carries equal weight. The median is used instead of the mean for robustness against outlier benchmarks where a model performs unusually well or poorly.
+
+Benchmarks are not equally hard, and models are not all run on the same ones, so a model evaluated mostly on benchmarks where everyone scores near the top gets a better median than an equally capable model evaluated on harder ones. This matters most for models on few benchmarks; the rank ranges in §5 make it visible.
 
 ### 3. Sparse-data penalty
 
@@ -229,17 +228,26 @@ Models evaluated on very few benchmarks get a penalty added to their average to 
 | 2                      | +0.10   |
 | 3 or more              | +0.00   |
 
-**Note:** Penalized scores are capped at 1.0 (100th percentile) to prevent exceeding the theoretical maximum.
+**Note:** Penalized scores are capped at 1.0 to prevent exceeding the theoretical maximum.
 
-### 4. Asymmetric IQR bounds (dispersion)
+### 4. Asymmetric IQR bounds (spread)
 
-The lower (`median − Q1`) and upper (`Q3 − median`) distances from the median to the first and third quartiles are kept separate, reflecting the true skew of each model's benchmark distribution. They serve as the asymmetric error bars in plots and as the overlap interval in tier classification. Models with fewer than 3 data points report `N/A` (IQR is degenerate for n < 3); these use the average lower/upper across all other models as a stand-in for tiering purposes.
+The lower (`median − Q1`) and upper (`Q3 − median`) distances from the median to the first and third quartiles are kept separate, reflecting the skew of each model's per-benchmark gaps. They are drawn as error bars in plots. They describe how consistent a model is across benchmarks; they do not shrink as benchmarks are added, so they are not a measure of how precisely the median is known. Models with fewer than 3 benchmarks report `N/A` and get no error bar.
 
-### 5. Missing data
+### 5. Uncertainty: benchmark bootstrap
+
+The main source of uncertainty in an aggregate like this is which benchmarks happen to be included. To measure it, the tool resamples the category's benchmarks with replacement 2,000 times (fixed seed, so output is reproducible) and recomputes every model's score on each resample. All models share the same resample, so comparisons between models are paired. A model none of whose benchmarks were drawn is skipped for that resample.
+
+- **Rank range:** the middle 68% of a model's ranks across resamples (roughly ±1σ). It is always widened, if needed, to include the listed rank.
+- **Tiers:** see [Tiering Methodology](#tiering-methodology).
+
+Models on few benchmarks naturally get wide rank ranges, because dropping or duplicating one of their benchmarks changes their median a lot.
+
+### 6. Missing data
 
 `None` values and absent keys are treated as "not evaluated" — the benchmark is simply excluded from that model's calculations.
 
-### 6. Name matching
+### 7. Name matching
 
 Model keys are compared as exact strings. No fuzzy matching or alias merging is performed (e.g. `qwen3-235` and `qwen3-80` remain separate models).
 
@@ -250,24 +258,19 @@ Model keys are compared as exact strings. No fuzzy matching or alias merging is 
 
 A sorted ASCII table (best model first):
 
-```
-+------------------------------------------------------------------------------+
-| Rank  | Model                  | Avg Pctl | -err  | +err  | # Benchmarks | Rel. Cost |
-+------------------------------------------------------------------------------+
-| 1     | opus                   | 0.019    | 0.008    | 4            | 1.000     |
-| 2     | gemini                 | 0.048    | 0.041    | 4            | 0.435     |
-| ...   | ...                    | ...      | ...      | ...          | ...       |
-+------------------------------------------------------------------------------+
-```
+See the sample in [Quick start](#quick-start).
 
 | Column           | Description                                                                 |
 |------------------|-----------------------------------------------------------------------------|
 | **Rank**         | Position in the final aggregated ranking (1 = best).                        |
-| **Model**        | Model identifier string (exactly as written in the file).                   |
-| **Avg Pctl**     | Median percentile after sparse-data penalty, 0–1 scale.                     |
-| **-err / +err**  | Lower (`median − Q1`) and upper (`Q3 − median`) IQR distances, or `N/A`.    |
+| **Model**        | Model identifier string (exactly as written in the file); `*` = open-weight. |
+| **Rank range**   | 68% bootstrap rank interval (see Methodology §5).                           |
+| **Gap**          | Median gap to the best tracked model after sparse-data penalty, 0–1 scale (0 = best). |
+| **-IQR / +IQR**  | Lower (`median − Q1`) and upper (`Q3 − median`) spread across benchmarks, or `N/A`. |
 | **# Benchmarks** | Number of benchmarks the model was evaluated on.                            |
 | **Rel. Cost**    | Cost relative to the best-ranked model (best = 1.000), or `N/A` if unavailable. |
+
+The JSON export (`--export-json`) carries the same values per model (`avg_pct` holds the gap, `rank_lo`/`rank_hi` the rank range) plus a top-level `uncertainty` block with the bootstrap settings.
 
 ### Visualization Plot (`--plot`)
 
@@ -284,19 +287,17 @@ Open-weight models are drawn as **diamonds**; proprietary models are drawn as **
 
 #### Tiering Methodology
 
-Models are grouped into performance tiers using a robust descriptive overlap rule:
+Models are grouped into performance tiers using the benchmark bootstrap (Methodology §5):
 
-1. **Tier 1**: Contains the best-performing model (leader) plus any models whose asymmetric Q1–Q3 interval overlaps with the leader's interval
-2. **Tier 2**: After removing Tier 1 models, the next-best performer becomes the new leader; models overlapping with this leader form Tier 2
-3. **Repeat**: Continue until all models are categorized
+1. **Tier 1**: The best-ranked model is the leader. Walking down the ranking, each next model joins the tier while it scores at least as well as the leader in at least 16% of the resamples where both have data.
+2. **Next tier**: The first model that fails this test becomes the next leader, and the walk continues from there.
+3. **Repeat** until every model has a tier.
 
-**Mathematical criterion**: A model belongs to the current tier if:
+**Mathematical criterion**: a candidate joins the current leader's tier if
 ```
-(model_score - lower_err) ≤ (leader_score + upper_err)
+P(candidate_score ≤ leader_score) ≥ 0.16      (over bootstrap resamples)
 ```
-where `lower_err = median − Q1` and `upper_err = Q3 − median`.
-
-This means if a model's best-case performance (score minus its lower IQR distance) could reach the leader's worst-case performance (score plus its upper IQR distance), the two are placed in the same tier. Asymmetric IQR bounds are used as the dispersion measure because they are the natural robust companion to the median aggregate, make no distributional assumptions, and correctly reflect the skew of each model's benchmark distribution. This is a descriptive grouping rule, not a formal hypothesis test.
+0.16 is the one-sided tail of a ±1σ interval. Tiers are contiguous: a model is never in a better tier than a model ranked above it. Use `--debug` to see every comparison. This is a descriptive grouping, not a formal multiple-comparison test.
 
 ## Extending the data
 
@@ -325,6 +326,6 @@ open = false
 
 ## Why "Indistinguishable from Best" Tiering?
 
-Traditional rankings treat every rank position as meaningfully different. This tool instead uses the "Indistinguishable from Best" overlap rule to group models whose robust spread intervals are too close to support a sharp separation.
+Traditional rankings treat every rank position as meaningfully different. This tool instead groups models whose order flips often enough when the benchmark set is resampled that the data cannot support a sharp separation.
 
 This approach answers the practical question: "Which models belong in the current top cluster?" rather than forcing a strict total order out of sparse, noisy benchmark data.
