@@ -51,16 +51,17 @@ min_score = -20.79
 [arena_agent.scores]
 deepseek-flash41 = 2.67
 fable51 = 13.35
+fable52 = 30.35
 gemini-flash38 = 2.65
 g4argon = 10.73
-g4carbon = 16.04
-gpt6astra = 12.96
+g4carbon = 16.98
+gpt6astra = 14.54
 gpt61sol = 12.47
 gpt61terra = 10.57
 grok47 = 2.39
 muse-wonder-1 = 10.09
 muse-spark-13 = 2.59
-opus55 = 20.94
+opus55 = 19.52
 qwen38-max = 20.94
 sonnet55 = 13.84
 
@@ -592,6 +593,7 @@ min_score = 8.855
 [Vals_Index.scores]
 deepseek4 = 47.628
 deepseek-flash41 = 51.320
+fable52 = 71.31
 gemini-flash38 = 54.825
 g4argon = 69.2
 g4carbon = 70.4
