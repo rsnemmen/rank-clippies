@@ -28,7 +28,7 @@ def test_retired_benchmarks_are_excluded_from_active_data() -> None:
 
 
 def test_fable5_is_absent_from_active_data() -> None:
-    """Keep the retired model out of active rankings while retaining Fable 5.1."""
+    """Keep the retired model out of active rankings."""
     data_dir = Path(rank_models.__file__).resolve().parent / "data"
     with (data_dir / "benchmarks.toml").open("rb") as f:
         active = tomllib.load(f)
@@ -37,8 +37,20 @@ def test_fable5_is_absent_from_active_data() -> None:
 
     assert all("fable5" not in benchmark["scores"] for benchmark in active.values())
     assert "fable5" not in models
-    assert "fable51" in models
-    assert any("fable51" in benchmark["scores"] for benchmark in active.values())
+
+
+def test_fable51_is_absent_from_active_data() -> None:
+    """Keep Fable 5.1 out of active rankings while retaining Fable 5.2."""
+    data_dir = Path(rank_models.__file__).resolve().parent / "data"
+    with (data_dir / "benchmarks.toml").open("rb") as f:
+        active = tomllib.load(f)
+    with (data_dir / "models.toml").open("rb") as f:
+        models = tomllib.load(f)
+
+    assert all("fable51" not in benchmark["scores"] for benchmark in active.values())
+    assert "fable51" not in models
+    assert "fable52" in models
+    assert any("fable52" in benchmark["scores"] for benchmark in active.values())
 
 
 def test_muse_spark_12_is_absent_from_active_data() -> None:

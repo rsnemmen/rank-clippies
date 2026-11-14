@@ -1,6 +1,18 @@
 {
   "entries": [
     {
+      "date": "2026-11-13",
+      "message": "Remove Fable 5.1 and regenerate rankings"
+    },
+    {
+      "date": "2026-11-12",
+      "message": "Merge branch 'main' into bootstrap-tiering"
+    },
+    {
+      "date": "2026-11-12",
+      "message": "updated some benchmarks"
+    },
+    {
       "date": "2026-11-12",
       "message": "Replace IQR tiering with benchmark bootstrap; fix FrontierPhysics data"
     },

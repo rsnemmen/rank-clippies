@@ -12,11 +12,6 @@ cost = 0.75
 open = true
 company = "deepseek"
 
-[fable51]
-cost = 60
-open = false
-company = "anthropic"
-
 [fable52]
 cost = 48
 open = false

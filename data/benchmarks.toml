@@ -22,7 +22,6 @@ min_score = 0
 
 [ARC_AGI_2.scores]
 deepseek4 = 61.3
-fable51 = 90
 fable52 = 93.8
 gemini-flash38 = 84.6
 g4argon = 91.3
@@ -50,7 +49,6 @@ min_score = -20.79
 
 [arena_agent.scores]
 deepseek-flash41 = 2.67
-fable51 = 13.35
 fable52 = 30.35
 gemini-flash38 = 2.65
 g4argon = 10.73
@@ -73,7 +71,6 @@ min_score = 1072
 [arena_webdev.scores]
 deepseek-flash41 = 1665
 deepseek4 = 1457
-fable51 = 1745
 fable52 = 1832
 gemini-flash38 = 1567
 gemma4-31 = 1370
@@ -99,7 +96,6 @@ min_score = 952
 
 [arena_general.scores]
 deepseek4 = 1463
-fable51 = 1504
 gemini-flash38 = 1494
 g4argon = 1520
 g4carbon = 1528
@@ -123,7 +119,6 @@ min_score = 20
 [artificial_analysis_coding.scores]
 deepseek4 = 43
 deepseek-flash41 = 47
-fable51 = 62
 gemini-flash38 = 42
 g4argon = 64
 g4carbon = 59
@@ -147,7 +142,6 @@ min_score = 1
 
 [artificial_analysis_intelligence.scores]
 deepseek-flash41 = 41
-fable51 = 53
 fable52 = 65
 gemini-flash38 = 47
 g4argon = 53
@@ -176,7 +170,6 @@ min_score = -71
 
 [artificial_analysis_omniscience.scores]
 deepseek-flash41 = 1
-fable51 = 46
 fable52 = 67
 gemini-flash38 = 23
 g4carbon = 54
@@ -219,7 +212,6 @@ min_score = 4
 
 [CritPt.scores]
 deepseek-flash41 = 24
-fable51 = 51
 fable52 = 77
 gemini-flash38 = 43.5
 g4carbon = 63
@@ -241,7 +233,6 @@ min_score = 16
 
 [CursorBench.scores]
 deepseek-flash41 = 47.7
-fable51 = 51.8
 gemini-flash38 = 39.6
 glm53 = 42.6
 glm53-flash = 36.8
@@ -263,7 +254,6 @@ min_score = 5
 [DeepSWE.scores]
 deepseek4 = 8
 deepseek-flash41 = 53
-fable51 = 67.4
 gemini-flash38 = 75.4
 g4argon = 77.9
 glm53-flash = 63
@@ -281,7 +271,6 @@ min_score = 8
 
 [FrontierCode.scores]
 deepseek-flash41 = 19.3
-fable51 = 32.4
 fable52 = 49
 g4argon = 26.3
 g4carbon = 40
@@ -305,7 +294,6 @@ min_score = 0
 
 [FrontierPhysics.scores]
 deepseek-flash41 = 3.6
-fable51 = 11.3
 g4argon = 8.3
 glm53 = 4.2
 gpt6astra = 23.2
@@ -320,7 +308,6 @@ min_score = 2
 
 [GDPpdf.scores]
 deepseek-flash41 = 19.8
-fable51 = 27.6
 fable52 = 24
 gemini-flash38 = 23.2
 g4argon = 22
@@ -346,7 +333,6 @@ min_score = -426
 ["GDPval-AA-v2.1".scores]
 deepseek-flash41 = 1600
 deepseek4 = 1441
-fable51 = 1735
 fable52 = 1866
 gemini-flash38 = 1412
 g4argon = 1611
@@ -374,7 +360,6 @@ categories = ["general"]
 min_score = 65
 
 ["GraphWalks".scores]
-fable51 = 65
 g4argon = 84.2
 g4carbon = 96.2
 gpt6astra = 71.8
@@ -388,7 +373,6 @@ min_score = 52.1
 # https://www.anthropic.com/claude-opus-5-5-system-card
 # https://deploymentsafety.openai.com/gpt-6-1-sol
 [health_bench_pro.scores]
-fable51 = 62.1
 gemini-flash38 = 52.1
 gpt6astra = 64.7
 gpt61sol = 64.2
@@ -403,7 +387,6 @@ min_score = 9
 
 [HLE.scores]
 deepseek-flash41 = 25.3
-fable51 = 60.1
 fable52 = 80
 gemini-flash38 = 33.1
 g4argon = 57
@@ -426,7 +409,6 @@ min_score = 13.6
 
 [LiveBench_coding.scores]
 deepseek-flash41 = 56.6
-fable51 = 80.8
 fable52 = 81.3
 gemini-flash38 = 44.7
 g4argon = 70.2
@@ -450,7 +432,6 @@ min_score = 8.5
 [LiveBench_agents.scores]
 deepseek-flash41 = 73.7
 deepseek4 = 52.5
-fable51 = 69.5
 fable52 = 82.9
 gemini-flash38 = 16.5
 gpt6astra = 75.6
@@ -471,7 +452,6 @@ min_score = 53.2
 
 [LiveBench_stem.scores]
 deepseek-flash41 = 82.4
-fable51 = 86.8
 fable52 = 88.3
 gemini-flash38 = 74.1
 g4argon = 89
@@ -493,7 +473,6 @@ min_score = 32.4
 
 [LiveBench_general.scores]
 deepseek-flash41 = 76.8
-fable51 = 84
 fable52 = 84.9
 gemini-flash38 = 67.3
 g4argon = 77.7
@@ -513,7 +492,6 @@ categories = ["general"]
 min_score = 10.7
 
 [simpleBench.scores]
-fable51 = 86.6
 gemini-flash38 = 82.4
 glm53 = 66.2
 gpt-oss-120b = 22.1
@@ -532,7 +510,6 @@ min_score = 10.4
 
 [SWE_Marathon.scores]
 deepseek4 = 10.6
-fable51 = 45.6
 g4argon = 43.8
 glm53 = 42.5
 gpt6astra = 42.5
@@ -550,7 +527,6 @@ min_score = 12.1
 
 [terminal_bench4.scores]
 deepseek-flash41 = 15.7
-fable51 = 57.9
 fable52 = 60
 gemini-flash38 = 19.1
 g4argon = 57.4
@@ -573,7 +549,6 @@ min_score = 0
 
 [terminal_bench_science.scores]
 deepseek-flash41 = 15.7
-fable51 = 40
 fable52 = 74.6
 gemini-flash38 = 12.4
 g4argon = 57.6
