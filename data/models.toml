@@ -22,13 +22,18 @@ cost = 9
 open = false
 company = "google"
 
-[g4argon]
+[argon]
 cost = 12.0
 open = false
 company = "google"
 
-[g4carbon]
+[carbon]
 cost = 12.0
+open = false
+company = "google"
+
+[hydrogen]
+cost = 9.0
 open = false
 company = "google"
 
