@@ -1,6 +1,14 @@
 {
   "entries": [
     {
+      "date": "2026-11-16",
+      "message": "Rename g4argon/g4carbon to argon/carbon in benchmarks"
+    },
+    {
+      "date": "2026-11-16",
+      "message": "added hydrogen model cost"
+    },
+    {
       "date": "2026-11-13",
       "message": "Remove Fable 5.1 and regenerate rankings"
     },

@@ -62,7 +62,7 @@ cost = 0.5
 open = true
 company = "openai"
 
-[gpt6astra]
+[astra]
 cost = 60
 open = false
 company = "openai"
@@ -72,17 +72,17 @@ cost = 12
 open = false
 company = "openai"
 
-[gpt61sol]
+[sol]
 cost = 12
 open = false
 company = "openai"
 
-[gpt61terra]
+[terra]
 cost = 6
 open = false
 company = "openai"
 
-[gpt6luna]
+[luna]
 cost = 0.6
 open = false
 company = "openai"
