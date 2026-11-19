@@ -6,10 +6,13 @@ categories = ["agentic", "general"]
 min_score = 5.7
 
 [agents_last_exam.scores]
-deepseek-flash41 = 36.1
 argon = 40.2
+astra = 78.3
 carbon = 45.9
-astra = 42.6
+deepseek-flash41 = 36.1
+neon = 75.8
+sol = 73
+fable52 = 72.8
 terra = 41.8
 kimi-k31-pro = 43.4
 muse-wonder-1 = 38.5
@@ -25,8 +28,11 @@ deepseek4 = 61.3
 fable52 = 93.8
 gemini-flash38 = 84.6
 argon = 91.3
-astra = 95
-sol = 94.2
+carbon = 94.2
+astra = 95.8
+haiku55 = 61.3
+sol = 85.8
+sonnet55 = 83.9
 opus55 = 93.3
 
 # https://arcprize.org/results/openai-gpt-6
@@ -38,31 +44,63 @@ min_score = 0
 [ARC_AGI_3.scores]
 fable52 = 97.7
 argon = 97.3
-astra = 99.99
-sol = 96.37
+astra = 100
+carbon = 99.1
+haiku55 = 2.8
+sol = 98.2
+sonnet55 = 72.4
 luna = 0.6
 
-# Agent Arena | capabilities
+# Agent Arena index
 [arena_agent]
 categories = ["agentic", "general"]
-min_score = -20.79
+min_score = 800
 
 [arena_agent.scores]
-deepseek-flash41 = 2.67
-fable52 = 28.61
-gemini-flash38 = 2.65
-argon = 10.73
-carbon = 16.98
-hydrogen = 14.91
-astra = 14.54
-sol = 12.47
-terra = 10.57
+deepseek-flash41 = 1109
+fable52 = 1448
+argon = 1229
+carbon = 1303
+hydrogen = 1271
+astra = 1291
+sol = 1241
+terra = 1230
 grok47 = 2.39
-muse-wonder-1 = 10.09
-muse-spark-13 = 2.59
-opus55 = 18.19
-qwen38-max = 20.94
-sonnet55 = 13.84
+glm53-flash = 1046
+muse-wonder-1 = 1201
+muse-spark-13 = 1110
+neon = 1333
+opus55 = 1336
+qwen4-max = 1189
+sonnet55 = 1296
+
+# Arena agentic codind index
+[arena_agentic_coding]
+categories = ["coding"]
+min_score = 783
+
+[arena_agentic_coding.scores]
+deepseek-flash41 = 1665
+deepseek4 = 1457
+fable52 = 1832
+gemini-flash38 = 1567
+gemma4-31 = 1370
+argon = 1674
+carbon = 1768
+hydrogen = 1704
+glm53 = 1599
+glm53-flash = 1607
+#astra = 1793
+sol = 1681
+grok47 = 1632
+minimax3 = 1496
+mimov26pro = 1628
+muse-spark-13 = 1652
+opus55 = 1818
+qwen38-max = 1688
+qwen38-27b = 1595
+sonnet55 = 1774
+
 
 # Code Arena | WebDev
 [arena_webdev]
@@ -80,7 +118,7 @@ carbon = 1768
 hydrogen = 1704
 glm53 = 1599
 glm53-flash = 1607
-astra = 1793
+#astra = 1793
 sol = 1681
 grok47 = 1632
 minimax3 = 1496
@@ -105,7 +143,7 @@ hydrogen = 1490
 gemma4-31 = 1451
 glm53 = 1487
 gpt-oss-120b = 1353
-astra = 1478
+#astra = 1478
 sol = 1483
 muse-spark-13 = 1494
 muse-wonder-1 = 1509
@@ -114,29 +152,24 @@ qwen38-max = 1496
 qwen38-27b = 1440
 
 # https://artificialanalysis.ai/agents/coding-agents/comparisons/antigravity-cli-vs-codex
-# Coding Agent Index v1.5; Gemini 4 Argon uses Antigravity CLI (checked 2026-10-02)
+# Coding Agent Index v2.1; Gemini 4 Argon uses Antigravity CLI (checked 2026-10-02)
 [artificial_analysis_coding]
 categories = ["coding"]
-min_score = 20
+min_score = 15
 
 [artificial_analysis_coding.scores]
-deepseek4 = 43
-deepseek-flash41 = 47
-gemini-flash38 = 42
-argon = 64
-carbon = 59
+deepseek-flash41 = 37
+carbon = 55
 hydrogen = 52
-glm53 = 54
-astra = 62
-sol = 63
-luna = 41
-terra = 48
-grok47 = 56
-muse-spark-13 = 54
-muse-wonder-1 = 68
-qwen38-max = 43
-opus55 = 66
-sonnet55 = 68
+fable52 = 58
+glm53 = 40
+astra = 53
+sol = 50
+grok47 = 42
+muse-wonder-1 = 54
+neon = 59
+opus55 = 58
+sonnet55 = 56
 
 # includes STEM benchmarks: SciCode, Humanity's Last Exam, GPQA Diamond, CritPt
 # (among many others), v4.2
@@ -152,8 +185,8 @@ argon = 53
 carbon = 59
 hydrogen = 54
 glm53 = 45
-astra = 53
-sol = 52
+astra = 62
+sol = 57
 luna = 37
 terra = 48
 gpt-oss-120b = 16
@@ -163,7 +196,8 @@ muse-spark-13 = 48
 muse-wonder-1 = 56
 mimov26pro = 46
 minimax3 = 29
-opus55 = 58
+neon = 61
+opus55 = 59
 qwen38-27b = 34
 qwen38-max = 45
 sonnet55 = 56
@@ -202,8 +236,9 @@ min_score = 42.59
 deepseek-flash41 = 67.78
 gemini-flash38 = 62.22
 argon = 76.3
-astra = 79.3
-sol = 79.6
+astra = 80.74
+sol = 77.8
+fable52 = 83.7
 grok47 = 69.3
 haiku55 = 70.4
 kimi-k31-pro = 75.6
@@ -222,8 +257,8 @@ fable52 = 77
 gemini-flash38 = 43.5
 carbon = 69
 hydrogen = 66
-astra = 70.5
-sol = 70
+astra = 72
+sol = 63
 luna = 41.5
 terra = 68
 grok47 = 32
@@ -240,11 +275,15 @@ min_score = 16
 
 [CursorBench.scores]
 deepseek-flash41 = 47.7
+carbon = 60.4
+hydrogen = 57.8
 gemini-flash38 = 39.6
+fable52 = 60
 glm53 = 42.6
 glm53-flash = 36.8
 grok47 = 46.3
 muse-spark-13 = 41.6
+neon = 65.4
 opus55 = 57.8
 sonnet55 = 55.5
 
@@ -284,12 +323,13 @@ carbon = 42.6
 hydrogen = 38.9
 glm53 = 17.8
 glm53-flash = 14.9
-astra = 44
-sol = 39.6
+astra = 44.2
+sol = 43.8
 luna = 21.9
 terra = 46.7
 haiku55 = 27.7
 muse-wonder-1 = 24.3
+neon = 46.2
 opus55 = 47.3
 sonnet55 = 42.2
 
@@ -321,7 +361,7 @@ gemini-flash38 = 23.2
 argon = 22
 carbon = 28
 hydrogen = 28
-astra = 34.2
+astra = 30
 sol = 32
 luna = 23
 terra = 29
@@ -342,7 +382,7 @@ min_score = -426
 ["GDPval-AA-v2.1".scores]
 deepseek-flash41 = 1600
 deepseek4 = 1441
-fable52 = 1866
+fable52 = 1831
 gemini-flash38 = 1412
 argon = 1611
 carbon = 1733
@@ -372,7 +412,9 @@ min_score = 65
 argon = 84.2
 carbon = 96.2
 astra = 71.8
+neon = 95.2
 opus55 = 66.8
+sol = 80.1
 
 [health_bench_pro]
 categories = ["stem"]
@@ -401,13 +443,14 @@ gemini-flash38 = 33.1
 argon = 57
 carbon = 69.1
 hydrogen = 58.8
-astra = 63.8
+astra = 72
 terra = 47.3
-sol = 58.8
+sol = 64
 grok47 = 23.2
 haiku55 = 29.6
 muse-wonder-1 = 48.5
 muse-spark-13 = 30.3
+neon = 71.3
 opus55 = 67.9
 qwen38-max = 24
 sonnet55 = 53.3
@@ -472,7 +515,7 @@ gemini-flash38 = 74.1
 argon = 89
 carbon = 89.9
 hydrogen = 86.2
-astra = 88.8
+astra = 89.1
 sol = 88.4
 terra = 83.4
 grok47 = 83
@@ -496,7 +539,7 @@ argon = 77.7
 carbon = 83.5
 hydrogen = 77
 glm53-flash = 60.7
-astra = 84.5
+astra = 84.9
 sol = 81.4
 terra = 78.8
 grok47 = 67.9
@@ -548,25 +591,26 @@ opus55 = 46.3
 # v4.1
 [terminal_bench4]
 categories = ["coding", "agentic"]
-min_score = 12.1
+min_score = 0
 
 [terminal_bench4.scores]
-deepseek-flash41 = 15.7
-fable52 = 60
+deepseek-flash41 = 38.5
+fable52 = 65.8
 gemini-flash38 = 19.1
 argon = 57.4
 carbon = 65.2
 hydrogen = 57
 glm53 = 41.8
-glm53-flash = 35.5
-astra = 68.1
-terra = 50.3
-sol = 55.9
+glm53-flash = 37
+astra = 62.1
+terra = 53.3
+sol = 61.5
 grok47 = 37.6
-kimi-k31-pro = 67
+neon = 65.2
+kimi-k31-pro = 59.7
 mimov26pro = 34.9
-opus55 = 66.4
-sonnet55 = 61.8
+opus55 = 65.8
+sonnet55 = 63.9
 
 # v0.1
 [terminal_bench_science]
@@ -581,8 +625,9 @@ argon = 57.6
 carbon = 64.8
 hydrogen = 51.4
 glm53 = 8.1
-astra = 68.1
-sol = 57
+astra = 77.1
+neon = 70.5
+sol = 68
 terra = 58.3
 opus55 = 63.3
 
@@ -603,13 +648,14 @@ argon = 69.2
 carbon = 70.4
 hydrogen = 68.49
 glm53 = 53.514
-astra = 65
-sol = 61.154
+astra = 67.7
+sol = 66.1
 luna = 51.216
 grok47 = 54.947
 minimax3 = 36.535
 mimov26pro = 55.199
 muse-spark-13 = 58.162
+neon = 70.9
 opus55 = 70.2
 qwen38-max = 48.270
 sonnet55 = 67.037

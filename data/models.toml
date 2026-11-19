@@ -37,6 +37,11 @@ cost = 9.0
 open = false
 company = "google"
 
+[neon]
+cost = 18.0
+open = false
+company = "google"
+
 [gemma4-31]
 cost = 0.7
 open = true
@@ -63,12 +68,7 @@ open = true
 company = "openai"
 
 [astra]
-cost = 60
-open = false
-company = "openai"
-
-[gpt6sol]
-cost = 12
+cost = 48
 open = false
 company = "openai"
 
@@ -134,6 +134,11 @@ company = "qwen"
 
 [qwen38-max]
 cost = 8
+open = true
+company = "qwen"
+
+[qwen4-max]
+cost = 5.7
 open = true
 company = "qwen"
 
