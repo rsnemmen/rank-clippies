@@ -1,148 +1,173 @@
 # Model metadata: cost = USD per 1M tokens (input + output combined), open = true if open-weight
 # company = logo slug used for docs/assets/logos/<company>.png; omit for unknown vendors
+# Keys name the model line, not a version. The comment above each entry records the version
+# its benchmark scores refer to; update it when the scores move to a newer version.
 # Sorted alphabetically by model name
 
-[deepseek4]
-cost = 5.1
-open = true
-company = "deepseek"
-
-[deepseek-flash41]
-cost = 0.75
-open = true
-company = "deepseek"
-
-[fable52]
-cost = 48
-open = false
-company = "anthropic"
-
-[gemini-flash38]
-cost = 9
-open = false
-company = "google"
-
+# Gemini 4 Argon — Google
 [argon]
 cost = 12.0
 open = false
 company = "google"
 
-[carbon]
-cost = 12.0
-open = false
-company = "google"
-
-[hydrogen]
-cost = 9.0
-open = false
-company = "google"
-
-[neon]
-cost = 18.0
-open = false
-company = "google"
-
-[gemma4-31]
-cost = 0.7
-open = true
-company = "google"
-
-[glm53]
-cost = 5.8
-open = true
-company = "zhipu"
-
-[glm53-flash]
-cost = 0.65
-open = true
-company = "zhipu"
-
-[gpt-oss-120b]
-cost = 1.4
-open = true
-company = "openai"
-
-[gpt-oss-20b]
-cost = 0.5
-open = true
-company = "openai"
-
+# GPT-6 Astra — OpenAI
 [astra]
 cost = 48
 open = false
 company = "openai"
 
-[sol]
+# Gemini 4 Carbon — Google
+[carbon]
+cost = 12.0
+open = false
+company = "google"
+
+# DeepSeek V4 — DeepSeek
+[deepseek]
+cost = 5.1
+open = true
+company = "deepseek"
+
+# DeepSeek Flash 4.1 — DeepSeek
+[deepseek-flash]
+cost = 0.75
+open = true
+company = "deepseek"
+
+# Fable 5.2 — Anthropic
+[fable]
+cost = 48
+open = false
+company = "anthropic"
+
+# Gemini Flash 3.8 — Google
+[gemini-flash]
+cost = 9
+open = false
+company = "google"
+
+# Gemma 4 31B — Google
+[gemma]
+cost = 0.7
+open = true
+company = "google"
+
+# GLM 5.3 — Zhipu
+[glm]
+cost = 5.8
+open = true
+company = "zhipu"
+
+# GLM 5.3 Flash — Zhipu
+[glm-flash]
+cost = 0.65
+open = true
+company = "zhipu"
+
+# GPT-OSS 120B — OpenAI
+[gpt-oss-120b]
+cost = 1.4
+open = true
+company = "openai"
+
+# GPT-OSS 20B — OpenAI
+[gpt-oss-20b]
+cost = 0.5
+open = true
+company = "openai"
+
+# Grok 4.7 — xAI
+[grok]
+cost = 8
+open = false
+company = "xai"
+
+# Haiku 5.5 — Anthropic
+[haiku]
+cost = 0.6
+open = false
+company = "anthropic"
+
+# Gemini 4 Hydrogen — Google
+[hydrogen]
+cost = 9.0
+open = false
+company = "google"
+
+# Kimi K3.1 Pro — Moonshot
+[kimi]
 cost = 12
-open = false
-company = "openai"
+open = true
+company = "moonshot"
 
-[terra]
-cost = 6
-open = false
-company = "openai"
-
+# GPT-6 Luna — OpenAI
 [luna]
 cost = 0.6
 open = false
 company = "openai"
 
-[grok47]
-cost = 8
-open = false
-company = "xai"
-
-[haiku55]
-cost = 0.6
-open = false
-company = "anthropic"
-
-[kimi-k31-pro]
-cost = 12
-open = true
-company = "moonshot"
-
-[minimax3]
-cost = 3
-open = true
-company = "minimax"
-
-[mimov26pro]
+# MiMo v2.6 Pro — Xiaomi
+[mimo]
 cost = 1.3
 open = true
 company = "xiaomi"
 
-[muse-spark-13]
+# MiniMax M3 — MiniMax
+[minimax]
+cost = 3
+open = true
+company = "minimax"
+
+# Muse Spark 1.3 — Meta
+[muse-spark]
 cost = 5.5
 open = false
 company = "meta"
 
-[muse-wonder-1]
+# Muse Wonder 1 — Meta
+[muse-wonder]
 cost = 24
 open = false
 company = "meta"
 
-[opus55]
+# Gemini 4 Neon — Google
+[neon]
+cost = 18.0
+open = false
+company = "google"
+
+# Opus 5.5 — Anthropic
+[opus]
 cost = 24
 open = false
 company = "anthropic"
 
-[qwen38-27b]
+# Qwen 3.8 27B — Qwen
+[qwen-27b]
 cost = 0.7
 open = true
 company = "qwen"
 
-[qwen38-max]
-cost = 8
-open = true
-company = "qwen"
-
-[qwen4-max]
+# Qwen 4 Max — Qwen
+[qwen-max]
 cost = 5.7
 open = true
 company = "qwen"
 
-[sonnet55]
+# GPT-6.1 Sol — OpenAI
+[sol]
+cost = 12
+open = false
+company = "openai"
+
+# Sonnet 5.5 — Anthropic
+[sonnet]
 cost = 12
 open = false
 company = "anthropic"
+
+# GPT-6.1 Terra — OpenAI
+[terra]
+cost = 6
+open = false
+company = "openai"

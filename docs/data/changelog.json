@@ -1,6 +1,22 @@
 {
   "entries": [
     {
+      "date": "2026-11-21",
+      "message": "updated healthbench"
+    },
+    {
+      "date": "2026-11-19",
+      "message": "added neon"
+    },
+    {
+      "date": "2026-11-19",
+      "message": "started adding neon; added some Arena benchmarks"
+    },
+    {
+      "date": "2026-11-16",
+      "message": "Rename gpt6astra/gpt61sol/gpt61terra/gpt6luna to astra/sol/terra/luna"
+    },
+    {
       "date": "2026-11-16",
       "message": "Rename g4argon/g4carbon to argon/carbon in benchmarks"
     },

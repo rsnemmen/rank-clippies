@@ -40,7 +40,7 @@ def test_fable5_is_absent_from_active_data() -> None:
 
 
 def test_fable51_is_absent_from_active_data() -> None:
-    """Keep Fable 5.1 out of active rankings while retaining Fable 5.2."""
+    """Keep old Fable versions out of active rankings while retaining the Fable line."""
     data_dir = Path(rank_models.__file__).resolve().parent / "data"
     with (data_dir / "benchmarks.toml").open("rb") as f:
         active = tomllib.load(f)
@@ -49,12 +49,12 @@ def test_fable51_is_absent_from_active_data() -> None:
 
     assert all("fable51" not in benchmark["scores"] for benchmark in active.values())
     assert "fable51" not in models
-    assert "fable52" in models
-    assert any("fable52" in benchmark["scores"] for benchmark in active.values())
+    assert "fable" in models
+    assert any("fable" in benchmark["scores"] for benchmark in active.values())
 
 
 def test_muse_spark_12_is_absent_from_active_data() -> None:
-    """Keep Muse Spark 12 out of active rankings while retaining Muse Spark 13."""
+    """Keep Muse Spark 12 out of active rankings while retaining the Muse Spark line."""
     data_dir = Path(rank_models.__file__).resolve().parent / "data"
     with (data_dir / "benchmarks.toml").open("rb") as f:
         active = tomllib.load(f)
@@ -65,12 +65,12 @@ def test_muse_spark_12_is_absent_from_active_data() -> None:
         "muse-spark-12" not in benchmark["scores"] for benchmark in active.values()
     )
     assert "muse-spark-12" not in models
-    assert "muse-spark-13" in models
-    assert any("muse-spark-13" in benchmark["scores"] for benchmark in active.values())
+    assert "muse-spark" in models
+    assert any("muse-spark" in benchmark["scores"] for benchmark in active.values())
 
 
 def test_deepseek_flash4_is_absent_from_active_data() -> None:
-    """Keep DeepSeek Flash 4 out of active rankings while retaining Flash 4.1."""
+    """Keep DeepSeek Flash 4 out of active rankings while retaining the Flash line."""
     data_dir = Path(rank_models.__file__).resolve().parent / "data"
     with (data_dir / "benchmarks.toml").open("rb") as f:
         active = tomllib.load(f)
@@ -81,14 +81,12 @@ def test_deepseek_flash4_is_absent_from_active_data() -> None:
         "deepseek-flash4" not in benchmark["scores"] for benchmark in active.values()
     )
     assert "deepseek-flash4" not in models
-    assert "deepseek-flash41" in models
-    assert any(
-        "deepseek-flash41" in benchmark["scores"] for benchmark in active.values()
-    )
+    assert "deepseek-flash" in models
+    assert any("deepseek-flash" in benchmark["scores"] for benchmark in active.values())
 
 
 def test_opus5_is_absent_from_active_data() -> None:
-    """Keep Opus 5 out of active rankings while retaining Opus 5.5."""
+    """Keep Opus 5 out of active rankings while retaining the Opus line."""
     data_dir = Path(rank_models.__file__).resolve().parent / "data"
     with (data_dir / "benchmarks.toml").open("rb") as f:
         active = tomllib.load(f)
@@ -97,8 +95,24 @@ def test_opus5_is_absent_from_active_data() -> None:
 
     assert all("opus5" not in benchmark["scores"] for benchmark in active.values())
     assert "opus5" not in models
-    assert "opus55" in models
-    assert any("opus55" in benchmark["scores"] for benchmark in active.values())
+    assert "opus" in models
+    assert any("opus" in benchmark["scores"] for benchmark in active.values())
+
+
+def test_qwen38_max_is_merged_into_qwen_max() -> None:
+    """Keep only the newest Qwen Max line after dropping versioned keys."""
+    data_dir = Path(rank_models.__file__).resolve().parent / "data"
+    with (data_dir / "benchmarks.toml").open("rb") as f:
+        active = tomllib.load(f)
+    with (data_dir / "models.toml").open("rb") as f:
+        models = tomllib.load(f)
+
+    assert all(
+        "qwen38-max" not in benchmark["scores"] for benchmark in active.values()
+    )
+    assert "qwen38-max" not in models
+    assert "qwen-max" in models
+    assert any("qwen-max" in benchmark["scores"] for benchmark in active.values())
 
 
 def _patch_data(

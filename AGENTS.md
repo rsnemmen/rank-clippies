@@ -47,6 +47,14 @@ Use USD per 1M tokens (input + output combined) as the cost metric for consisten
 
 **Math and STEM expert reasoning:** GPQA Diamond, Humanity's Last Exam, USA Math Olympiad (USAMO)
 
+## Data Conventions
+
+### Model Keys and Versions
+Model keys name the model line, not a version: `fable`, not `fable52`. The comment above each `[model]` table in `data/models.toml` records the version its benchmark scores currently refer to; when the scores move to a newer version, update the scores and the comment in place. Add a new key only for a genuinely different product line (for example `qwen-27b` vs `qwen-max`), never for a version bump. `data/retired.toml` is exempt: it archives old versions and keeps their versioned keys.
+
+### Benchmark Scores
+Every score in `data/benchmarks.toml` must come from the same model version documented in `data/models.toml`. When a benchmark is refreshed, replace the old score rather than adding a new key.
+
 ## Build/Lint/Test Commands
 
 ```bash

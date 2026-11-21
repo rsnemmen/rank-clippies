@@ -19,16 +19,16 @@ The above command will produce the following output:
 +-----------------------------------------------------------------------------------------------------+
 | Rank  | Model                   | Rank range | Gap    | -IQR   | +IQR   | # Benchmarks  | Rel. Cost |
 +-----------------------------------------------------------------------------------------------------+
-| 1     | fable52                 | 1-2        | 0.038  | 0.000  | 0.014  | 8             | 1.000     |
-| 2     | opus55                  | 2-3        | 0.055  | 0.023  | 0.073  | 13            | 0.500     |
-| 3     | g4carbon                | 1-5        | 0.100  | 0.069  | 0.032  | 10            | 0.250     |
-| 4     | astra                   | 3-7        | 0.104  | 0.062  | 0.092  | 14            | 1.250     |
-| 5     | kimi-k31-pro*           | 4-9        | 0.132  | 0.022  | 0.014  | 3             | 0.250     |
-| 6     | sol                     | 5-9        | 0.154  | 0.065  | 0.055  | 12            | 0.250     |
+| 1     | fable                   | 1-2        | 0.043  | 0.000  | 0.029  | 9             | 1.000     |
+| 2     | opus                    | 2-5        | 0.089  | 0.026  | 0.103  | 10            | 0.500     |
+| 3     | astra                   | 3-6        | 0.093  | 0.009  | 0.072  | 9             | 1.000     |
+| 4     | carbon                  | 3-6        | 0.125  | 0.071  | 0.058  | 9             | 0.250     |
+| 5     | neon                    | 2-5        | 0.125  | 0.068  | 0.005  | 7             | 0.375     |
+| 6     | sonnet                  | 4-8        | 0.154  | 0.048  | 0.056  | 8             | 0.250     |
 ...
 ```
 
-`kimi-k31-pro` has the third-best median, but it rests on only three benchmarks: shrinkage (Methodology §3) places it 5th, and resampling the benchmarks puts it anywhere from 4th to 9th.
+`mimo*` and `kimi*` have better raw medians than `grok`, but they rest on only three and two benchmarks: shrinkage (Methodology §3) places them 11th and 12th, and resampling the benchmarks puts `kimi` anywhere from 9th to 20th.
 
 For the plots:
 
@@ -128,14 +128,14 @@ One TOML table per benchmark. Each benchmark has:
 **Score-based** — model scores are numeric, higher = better. `min_score` sets the normalization floor. Use the lowest score on the full source leaderboard, including models not tracked here, and note the source in a comment. Every listed score must be at or above `min_score`; `rank_models.py` exits with an error otherwise. The floor sets how much a benchmark spreads models apart, so it effectively controls the benchmark's weight.
 
 ```toml
-[artificial_analysis_agentic]
-categories = ["coding", "agentic"]
-min_score = 5
+[artificial_analysis_coding]
+categories = ["coding"]
+min_score = 15
 
-[artificial_analysis_agentic.scores]
-gemini-flash3 = 50
-gpt56sol = 74
-opus55 = 70
+[artificial_analysis_coding.scores]
+astra = 53
+fable = 58
+opus = 58
 ```
 
 **Rank-based** — models are mapped to integer ranks (lower = better). `known_totals` is the total number of models evaluated on that leaderboard. Ranks must lie in `1..known_totals`.
@@ -146,8 +146,8 @@ categories = ["coding"]
 known_totals = 347
 
 [livebench_coding.scores]
-deepseek4 = 34
-gemini-flash3 = 19
+deepseek = 34
+gemini-flash = 19
 # Omit models that were not evaluated on this benchmark.
 ```
 
@@ -175,14 +175,18 @@ the normalization floor, including models not tracked here.
 One TOML table per model, alphabetical by model name. Each entry holds USD cost and model type:
 
 ```toml
-[deepseek4]
+# DeepSeek V4 — DeepSeek
+[deepseek]
 cost = 5.1
 open = true
 
-[gemini-flash38]
+# Gemini Flash 3.8 — Google
+[gemini-flash]
 cost = 9
 open = false
 ```
+
+Keys name the model line, not a version. The comment above each entry records the version its benchmark scores currently refer to, so a version bump updates the scores and the comment in place. Add a new key only for a genuinely different product line (for example `qwen-27b` and `qwen-max`), never for a version of an existing one.
 
 | Field | Description |
 |-------|-------------|
@@ -324,8 +328,8 @@ categories = ["general"]
 known_totals = 40
 
 [new_bench.scores]
-gpt56sol = 1
-opus55 = 2
+sol = 1
+opus = 2
 ```
 
 Use `min_score` instead of `known_totals` for score-based benchmarks. Omit models that were not evaluated.
@@ -333,6 +337,7 @@ Use `min_score` instead of `known_totals` for score-based benchmarks. Omit model
 To add a new model, insert its key into `data/models.toml` and into each relevant benchmark's scores table:
 
 ```toml
+# New Model 1.0 — Vendor
 [new-model]
 cost = 300
 open = false
