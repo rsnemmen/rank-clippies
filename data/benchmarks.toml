@@ -11,7 +11,7 @@ astra = 78.3
 carbon = 45.9
 deepseek-flash = 36.1
 fable = 72.8
-kimi = 43.4
+kimi = 44.2
 muse-wonder = 38.5
 neon = 75.8
 opus = 43.4
@@ -232,7 +232,7 @@ fable = 83.7
 gemini-flash = 62.22
 grok = 69.3
 haiku = 70.4
-kimi = 75.6
+kimi = 80.6
 opus = 79.3
 sol = 77.8
 sonnet = 81.1
@@ -293,6 +293,7 @@ fable = 74.3
 gemini-flash = 75.4
 glm-flash = 63
 grok = 71
+kimi = 75.5
 mimo = 71.9
 opus = 74.2
 sol = 71.9
@@ -436,6 +437,7 @@ gemini-flash = 33.1
 grok = 23.2
 haiku = 29.6
 hydrogen = 58.8
+kimi = 39.4
 muse-spark = 30.3
 muse-wonder = 48.5
 neon = 71.3
@@ -558,24 +560,25 @@ qwen-27b = 60.2
 sol = 73.1
 terra = 72.2
 
-# https://www.swemarathon.org, v1.1
+# https://www.swemarathon.org, v1.2
 [SWE_Marathon]
 categories = ["coding"]
-min_score = 10.4
+min_score = 30
 
 [SWE_Marathon.scores]
-argon = 43.8
-astra = 42.5
-carbon = 53.8
-deepseek = 10.6
-glm = 42.5
-grok = 45.6
+argon = 49.4
+astra = 82.5
+carbon = 56.5
+deepseek-flash = 40
+fable = 75
+haiku = 42.1
 hydrogen = 49.4
-muse-spark = 30.6
-muse-wonder = 53.1
-opus = 46.3
-sol = 42.5
-sonnet = 51.3
+kimi = 51.7
+muse-wonder = 30
+neon = 58.1
+opus = 73.1
+sol = 68.8
+sonnet = 64
 
 # v4.1
 [terminal_bench4]
@@ -615,6 +618,7 @@ fable = 74.6
 gemini-flash = 12.4
 glm = 8.1
 hydrogen = 51.4
+kimi = 38.1
 neon = 70.5
 opus = 63.3
 sol = 68
