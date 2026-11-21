@@ -192,8 +192,7 @@ muse-spark-13 = 48
 muse-wonder-1 = 56
 neon = 61
 opus55 = 59
-qwen38-27b = 34
-qwen38-max = 45
+qwen4-max = 43
 sol = 57
 sonnet55 = 56
 terra = 48
@@ -272,12 +271,12 @@ min_score = 16
 [CursorBench.scores]
 carbon = 60.4
 deepseek-flash41 = 47.7
-fable52 = 60
+fable52 = 61.3
 gemini-flash38 = 39.6
 glm53 = 42.6
 glm53-flash = 36.8
 grok47 = 46.3
-hydrogen = 57.8
+hydrogen = 61.4
 muse-spark-13 = 41.6
 neon = 65.4
 opus55 = 57.8
@@ -285,10 +284,6 @@ sonnet55 = 55.5
 
 # https://deepswe.datacurve.ai
 # v1.1
-# Fable and Opus values are five-trial means reported in their system cards.
-# https://www.anthropic.com/claude-fable-5-1-mythos-5-1-system-card
-# https://www.anthropic.com/claude-opus-5-5-system-card
-# Anthropic notes that DeepSWE's hidden tests rejected some valid Fable solutions.
 [DeepSWE]
 categories = ["coding"]
 min_score = 5
@@ -298,6 +293,7 @@ argon = 77.9
 astra = 74.1
 deepseek-flash41 = 53
 deepseek4 = 8
+fable52 = 74.3
 gemini-flash38 = 75.4
 glm53-flash = 63
 grok47 = 71
@@ -338,12 +334,15 @@ min_score = 0
 
 [FrontierPhysics.scores]
 argon = 8.3
-astra = 23.2
+astra = 26.8
+carbon = 19
 deepseek-flash41 = 3.6
+fable52 = 33.3
 glm53 = 4.2
 haiku55 = 4.2
+neon = 23.2
 opus55 = 27.4
-sol = 19.6
+sol = 21.4
 terra = 14.3
 
 [GDPpdf]
@@ -413,18 +412,19 @@ opus55 = 66.8
 sol = 80.1
 
 [health_bench_pro]
-categories = ["stem"]
+categories = ["stem", "general"]
 min_score = 52.1
 
 # Length-adjusted scores; Anthropic reports five-trial means.
-# https://www.anthropic.com/claude-opus-5-5-system-card
-# https://deploymentsafety.openai.com/gpt-6-1-sol
 [health_bench_pro.scores]
-astra = 64.7
+astra = 66.3
 gemini-flash38 = 52.1
+haiku55 = 58.4
+fable52 = 67.7
 grok47 = 56.7
-opus55 = 65.6
+opus55 = 59.9
 sol = 64.2
+sonnet55 = 63
 terra = 62.7
 
 # HLE Diamond
