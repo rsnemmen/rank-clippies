@@ -146,8 +146,8 @@ categories = ["coding"]
 known_totals = 347
 
 [livebench_coding.scores]
-deepseek = 34
-gemini-flash = 19
+kimi = 34
+haiku = 19
 # Omit models that were not evaluated on this benchmark.
 ```
 
@@ -175,15 +175,15 @@ the normalization floor, including models not tracked here.
 One TOML table per model, alphabetical by model name. Each entry holds USD cost and model type:
 
 ```toml
-# DeepSeek V4 — DeepSeek
-[deepseek]
-cost = 5.1
-open = true
-
-# Gemini Flash 3.8 — Google
-[gemini-flash]
-cost = 9
+# Haiku 5.5 — Anthropic
+[haiku]
+cost = 0.6
 open = false
+
+# Kimi K3.1 Pro — Moonshot
+[kimi]
+cost = 12
+open = true
 ```
 
 Keys name the model line, not a version. The comment above each entry records the version its benchmark scores currently refer to, so a version bump updates the scores and the comment in place. Add a new key only for a genuinely different product line (for example `qwen-27b` and `qwen-max`), never for a version of an existing one.

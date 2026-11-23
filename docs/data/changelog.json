@@ -2,6 +2,14 @@
   "entries": [
     {
       "date": "2026-11-21",
+      "message": "updated SWE marathon scores"
+    },
+    {
+      "date": "2026-11-21",
+      "message": "Rename model keys to version-free names"
+    },
+    {
+      "date": "2026-11-21",
       "message": "updated healthbench"
     },
     {
